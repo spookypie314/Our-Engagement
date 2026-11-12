@@ -2,7 +2,7 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <!-- ==========================================================================
-       1. EDIT YOUR PASSWORD, GOOGLE DRIVE FOLDER ID & API KEY RIGHT HERE AT TOP
+       1. EDIT YOUR PASSWORD, GOOGLE DRIVE FOLDER ID, API KEY & BACKGROUND VIDEO HERE
        ========================================================================== -->
   <script>
     window.SITE_CONFIG = {
@@ -18,6 +18,10 @@
       // Couple Names
       coupleFirstName: "Pankaj",
       coupleSecondName: "Renu",
+
+      // Background Video Filename in ./media/ folder (change anytime here)
+      backgroundVideoFilename: "VID-20261111-WA0031_1.mp4",
+      fallbackBackgroundVideo: "ring_ceremony.mp4",
 
       // Session Memory (30 mins initial + 15 mins automatic extension)
       initialSessionMinutes: 30,
@@ -165,8 +169,7 @@
       loop
       playsinline
     >
-      <source src="./media/master.mp4" type="video/mp4" />
-      <source src="./media/ring_ceremony.mp4" type="video/mp4" />
+      <!-- Source injected dynamically from SITE_CONFIG.backgroundVideoFilename -->
     </video>
     <div class="absolute inset-0 bg-gradient-to-b from-[#0e0e0d]/55 via-[#0e0e0d]/75 to-[#0e0e0d]"></div>
   </div>
@@ -574,6 +577,27 @@
        ========================================================================== -->
   <script>
     const SITE_CONFIG = window.SITE_CONFIG;
+
+    // Initialize Background Video Source from SITE_CONFIG
+    function initMasterBackgroundVideo() {
+      const masterVideoEl = document.getElementById("masterVideo");
+      if (!masterVideoEl) return;
+      
+      masterVideoEl.innerHTML = "";
+      const sourceMain = document.createElement("source");
+      sourceMain.src = `./media/${SITE_CONFIG.backgroundVideoFilename || 'master.mp4'}`;
+      sourceMain.type = "video/mp4";
+      masterVideoEl.appendChild(sourceMain);
+
+      if (SITE_CONFIG.fallbackBackgroundVideo) {
+        const sourceFallback = document.createElement("source");
+        sourceFallback.src = `./media/${SITE_CONFIG.fallbackBackgroundVideo}`;
+        sourceFallback.type = "video/mp4";
+        masterVideoEl.appendChild(sourceFallback);
+      }
+      masterVideoEl.load();
+      masterVideoEl.play().catch(() => {});
+    }
 
     function scrollToTopSmooth() {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1118,6 +1142,9 @@
       stickyModalOverlay.classList.remove("hidden");
       stickyModalOverlay.classList.add("flex");
       document.body.style.overflow = "hidden";
+
+      // Push history state so mobile back button closes lightbox instead of exiting site
+      history.pushState({ modalOpen: true }, "");
     }
 
     function closeStickyModal() {
@@ -1135,7 +1162,7 @@
       isPinching = false;
       isTransitioning = false;
 
-      // Restore scroll position back to where the 50th photo was in the gallery grid
+      // Restore scroll position back to where the photo was in the gallery grid
       window.scrollTo({ top: galleryScrollRestorationY, behavior: "instant" });
     }
 
@@ -1488,6 +1515,9 @@
 
       window.scrollTo({ top: 0, behavior: "instant" });
       loadGoogleDriveGallery();
+
+      // Push history state so mobile back button returns to invitation instead of exiting site
+      history.pushState({ galleryOpen: true }, "");
     }
 
     function showInvitationLandingView() {
@@ -1498,6 +1528,31 @@
       if (landing) landing.classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "instant" });
     }
+
+    // Handle Mobile Back Button (Popstate) to prevent exiting the browser unexpectedly
+    window.addEventListener("popstate", (e) => {
+      const gateModal = document.getElementById("passcodeGateModal");
+      const galleryView = document.getElementById("engagementGalleryView");
+
+      if (!stickyModalOverlay.classList.contains("hidden")) {
+        // If lightbox is open, close it first
+        closeStickyModal();
+        return;
+      }
+
+      if (gateModal && !gateModal.classList.contains("hidden")) {
+        // If passcode modal is open, close it
+        gateModal.classList.add("hidden");
+        gateModal.classList.remove("flex");
+        return;
+      }
+
+      if (galleryView && !galleryView.classList.contains("hidden")) {
+        // If inside gallery view, return to invitation landing page
+        showInvitationLandingView();
+        return;
+      }
+    });
 
     function initInvitationAndPasscodeGate() {
       const openGateBtn = document.getElementById("openGalleryGateBtn");
@@ -1636,6 +1691,7 @@
     }
 
     window.onload = function () {
+      initMasterBackgroundVideo();
       initParticles();
       animateAmbientParticles();
       initInvitationAndPasscodeGate();
