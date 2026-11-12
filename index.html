@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <!-- ==========================================================================
+       1. EDIT YOUR PASSWORD, GOOGLE DRIVE FOLDER ID & API KEY RIGHT HERE AT TOP
+       ========================================================================== -->
+  <script>
+    window.SITE_CONFIG = {
+      // Family Gallery Passcode (case-insensitive, spaces ignored)
+      familyAccessCode: "pankajrenu",
+
+      // Google Drive Folder URL or Folder ID
+      googleDriveFolderId: "1IcifgGCUJtC2Oeivb7pUhdevywaKhl47",
+
+      // Google Drive API Key
+      googleDriveApiKey: "AIzaSyBU992oO3J8QGx4B1_0kjm3_JUJ00SnnKc",
+
+      // Couple Names
+      coupleFirstName: "Pankaj",
+      coupleSecondName: "Renu",
+
+      // Session Memory (30 mins initial + 15 mins automatic extension)
+      initialSessionMinutes: 30,
+      extensionMinutes: 15
+    };
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"
+  />
+  <title>Pankaj &amp; Renu — Engagement Memories</title>
+
+  <!-- Google Fonts: Luxury Serif & Regal Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Rozha+One&family=Noto+Serif+Devanagari:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --bg-primary: #0e0e0d;
+      --bg-secondary: #171614;
+      --text-main: #f7f3ee;
+      --text-muted: #b5a48b;
+      --accent-gold: #c5a059;
+      --accent-gold-light: #e5c378;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(197, 160, 89, 0.25);
+      --font-serif: 'Cormorant Garamond', serif;
+      --font-sans: 'Montserrat', sans-serif;
+      --font-devanagari: 'Rozha One', 'Noto Serif Devanagari', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      background-color: var(--bg-primary);
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1, h2, .couple-title {
+      font-family: var(--font-serif);
+      color: var(--text-main);
+      letter-spacing: 0.05em;
+    }
+
+    .devanagari-sacred {
+      font-family: var(--font-devanagari);
+    }
+
+    .gold-accent {
+      color: var(--accent-gold);
+    }
+
+    .tracking-regal {
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0e0e0d;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c5a059;
+      border-radius: 9999px;
+    }
+
+    /* Fixed Background Video Layer */
+    #masterVideoStage {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      opacity: 0.85;
+      transition: opacity 0.3s ease-out, filter 0.3s ease-out;
+    }
+
+    #masterVideo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+    }
+
+    /* Canvas Gold Sparkle Dust */
+    #ambientCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Cute Twinkling Sparkles */
+    @keyframes cuteTwinkle {
+      0%, 100% { transform: scale(0.85) rotate(0deg); opacity: 0.6; }
+      50% { transform: scale(1.15) rotate(25deg); opacity: 1; }
+    }
+    .cute-sparkle {
+      animation: cuteTwinkle 2.8s ease-in-out infinite;
+    }
+    .cute-sparkle-delayed {
+      animation: cuteTwinkle 3.2s ease-in-out 1.4s infinite;
+    }
+  </style>
+</head>
+<body class="relative min-h-screen selection:bg-[#c5a059] selection:text-[#0e0e0d]">
+
+  <!-- MASTER RING CEREMONY BACKGROUND VIDEO (FADES SMOOTHLY ON SCROLL) -->
+  <div id="masterVideoStage" aria-hidden="true">
+    <video
+      id="masterVideo"
+      autoplay
+      muted
+      loop
+      playsinline
+    >
+      <source src="./media/master.mp4" type="video/mp4" />
+      <source src="./media/ring_ceremony.mp4" type="video/mp4" />
+    </video>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0e0e0d]/55 via-[#0e0e0d]/75 to-[#0e0e0d]"></div>
+  </div>
+
+  <!-- Ambient Gold Dust Canvas -->
+  <canvas id="ambientCanvas"></canvas>
+
+  <!-- ==========================================================================
+       VIEW 1: ROYAL WEDDING INVITATION PREVIEW & ENGAGEMENT GREETING LANDING
+       ========================================================================== -->
+  <section id="landingPortalView" class="relative z-10 min-h-screen flex flex-col items-center justify-between px-4 sm:px-8 py-8 sm:py-12 text-center transition-all duration-700">
+    <!-- Top Sacred Invocation -->
+    <div class="w-full max-w-2xl mx-auto flex flex-col items-center pt-1">
+      <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-[#c5a059]/45 bg-[#171614]/70 backdrop-blur-md flex items-center justify-center mb-2 shadow-[0_0_25px_rgba(197,160,89,0.2)]">
+        <span class="devanagari-sacred text-lg sm:text-xl text-[#e5c378] leading-none">ॐ</span>
+      </div>
+      <p class="devanagari-sacred text-sm sm:text-lg text-[#e5c378] tracking-wider">
+        ॥ श्री गणेशाय नमः ॥
+      </p>
+      <p class="devanagari-sacred text-[11px] sm:text-xs text-[#f7f3ee]/80 mt-1 max-w-md leading-relaxed px-2">
+        वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ । निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥
+      </p>
+    </div>
+
+    <!-- Center Bespoke Invitation & Engagement Tribute Card -->
+    <div class="my-auto w-full max-w-xl mx-auto py-6">
+      <div class="relative px-5 py-8 sm:px-11 sm:py-12 rounded-[26px] bg-[#171614]/70 backdrop-blur-xl border border-[#c5a059]/35 shadow-[0_30px_80px_rgba(0,0,0,0.85)]">
+        <span class="absolute top-3.5 left-4 text-[#c5a059]/50 text-xs">✦</span>
+        <span class="absolute top-3.5 right-4 text-[#c5a059]/50 text-xs">✦</span>
+        <span class="absolute bottom-3.5 left-4 text-[#c5a059]/50 text-xs">✦</span>
+        <span class="absolute bottom-3.5 right-4 text-[#c5a059]/50 text-xs">✦</span>
+
+        <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-[#e5c378] font-medium mb-2.5">
+          ENGAGED ON THE 10TH
+        </p>
+
+        <h1 class="couple-title text-4xl sm:text-6xl font-normal text-[#f7f3ee] tracking-wide leading-tight">
+          Pankaj <span class="gold-accent italic font-light">&amp;</span> Renu
+        </h1>
+
+        <div class="my-4 sm:my-5 flex items-center justify-center gap-3 opacity-80">
+          <span class="h-px w-10 sm:w-12 bg-gradient-to-r from-transparent to-[#c5a059]"></span>
+          <span class="text-[#e5c378] text-xs">❖</span>
+          <span class="h-px w-10 sm:w-12 bg-gradient-to-l from-transparent to-[#c5a059]"></span>
+        </div>
+
+        <p class="text-xs sm:text-sm text-[#f7f3ee]/90 font-light leading-relaxed max-w-md mx-auto">
+          With full hearts, we celebrate our engagement held on the 10th and extend a gentle thank you to everyone for your warm wishes, blessings, and presence.
+        </p>
+
+        <!-- Wedding Dates Status Badge -->
+        <div class="mt-5 sm:mt-6 inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#0e0e0d]/75 border border-[#c5a059]/25 max-w-full">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#e5c378] animate-pulse shrink-0"></span>
+          <span class="text-[10px] sm:text-xs tracking-[0.12em] sm:tracking-[0.16em] uppercase text-[#e5c378]/95 font-medium leading-snug">
+            Wedding Invitations &amp; Dates — To Be Announced Soon
+          </span>
+        </div>
+
+        <!-- Premium Action Button to Open Family Gallery Gate -->
+        <div class="mt-7 sm:mt-8">
+          <button
+          id="openGalleryGateBtn"
+          type="button"
+          class="group relative inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-9 sm:py-4 rounded-full bg-gradient-to-r from-[#c5a059] via-[#e5c378] to-[#c5a059] text-[#0e0e0d] text-xs sm:text-sm tracking-[0.16em] sm:tracking-[0.2em] uppercase font-semibold shadow-[0_12px_35px_rgba(197,160,89,0.32)] hover:shadow-[0_16px_45px_rgba(229,195,120,0.45)] transition-all duration-300 hover:scale-[1.03] active:scale-95"
+        >
+          <span>Visit Engagement Gallery</span>
+          <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-[#b5a48b]/70">
+      A New Chapter Begins
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FAMILY PASSCODE GATE MODAL (CASE-INSENSITIVE: pankajrenu)
+       ========================================================================== -->
+  <div
+    id="passcodeGateModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center px-5 bg-[#0e0e0d]/90 backdrop-blur-2xl transition-opacity duration-300"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="relative w-full max-w-md rounded-[26px] bg-[#171614]/95 border border-[#c5a059]/40 p-6 sm:p-9 text-center shadow-[0_30px_90px_rgba(0,0,0,0.95)]">
+      <button
+        id="closePasscodeGateBtn"
+        type="button"
+        class="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#0e0e0d]/70 border border-[#c5a059]/30 text-[#b5a48b] hover:text-[#f7f3ee] hover:border-[#e5c378] flex items-center justify-center transition-all"
+        aria-label="Close passcode dialog"
+      >
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-[#0e0e0d] border border-[#c5a059]/40 flex items-center justify-center text-[#e5c378] shadow-[0_0_25px_rgba(197,160,89,0.2)]">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+
+      <p class="text-[10px] tracking-regal text-[#e5c378] mb-1.5">FAMILY ARCHIVE</p>
+      <h2 class="couple-title text-2xl sm:text-3xl text-[#f7f3ee] font-normal">
+        Private Engagement Gallery
+      </h2>
+
+      <p class="mt-3 text-xs sm:text-[13px] text-[#b5a48b] font-light leading-relaxed">
+        As these are intimate family function moments, please enter the family access code to step inside the gallery.
+      </p>
+
+      <form id="passcodeForm" class="mt-6 flex flex-col gap-3.5" autocomplete="off">
+        <input
+          id="passcodeInput"
+          type="text"
+          inputmode="text"
+          autocapitalize="none"
+          spellcheck="false"
+          placeholder="Enter family code"
+          class="w-full px-4 py-3.5 rounded-xl bg-[#0e0e0d] border border-[#c5a059]/35 focus:border-[#e5c378] focus:outline-none text-center text-sm sm:text-base tracking-[0.22em] text-[#f7f3ee] placeholder:text-[#b5a48b]/45 placeholder:tracking-widest transition-colors"
+        />
+
+        <p id="passcodeErrorMsg" class="hidden text-xs text-[#e5c378] font-normal">
+          Incorrect code — please check with family and try again.
+        </p>
+
+        <button
+          type="submit"
+          class="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#c5a059] via-[#e5c378] to-[#c5a059] text-[#0e0e0d] text-xs sm:text-sm tracking-[0.2em] uppercase font-semibold shadow-[0_10px_30px_rgba(197,160,89,0.28)] hover:brightness-105 active:scale-[0.98] transition-all"
+        >
+          Unlock Memories
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       VIEW 2: PROTECTED ENGAGEMENT GALLERY VIEW (4 COLUMNS ON MOBILE)
+       ========================================================================== -->
+  <div id="engagementGalleryView" class="relative z-10 hidden">
+    <!-- Compact Back-to-Invitation Bar -->
+    <div class="sticky top-0 z-30 flex items-center justify-between gap-2 px-3 sm:px-8 py-2.5 sm:py-3 bg-[#0e0e0d]/90 backdrop-blur-xl border-b border-[#c5a059]/20">
+      <button
+        id="backToInvitationBtn"
+        type="button"
+        class="inline-flex items-center gap-1 text-[10px] sm:text-xs tracking-[0.1em] sm:tracking-[0.18em] uppercase text-[#e5c378] hover:text-[#f7f3ee] transition-colors shrink-0 py-1"
+      >
+        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span>Invitation</span>
+      </button>
+
+      <span class="couple-title text-sm sm:text-xl text-[#f7f3ee] tracking-wide truncate text-center">
+        Pankaj <span class="gold-accent italic">&amp;</span> Renu
+      </span>
+
+      <span id="photoCounterBadge" class="text-[9px] sm:text-[10px] tracking-[0.1em] sm:tracking-[0.18em] uppercase text-[#b5a48b] shrink-0 text-right">
+        10th Memories
+      </span>
+    </div>
+
+    <!-- HERO SECTION INSIDE GALLERY -->
+    <header id="topHeroSection" class="relative z-10 flex flex-col items-center justify-center px-3 sm:px-8 pt-6 sm:pt-10 pb-4 sm:pb-8 text-center">
+      <div id="heroContentWrapper" class="max-w-2xl mx-auto flex flex-col items-center">
+        <div class="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+          <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 cute-sparkle shrink-0" viewBox="0 0 32 32" fill="none">
+            <path d="M16 2C16.8 10.5 21.5 15.2 30 16C21.5 16.8 16.8 21.5 16 30C15.2 21.5 10.5 16.8 2 16C10.5 15.2 15.2 10.5 16 2Z" fill="#f3d8a0" stroke="#c5a059" stroke-width="1.2"/>
+          </svg>
+          <span class="text-[9px] sm:text-xs tracking-[0.15em] sm:tracking-regal text-[#e5c378] font-medium">ENGAGEMENT ARCHIVE • 10TH</span>
+          <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 cute-sparkle-delayed shrink-0" viewBox="0 0 32 32" fill="none">
+            <path d="M16 2C16.8 10.5 21.5 15.2 30 16C21.5 16.8 16.8 21.5 16 30C15.2 21.5 10.5 16.8 2 16C10.5 15.2 15.2 10.5 16 2Z" fill="#f3d8a0" stroke="#c5a059" stroke-width="1.2"/>
+          </svg>
+        </div>
+
+        <h2 class="couple-title text-2xl sm:text-5xl font-normal text-[#f7f3ee] tracking-wide leading-snug">
+          Sweet Moments Together
+        </h2>
+
+        <p class="mt-1.5 text-[11px] sm:text-sm text-[#b5a48b] font-light max-w-md leading-relaxed px-2">
+          Tap any memory for uncropped fullscreen view — pinch to zoom, rotate, swipe, or save.
+        </p>
+
+        <!-- Loading Indicator while fetching Google Drive Thumbnails -->
+        <div id="driveSyncStatus" class="hidden mt-4 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#171614]/90 border border-[#c5a059]/35 text-xs text-[#e5c378]">
+          <span class="w-2 h-2 rounded-full bg-[#e5c378] animate-ping"></span>
+          <span>Fetching photos &amp; videos from Google Drive...</span>
+        </div>
+
+        <!-- Diagnostic Message Box (Only shown if Drive Folder is empty or restricted) -->
+        <div id="driveErrorContainer" class="hidden mt-6 w-full max-w-lg rounded-2xl bg-[#171614]/95 border border-[#c5a059]/45 p-5 sm:p-6 text-left shadow-2xl">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-[#c5a059]/15 border border-[#c5a059]/40 flex items-center justify-center text-[#e5c378] shrink-0 mt-0.5">
+              !
+            </div>
+            <div class="flex-1">
+              <h3 id="driveErrorTitle" class="couple-title text-lg sm:text-xl text-[#f7f3ee] font-normal">
+                Unable to load Google Drive folder
+              </h3>
+              <p id="driveErrorDetails" class="mt-1.5 text-xs text-[#b5a48b] leading-relaxed"></p>
+              <div class="mt-4 flex flex-wrap items-center gap-2.5">
+                <button
+                  onclick="loadGoogleDriveGallery()"
+                  type="button"
+                  class="px-4 py-2 rounded-full bg-[#c5a059] text-[#0e0e0d] text-[11px] tracking-wider uppercase font-semibold hover:bg-[#e5c378] transition-colors"
+                >
+                  Retry Connection
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN PHOTO STREAM: 4 PHOTOS HORIZONTALLY ON MOBILE (grid-cols-4), 5 ON DESKTOP -->
+    <main class="relative z-10 w-full min-h-screen pb-24 pt-2">
+      <div class="max-w-7xl mx-auto px-2 sm:px-6">
+        <div
+          id="scatteredGalleryGrid"
+          class="grid grid-cols-4 md:grid-cols-5 gap-2 sm:gap-5 md:gap-7"
+        >
+          <!-- Populated dynamically with actual Google Drive photos & videos ONLY -->
+        </div>
+      </div>
+
+      <!-- Bottom Return & Back To Top Action -->
+      <div class="mt-16 flex flex-col items-center justify-center gap-4">
+        <button
+          onclick="scrollToTopSmooth()"
+          class="px-7 py-3 rounded-full bg-[#171614]/85 border border-[#c5a059]/40 hover:border-[#e5c378] text-[#e5c378] text-xs tracking-widest uppercase font-medium transition-all hover:scale-105 active:scale-95 shadow-lg backdrop-blur-md flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+          </svg>
+          <span>Back To Top</span>
+        </button>
+
+        <p class="devanagari-sacred text-xs sm:text-sm text-[#c5a059]/75 mt-2 tracking-wider">
+          ॥ सदा मंगलम् भवतु ॥
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Floating Quick Top Button -->
+  <button
+    id="quickScrollTopBtn"
+    onclick="scrollToTopSmooth()"
+    class="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-[#171614]/85 border border-[#c5a059]/45 text-[#e5c378] flex items-center justify-center shadow-2xl backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 active:scale-95"
+    aria-label="Back to top"
+  >
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+      <path d="M5 15l7-7 7 7"/>
+    </svg>
+  </button>
+
+  <!-- ==========================================================================
+       TRUE FULLSCREEN UNCROPPED LIGHTBOX WITH PINCH-TO-ZOOM, ROTATE & DOWNLOAD
+       ========================================================================== -->
+  <div
+    id="stickyModalOverlay"
+    class="fixed inset-0 z-50 hidden bg-[#080807]/98 backdrop-blur-2xl items-center justify-center select-none overflow-hidden touch-none"
+    role="dialog"
+    aria-modal="true"
+  >
+    <!-- Top Action Controls: Zoom Reset (when zoomed), Rotate 90°, Download & Close -->
+    <div class="fixed top-3 right-3 sm:top-5 sm:right-6 z-50 flex items-center gap-2 sm:gap-2.5">
+      <!-- Reset Zoom Pill (Appears automatically when pinched/zoomed in) -->
+      <button
+        id="resetZoomBtn"
+        type="button"
+        class="hidden h-9 sm:h-10 px-3 sm:px-3.5 rounded-full bg-[#171614]/90 border border-[#c5a059]/50 text-[#e5c378] items-center justify-center gap-1 text-[10px] sm:text-xs tracking-wider uppercase font-semibold shadow-2xl transition-all active:scale-95"
+        aria-label="Reset zoom"
+      >
+        <span id="zoomLevelReadout">100%</span>
+        <span class="text-[9px] opacity-75">✕</span>
+      </button>
+
+      <!-- Rotate 90° Button (View vertical or horizontal photos conveniently) -->
+      <button
+        id="rotateMediaBtn"
+        type="button"
+        class="h-9 sm:h-10 px-3 sm:px-4 rounded-full bg-[#171614]/90 border border-[#c5a059]/45 hover:border-[#e5c378] text-[#e5c378] hover:text-[#f7f3ee] flex items-center justify-center gap-1.5 text-[10px] sm:text-xs tracking-[0.12em] uppercase font-medium transition-all hover:scale-105 active:scale-95 shadow-2xl"
+        aria-label="Rotate photo 90 degrees"
+      >
+        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+          <path d="M21 3v5h-5"/>
+        </svg>
+        <span>Rotate</span>
+      </button>
+
+      <!-- Download Original Button -->
+      <button
+        id="downloadMediaBtn"
+        type="button"
+        class="h-9 sm:h-10 px-3 sm:px-4 rounded-full bg-[#171614]/90 border border-[#c5a059]/45 hover:border-[#e5c378] text-[#e5c378] hover:text-[#f7f3ee] flex items-center justify-center gap-1.5 text-[10px] sm:text-xs tracking-[0.12em] uppercase font-medium transition-all hover:scale-105 active:scale-95 shadow-2xl"
+        aria-label="Download full quality photo or video"
+      >
+        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span>Save</span>
+      </button>
+
+      <!-- Close Button -->
+      <button
+        id="closeStickyModalBtn"
+        type="button"
+        class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#171614]/90 border border-[#c5a059]/40 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl"
+        aria-label="Close"
+      >
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Subtle Full-Resolution Loading Pill -->
+    <div
+      id="fullResLoaderBadge"
+      class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#171614]/90 border border-[#c5a059]/35 text-[10px] sm:text-[11px] tracking-wider text-[#e5c378] shadow-xl pointer-events-none"
+    >
+      <span class="w-2 h-2 rounded-full bg-[#e5c378] animate-ping"></span>
+      <span>Loading Full HD...</span>
+    </div>
+
+    <!-- Previous Photo Arrow -->
+    <button
+      id="modalPrevBtn"
+      class="fixed left-2 sm:left-5 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#171614]/75 border border-[#c5a059]/35 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl"
+      aria-label="Previous memory"
+    >
+      <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="#e5c378" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+
+    <!-- Next Photo Arrow -->
+    <button
+      id="modalNextBtn"
+      class="fixed right-2 sm:right-5 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#171614]/75 border border-[#c5a059]/35 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl"
+      aria-label="Next memory"
+    >
+      <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="#e5c378" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
+
+    <!-- True Fullscreen Edge-to-Edge Stage (No Aspect Ratio Cropping) -->
+    <div
+      id="discreteStage"
+      class="relative w-screen h-screen flex items-center justify-center cursor-grab active:cursor-grabbing overflow-hidden"
+    >
+      <!-- Outgoing Card (Used during swipe transition) -->
+      <div
+        id="modalCardOutgoing"
+        class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none opacity-0"
+        style="will-change: transform, opacity;"
+      >
+        <img
+          id="modalImgOutgoing"
+          src=""
+          alt=""
+          referrerpolicy="no-referrer"
+          class="max-w-[96vw] max-h-[92vh] w-auto h-auto object-contain pointer-events-none select-none rounded-lg shadow-[0_25px_70px_rgba(0,0,0,0.9)]"
+          style="will-change: transform;"
+        />
+      </div>
+
+      <!-- Current Active Fullscreen Container (100% Uncropped + Pinch Zoom + Rotate) -->
+      <div
+        id="modalCardCurrent"
+        class="relative w-full h-full flex items-center justify-center"
+        style="will-change: transform, opacity;"
+      >
+        <img
+          id="modalImgCurrent"
+          src=""
+          alt=""
+          referrerpolicy="no-referrer"
+          class="max-w-[96vw] max-h-[92vh] w-auto h-auto object-contain pointer-events-none select-none rounded-lg shadow-[0_25px_70px_rgba(0,0,0,0.9)]"
+          style="will-change: transform;"
+        />
+        <video
+          id="modalVideoCurrent"
+          controls
+          playsinline
+          preload="metadata"
+          class="hidden max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain bg-black rounded-lg shadow-2xl"
+        ></video>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       APPLICATION LOGIC (UNCROPPED FULLSCREEN + PINCH ZOOM + ROTATE)
+       ========================================================================== -->
+  <script>
+    const SITE_CONFIG = window.SITE_CONFIG;
+
+    function scrollToTopSmooth() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function clamp(val, min, max) {
+      return Math.max(min, Math.min(max, val));
+    }
+
+    function extractCleanFolderId(rawInput) {
+      const str = (rawInput || "").trim();
+      const match = str.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) return match[1];
+      const idParam = str.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (idParam && idParam[1]) return idParam[1];
+      return str;
+    }
+
+    function classifyMediaItem(file) {
+      let targetId = file.id;
+      let mime = (file.mimeType || "").toLowerCase();
+      const name = (file.name || "").toLowerCase();
+
+      if (mime === "application/vnd.google-apps.shortcut" && file.shortcutDetails) {
+        targetId = file.shortcutDetails.targetId || file.id;
+        mime = (file.shortcutDetails.targetMimeType || "").toLowerCase();
+      }
+
+      const isImageExt = /\.(jpe?g|png|webp|gif|heic|heif|avif|bmp|tiff?)$/i.test(name);
+      const isVideoExt = /\.(mp4|mov|webm|m4v|mkv|avi|3gp)$/i.test(name);
+
+      const isVideo = mime.startsWith("video/") || isVideoExt;
+      const isImage = mime.startsWith("image/") || isImageExt;
+
+      return {
+        isMedia: isImage || isVideo,
+        isVideo,
+        effectiveId: targetId,
+        effectiveMime: mime
+      };
+    }
+
+    let galleryItems = [];
+    let galleryScrollRestorationY = 0; // Remembers gallery scroll position when opening lightbox
+
+    function showDriveDiagnostic(title, detailsHtml) {
+      const errBox = document.getElementById("driveErrorContainer");
+      const errTitle = document.getElementById("driveErrorTitle");
+      const errDetails = document.getElementById("driveErrorDetails");
+      if (!errBox || !errTitle || !errDetails) return;
+      errTitle.textContent = title;
+      errDetails.innerHTML = detailsHtml;
+      errBox.classList.remove("hidden");
+    }
+
+    function hideDriveDiagnostic() {
+      const errBox = document.getElementById("driveErrorContainer");
+      if (errBox) errBox.classList.add("hidden");
+    }
+
+    async function fetchDriveFolderContents(folderId, apiKey) {
+      let items = [];
+      let pageToken = "";
+
+      do {
+        const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
+        const fields = encodeURIComponent(
+          "nextPageToken, files(id, name, mimeType, thumbnailLink, webContentLink, shortcutDetails)"
+        );
+        const pageParam = pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : "";
+        const url = `https://www.googleapis.com/drive/v3/files?q=${query}&fields=${fields}&pageSize=500&orderBy=createdTime%20desc&supportsAllDrives=true&includeItemsFromAllDrives=true${pageParam}&key=${encodeURIComponent(apiKey)}`;
+
+        const response = await fetch(url);
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          const reason = data?.error?.message || `HTTP ${response.status}`;
+          throw new Error(reason);
+        }
+
+        if (Array.isArray(data.files)) {
+          items = items.concat(data.files);
+        }
+        pageToken = data.nextPageToken || "";
+      } while (pageToken);
+
+      return items;
+    }
+
+    async function loadGoogleDriveGallery() {
+      const statusBadge = document.getElementById("driveSyncStatus");
+      const counterBadge = document.getElementById("photoCounterBadge");
+      if (statusBadge) statusBadge.classList.remove("hidden");
+      hideDriveDiagnostic();
+
+      const folderId = extractCleanFolderId(SITE_CONFIG.googleDriveFolderId);
+      const apiKey = (SITE_CONFIG.googleDriveApiKey || "").trim();
+
+      if (!folderId || !apiKey) {
+        if (statusBadge) statusBadge.classList.add("hidden");
+        showDriveDiagnostic(
+          "Missing Google Drive Credentials",
+          "Please set <code>googleDriveFolderId</code> and <code>googleDriveApiKey</code> inside <code>window.SITE_CONFIG</code> at the very top of <code>index.html</code>."
+        );
+        return;
+      }
+
+      try {
+        const topLevelFiles = await fetchDriveFolderContents(folderId, apiKey);
+        let allDiscoveredFiles = [...topLevelFiles];
+
+        const subFolders = topLevelFiles.filter((f) => {
+          if (f.mimeType === "application/vnd.google-apps.folder") return true;
+          if (
+            f.mimeType === "application/vnd.google-apps.shortcut" &&
+            f.shortcutDetails?.targetMimeType === "application/vnd.google-apps.folder"
+          ) {
+            return true;
+          }
+          return false;
+        });
+
+        for (const folder of subFolders) {
+          const subFolderId = folder.shortcutDetails?.targetId || folder.id;
+          try {
+            const subItems = await fetchDriveFolderContents(subFolderId, apiKey);
+            allDiscoveredFiles = allDiscoveredFiles.concat(subItems);
+
+            const nestedFolders = subItems.filter(
+              (sf) => sf.mimeType === "application/vnd.google-apps.folder"
+            );
+            for (const nested of nestedFolders) {
+              try {
+                const nestedItems = await fetchDriveFolderContents(nested.id, apiKey);
+                allDiscoveredFiles = allDiscoveredFiles.concat(nestedItems);
+              } catch (e) {}
+            }
+          } catch (subErr) {
+            console.warn("Could not scan subfolder:", folder.name, subErr);
+          }
+        }
+
+        const mediaEntries = [];
+        for (const file of allDiscoveredFiles) {
+          const info = classifyMediaItem(file);
+          if (info.isMedia) {
+            mediaEntries.push({ file, info });
+          }
+        }
+
+        if (mediaEntries.length === 0) {
+          galleryItems = [];
+          renderScatteredGrid();
+          showDriveDiagnostic(
+            "Folder Connected — 0 Photos/Videos Visible",
+            `Google Drive connected to folder <code>${folderId}</code>, but returned <strong>${allDiscoveredFiles.length}</strong> visible items.<br/><br/>` +
+              `<strong>Why this happens &amp; how to fix in 10 seconds:</strong><br/>` +
+              `1. Open your Google Drive folder (<a href="https://drive.google.com/drive/folders/${folderId}" target="_blank" rel="noopener" class="underline text-[#e5c378]">Click to open folder</a>).<br/>` +
+              `2. Click <strong>Share</strong> → Change <strong>General Access</strong> from <em>Restricted</em> to <strong>Anyone with the link (Viewer)</strong>.<br/>` +
+              `3. Make sure your engagement photos or videos are uploaded inside this folder, then click <strong>Retry Connection</strong> below.`
+          );
+          return;
+        }
+
+        const firstVideoEntry = mediaEntries.find((m) => m.info.isVideo);
+        if (firstVideoEntry) {
+          const masterVideoEl = document.getElementById("masterVideo");
+          if (masterVideoEl && !masterVideoEl.dataset.driveAttached) {
+            masterVideoEl.dataset.driveAttached = "true";
+            const driveVideoSrc = document.createElement("source");
+            driveVideoSrc.src = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(firstVideoEntry.info.effectiveId)}?alt=media&key=${encodeURIComponent(apiKey)}`;
+            driveVideoSrc.type = firstVideoEntry.info.effectiveMime || "video/mp4";
+            masterVideoEl.appendChild(driveVideoSrc);
+          }
+        }
+
+        galleryItems = mediaEntries.map(({ file, info }, idx) => {
+          const fileId = info.effectiveId;
+          const isVideo = info.isVideo;
+          const directMediaUrl = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(fileId)}?alt=media&key=${encodeURIComponent(apiKey)}`;
+
+          const lowResThumb = file.thumbnailLink
+            ? file.thumbnailLink.replace(/=s\d+$/, "=s1600")
+            : `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w1600`;
+
+          const fullMediaUrl = isVideo
+            ? directMediaUrl
+            : file.thumbnailLink
+              ? file.thumbnailLink.replace(/=s\d+$/, "=s2400")
+              : `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w2400`;
+
+          return {
+            id: fileId,
+            name: file.name || `${SITE_CONFIG.coupleFirstName}-${SITE_CONFIG.coupleSecondName}-${idx + 1}`,
+            isVideo,
+            thumbnailUrl: lowResThumb,
+            fallbackThumbUrl: `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w1600`,
+            directMediaUrl,
+            fullUrl: fullMediaUrl,
+            downloadUrl: directMediaUrl
+          };
+        });
+
+        if (counterBadge) {
+          counterBadge.textContent = `${galleryItems.length} Memories`;
+        }
+
+        renderScatteredGrid();
+      } catch (err) {
+        galleryItems = [];
+        renderScatteredGrid();
+        showDriveDiagnostic(
+          "Google Drive API Error",
+          `Google Drive returned: <span class="text-[#e5c378]">${err.message}</span><br/><br/>` +
+            `<strong>Checklist:</strong><br/>` +
+            `• Ensure your Google Drive folder is set to <strong>Anyone with the link → Viewer</strong>.<br/>` +
+            `• Ensure <strong>Google Drive API</strong> is enabled in your Google Cloud project.<br/>` +
+            `• If your API key has HTTP Referrer restrictions, make sure <code>${window.location.origin}/*</code> is allowed.`
+        );
+      } finally {
+        if (statusBadge) statusBadge.classList.add("hidden");
+      }
+    }
+
+    function getCuteDecorationSvg(index) {
+      const variant = index % 5;
+      if (variant === 0) {
+        return `
+          <div class="absolute -top-2 -right-2 sm:-top-3.5 sm:-right-3.5 z-20 pointer-events-none drop-shadow-md">
+            <svg class="w-5 h-5 sm:w-8 sm:h-8 text-[#e5c378]" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M24 24 C18 14 6 16 12 28 C16 34 22 28 24 24 Z" fill="rgba(229,195,120,0.3)"/>
+              <path d="M24 24 C30 14 42 16 36 28 C32 34 26 28 24 24 Z" fill="rgba(229,195,120,0.3)"/>
+              <circle cx="24" cy="24" r="3.5" fill="#f7f3ee" stroke="#c5a059"/>
+              <path d="M22 27 C19 36 14 40 10 42" stroke-linecap="round"/>
+              <path d="M26 27 C29 36 34 40 38 42" stroke-linecap="round"/>
+            </svg>
+          </div>
+        `;
+      } else if (variant === 1) {
+        return `
+          <div class="absolute -bottom-2 -left-2 sm:-bottom-3 sm:-left-3 z-20 pointer-events-none opacity-90 drop-shadow">
+            <svg class="w-5 h-5 sm:w-9 sm:h-9 text-[#c5a059]" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M6 34 C14 28 26 20 34 8"/>
+              <path d="M12 28 C10 24 12 21 16 23 C18 24 17 28 12 28 Z" fill="rgba(197,160,89,0.35)"/>
+              <path d="M22 20 C24 16 27 16 28 19 C28 22 25 22 22 20 Z" fill="rgba(197,160,89,0.35)"/>
+              <path d="M27 12 C30 9 33 10 33 13 C32 15 29 14 27 12 Z" fill="rgba(197,160,89,0.35)"/>
+            </svg>
+          </div>
+        `;
+      } else if (variant === 2) {
+        return `
+          <div class="absolute -bottom-1.5 -right-1.5 sm:-bottom-2.5 sm:-right-2.5 z-20 pointer-events-none drop-shadow">
+            <svg class="w-4 h-4 sm:w-7 sm:h-7 text-[#e5c378]" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+              <circle cx="16" cy="16" r="3.2" fill="#f7f3ee"/>
+              <ellipse cx="16" cy="9" rx="3" ry="4.5" fill="rgba(229,195,120,0.35)"/>
+              <ellipse cx="16" cy="23" rx="3" ry="4.5" fill="rgba(229,195,120,0.35)"/>
+              <ellipse cx="9" cy="16" rx="4.5" ry="3" fill="rgba(229,195,120,0.35)"/>
+              <ellipse cx="23" cy="16" rx="4.5" ry="3" fill="rgba(229,195,120,0.35)"/>
+            </svg>
+          </div>
+        `;
+      } else if (variant === 3) {
+        return `
+          <div class="absolute -top-2 -left-1.5 sm:-top-3 sm:-left-2 z-20 pointer-events-none drop-shadow">
+            <svg class="w-4 h-4 sm:w-6 sm:h-6 text-[#f3d8a0] animate-pulse" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2 L13.5 9.5 L21 11 L13.5 12.5 L12 20 L10.5 12.5 L3 11 L10.5 9.5 Z"/>
+            </svg>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="absolute -top-1.5 right-1.5 sm:-top-2.5 sm:right-4 z-20 pointer-events-none drop-shadow">
+            <div class="w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-[#171614]/85 border border-[#c5a059]/40 flex items-center justify-center text-[8px] sm:text-[11px] text-[#e5c378]">
+              ♥
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderScatteredGrid() {
+      const galleryContainer = document.getElementById("scatteredGalleryGrid");
+      if (!galleryContainer) return;
+
+      galleryContainer.innerHTML = "";
+
+      galleryItems.forEach((item, idx) => {
+        const figure = document.createElement("figure");
+        figure.className = "relative z-10 m-0 gallery-card-figure cursor-pointer group";
+        figure.style.perspective = "800px";
+        figure.style.willChange = "transform";
+        figure.style.transform = "translateZ(0px)";
+
+        const isEven = idx % 2 === 0;
+        const colShift = isEven ? "-2%" : "2%";
+        const initialTilt = isEven ? "-1.8deg" : "2deg";
+        const decoHtml = getCuteDecorationSvg(idx);
+
+        const videoBadge = item.isVideo
+          ? `<div class="absolute inset-0 flex items-center justify-center bg-black/25 pointer-events-none">
+               <div class="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-[#0e0e0d]/80 border border-[#e5c378]/70 flex items-center justify-center text-[#e5c378] shadow-lg">
+                 <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor">
+                   <polygon points="5 3 19 12 5 21 5 3"/>
+                 </svg>
+               </div>
+             </div>`
+          : "";
+
+        figure.innerHTML = `
+          <div
+            class="gallery-card-inner relative aspect-[1/1.25] w-full p-1.5 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl md:rounded-3xl bg-[#171614]/90 border border-[#c5a059]/35 hover:border-[#e5c378] transition-all duration-500 shadow-[0_10px_25px_rgba(0,0,0,0.65)] group-hover:shadow-[0_20px_45px_rgba(197,160,89,0.22)]"
+            style="transform: translateX(${colShift}) rotateZ(${initialTilt});"
+          >
+            ${decoHtml}
+            <div class="relative w-full h-full overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl bg-[#0e0e0d]">
+              <img
+                src="${item.thumbnailUrl}"
+                alt="Engagement Memory ${idx + 1}"
+                loading="lazy"
+                decoding="async"
+                referrerpolicy="no-referrer"
+                class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+              />
+              ${videoBadge}
+            </div>
+          </div>
+        `;
+
+        const imgEl = figure.querySelector("img");
+        if (imgEl) {
+          let fallbackStep = 0;
+          imgEl.onerror = () => {
+            fallbackStep++;
+            if (fallbackStep === 1 && item.fallbackThumbUrl) {
+              imgEl.src = item.fallbackThumbUrl;
+            } else if (fallbackStep === 2 && item.directMediaUrl && !item.isVideo) {
+              imgEl.src = item.directMediaUrl;
+            }
+          };
+        }
+
+        figure.addEventListener("click", () => {
+          galleryScrollRestorationY = window.scrollY || window.pageYOffset;
+          openStickyModal(idx);
+        });
+
+        galleryContainer.appendChild(figure);
+      });
+    }
+
+    function updateMasterVideoAndHeroOnScroll() {
+      const masterStage = document.getElementById("masterVideoStage");
+      const galleryView = document.getElementById("engagementGalleryView");
+      const quickTopBtn = document.getElementById("quickScrollTopBtn");
+
+      function onScroll() {
+        const scrollY = window.scrollY || window.pageYOffset;
+        const vh = window.innerHeight || 800;
+        const isGalleryOpen = galleryView && !galleryView.classList.contains("hidden");
+
+        if (masterStage) {
+          if (!isGalleryOpen) {
+            masterStage.style.opacity = "0.78";
+            masterStage.style.filter = "blur(0px)";
+          } else {
+            const fadeProgress = clamp(scrollY / (vh * 0.7), 0, 1);
+            const currentOpacity = 0.55 - fadeProgress * 0.41;
+            const currentBlur = 2 + fadeProgress * 5;
+            masterStage.style.opacity = currentOpacity;
+            masterStage.style.filter = `blur(${currentBlur}px)`;
+          }
+        }
+
+        if (quickTopBtn) {
+          if (isGalleryOpen && scrollY > vh * 0.45) {
+            quickTopBtn.style.opacity = "1";
+            quickTopBtn.style.pointerEvents = "auto";
+          } else {
+            quickTopBtn.style.opacity = "0";
+            quickTopBtn.style.pointerEvents = "none";
+          }
+        }
+      }
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    }
+
+    // ==========================================================================
+    // TRUE FULLSCREEN UNCROPPED VIEWER + PINCH-TO-ZOOM + 90° ROTATE + SWIPE
+    // ==========================================================================
+    const stickyModalOverlay = document.getElementById("stickyModalOverlay");
+    const discreteStage = document.getElementById("discreteStage");
+    const modalCardCurrent = document.getElementById("modalCardCurrent");
+    const modalImgCurrent = document.getElementById("modalImgCurrent");
+    const modalVideoCurrent = document.getElementById("modalVideoCurrent");
+    const modalCardOutgoing = document.getElementById("modalCardOutgoing");
+    const modalImgOutgoing = document.getElementById("modalImgOutgoing");
+    const fullResLoaderBadge = document.getElementById("fullResLoaderBadge");
+    const downloadMediaBtn = document.getElementById("downloadMediaBtn");
+    const rotateMediaBtn = document.getElementById("rotateMediaBtn");
+    const resetZoomBtn = document.getElementById("resetZoomBtn");
+    const zoomLevelReadout = document.getElementById("zoomLevelReadout");
+
+    let currentModalIndex = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragCurrentX = 0;
+    let dragCurrentY = 0;
+    let isTransitioning = false;
+    let preloadedImagesCache = new Map(); // Fuzzy preloading cache for adjacent items
+
+    // Pinch-to-Zoom, Pan & Rotation State
+    let userZoomScale = 1;
+    let userPanX = 0;
+    let userPanY = 0;
+    let userRotationDeg = 0;
+
+    let isPinching = false;
+    let pinchStartDist = 0;
+    let pinchStartScale = 1;
+    let panStartOffsetX = 0;
+    let panStartOffsetY = 0;
+    let lastTapTimestamp = 0;
+
+    // Dynamically adjust max-width / max-height when rotated 90° or 270° so vertical photos fill horizontal screens without clipping
+    function updateImageBoundsForRotation() {
+      const isSideways = Math.abs(userRotationDeg % 180) === 90;
+      const activeEl = modalVideoCurrent.classList.contains("hidden")
+        ? modalImgCurrent
+        : modalVideoCurrent;
+
+      if (isSideways) {
+        activeEl.style.maxWidth = "90vh";
+        activeEl.style.maxHeight = "94vw";
+      } else {
+        activeEl.style.maxWidth = "96vw";
+        activeEl.style.maxHeight = "92vh";
+      }
+    }
+
+    function applyUserTransform(animate = false) {
+      const ease = animate ? "transform 0.28s cubic-bezier(0.22, 1, 0.36, 1)" : "none";
+      const activeEl = modalVideoCurrent.classList.contains("hidden")
+        ? modalImgCurrent
+        : modalVideoCurrent;
+
+      activeEl.style.transition = ease;
+      activeEl.style.transform = `translate3d(${userPanX}px, ${userPanY}px, 0px) scale(${userZoomScale}) rotate(${userRotationDeg}deg)`;
+
+      if (resetZoomBtn && zoomLevelReadout) {
+        if (userZoomScale > 1.02) {
+          resetZoomBtn.classList.remove("hidden");
+          resetZoomBtn.classList.add("flex");
+          zoomLevelReadout.textContent = `${Math.round(userZoomScale * 100)}%`;
+        } else {
+          resetZoomBtn.classList.add("hidden");
+          resetZoomBtn.classList.remove("flex");
+        }
+      }
+    }
+
+    function resetZoomAndRotation(animate = false) {
+      userZoomScale = 1;
+      userPanX = 0;
+      userPanY = 0;
+      userRotationDeg = 0;
+      updateImageBoundsForRotation();
+      applyUserTransform(animate);
+    }
+
+    // Fuzzy preloader for adjacent images (prev and next)
+    function preloadAdjacentImages(currentIndex) {
+      if (!galleryItems.length) return;
+      const total = galleryItems.length;
+      [1, 2, -1, -2].forEach((offset) => {
+        const idx = ((currentIndex + offset) % total + total) % total;
+        const item = galleryItems[idx];
+        if (item && !item.isVideo && item.fullUrl && !preloadedImagesCache.has(item.fullUrl)) {
+          const img = new Image();
+          img.referrerPolicy = "no-referrer";
+          img.src = item.fullUrl;
+          preloadedImagesCache.set(item.fullUrl, img);
+        }
+      });
+    }
+
+    function renderActiveMediaInModal(item) {
+      resetZoomAndRotation(false);
+      preloadAdjacentImages(currentModalIndex);
+
+      if (item.isVideo) {
+        modalImgCurrent.classList.add("hidden");
+        modalVideoCurrent.classList.remove("hidden");
+        modalVideoCurrent.poster = item.thumbnailUrl;
+        modalVideoCurrent.src = item.fullUrl;
+        modalVideoCurrent.play().catch(() => {});
+        if (fullResLoaderBadge) fullResLoaderBadge.classList.add("hidden");
+      } else {
+        modalVideoCurrent.pause();
+        modalVideoCurrent.removeAttribute("src");
+        modalVideoCurrent.classList.add("hidden");
+        modalImgCurrent.classList.remove("hidden");
+
+        // Instantly display high-res ready thumbnail first
+        modalImgCurrent.src = item.thumbnailUrl;
+
+        if (item.fullUrl && item.fullUrl !== item.thumbnailUrl) {
+          if (preloadedImagesCache.has(item.fullUrl) && preloadedImagesCache.get(item.fullUrl).complete) {
+            modalImgCurrent.src = item.fullUrl;
+          } else {
+            const hiResLoader = new Image();
+            hiResLoader.referrerPolicy = "no-referrer";
+            hiResLoader.onload = () => {
+              if (galleryItems[currentModalIndex]?.id === item.id) {
+                modalImgCurrent.src = item.fullUrl;
+              }
+              preloadedImagesCache.set(item.fullUrl, hiResLoader);
+            };
+            hiResLoader.src = item.fullUrl;
+          }
+        }
+      }
+    }
+
+    function openStickyModal(index) {
+      if (!galleryItems.length) return;
+      extendSessionByFifteenMinutes();
+      currentModalIndex = ((index % galleryItems.length) + galleryItems.length) % galleryItems.length;
+      const item = galleryItems[currentModalIndex];
+
+      renderActiveMediaInModal(item);
+
+      modalCardCurrent.style.transition = "none";
+      modalCardCurrent.style.transform = "translate3d(0px, 0px, 0px) scale(1) rotate(0deg)";
+      modalCardCurrent.style.opacity = "1";
+
+      modalCardOutgoing.style.opacity = "0";
+      modalCardOutgoing.style.transform = "translate3d(0px, 0px, 0px) scale(1) rotate(0deg)";
+
+      stickyModalOverlay.classList.remove("hidden");
+      stickyModalOverlay.classList.add("flex");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeStickyModal() {
+      modalVideoCurrent.pause();
+      modalVideoCurrent.removeAttribute("src");
+      if (fullResLoaderBadge) {
+        fullResLoaderBadge.classList.add("hidden");
+        fullResLoaderBadge.classList.remove("flex");
+      }
+      resetZoomAndRotation(false);
+      stickyModalOverlay.classList.add("hidden");
+      stickyModalOverlay.classList.remove("flex");
+      document.body.style.overflow = "";
+      isDragging = false;
+      isPinching = false;
+      isTransitioning = false;
+
+      // Restore scroll position back to where the 50th photo was in the gallery grid
+      window.scrollTo({ top: galleryScrollRestorationY, behavior: "instant" });
+    }
+
+    function transitionToPhoto(targetIndex, direction) {
+      if (isTransitioning || !galleryItems.length) return;
+      isTransitioning = true;
+
+      const total = galleryItems.length;
+      const nextIndex = ((targetIndex % total) + total) % total;
+      const outgoingItem = galleryItems[currentModalIndex];
+      const incomingItem = galleryItems[nextIndex];
+
+      const isNext = direction === "next";
+      const exitX = isNext ? -window.innerWidth * 0.85 : window.innerWidth * 0.85;
+      const enterX = isNext ? window.innerWidth * 0.85 : -window.innerWidth * 0.85;
+      const exitRot = isNext ? -16 : 16;
+      const enterRot = isNext ? 16 : -16;
+
+      // Copy current photo into outgoing layer uncropped
+      modalImgOutgoing.src = modalImgCurrent.src || outgoingItem.thumbnailUrl;
+      modalImgOutgoing.style.transform = `rotate(${userRotationDeg}deg)`;
+      modalCardOutgoing.style.transition = "none";
+      modalImgOutgoing.style.transition = "none";
+      modalCardOutgoing.style.transform = "translate3d(0px, 0px, 0px) scale(1) rotate(0deg)";
+      modalCardOutgoing.style.opacity = "1";
+
+      currentModalIndex = nextIndex;
+      renderActiveMediaInModal(incomingItem);
+
+      modalCardCurrent.style.transition = "none";
+      modalImgCurrent.style.transition = "none";
+      modalCardCurrent.style.opacity = "0";
+      modalCardCurrent.style.transform = `translate3d(${enterX}px, 0px, 0px) scale(0.84) rotate(${enterRot}deg)`;
+      modalImgCurrent.style.transform = `rotate(${-enterRot}deg)`;
+
+      void modalCardCurrent.offsetWidth;
+
+      const easeCurve = "cubic-bezier(0.22, 1, 0.36, 1)";
+      modalCardOutgoing.style.transition = `transform 0.45s ${easeCurve}, opacity 0.4s ease`;
+      modalImgOutgoing.style.transition = `transform 0.45s ${easeCurve}`;
+      modalCardOutgoing.style.transform = `translate3d(${exitX}px, 0px, 0px) scale(0.75) rotate(${exitRot}deg)`;
+      modalCardOutgoing.style.opacity = "0";
+      modalImgOutgoing.style.transform = `rotate(${userRotationDeg - exitRot}deg)`;
+
+      modalCardCurrent.style.transition = `transform 0.45s ${easeCurve}, opacity 0.38s ease`;
+      modalImgCurrent.style.transition = `transform 0.45s ${easeCurve}`;
+      modalCardCurrent.style.transform = "translate3d(0px, 0px, 0px) scale(1) rotate(0deg)";
+      modalCardCurrent.style.opacity = "1";
+      modalImgCurrent.style.transform = "translate3d(0px, 0px, 0px) scale(1) rotate(0deg)";
+
+      setTimeout(() => {
+        modalCardOutgoing.style.opacity = "0";
+        isTransitioning = false;
+      }, 460);
+    }
+
+    // Rotate 90 degrees button handler
+    if (rotateMediaBtn) {
+      rotateMediaBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userRotationDeg += 90;
+        userPanX = 0;
+        userPanY = 0;
+        updateImageBoundsForRotation();
+        applyUserTransform(true);
+      });
+    }
+
+    // Reset Zoom pill button handler
+    if (resetZoomBtn) {
+      resetZoomBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userZoomScale = 1;
+        userPanX = 0;
+        userPanY = 0;
+        applyUserTransform(true);
+      });
+    }
+
+    // Download original full-quality photo or video from Google Drive
+    if (downloadMediaBtn) {
+      downloadMediaBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const item = galleryItems[currentModalIndex];
+        if (!item) return;
+
+        try {
+          const response = await fetch(item.downloadUrl || item.fullUrl);
+          if (!response.ok) throw new Error("Direct fetch failed");
+          const blob = await response.blob();
+          const blobUrl = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = blobUrl;
+          link.download = item.name || `${SITE_CONFIG.coupleFirstName}-${SITE_CONFIG.coupleSecondName}-Memory-${currentModalIndex + 1}`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+        } catch (err) {
+          const driveDownloadUrl = `https://drive.google.com/uc?export=download&id=${encodeURIComponent(item.id)}`;
+          window.open(driveDownloadUrl, "_blank", "noopener");
+        }
+      });
+    }
+
+    function getTouchDistance(touches) {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.hypot(dx, dy);
+    }
+
+    function handleDragStart(clientX, clientY) {
+      if (isTransitioning || isPinching) return;
+      isDragging = true;
+      dragStartX = clientX;
+      dragStartY = clientY;
+      dragCurrentX = clientX;
+      dragCurrentY = clientY;
+      panStartOffsetX = userPanX;
+      panStartOffsetY = userPanY;
+      modalCardCurrent.style.transition = "none";
+      modalImgCurrent.style.transition = "none";
+    }
+
+    function handleDragMove(clientX, clientY) {
+      if (!isDragging || isTransitioning || isPinching) return;
+      dragCurrentX = clientX;
+      dragCurrentY = clientY;
+      const deltaX = dragCurrentX - dragStartX;
+      const deltaY = dragCurrentY - dragStartY;
+
+      // If image is zoomed in (> 1.02x), dragging pans around the zoomed photo instead of swiping
+      if (userZoomScale > 1.02) {
+        const maxPanX = (window.innerWidth * (userZoomScale - 1)) * 0.6;
+        const maxPanY = (window.innerHeight * (userZoomScale - 1)) * 0.6;
+        userPanX = clamp(panStartOffsetX + deltaX, -maxPanX, maxPanX);
+        userPanY = clamp(panStartOffsetY + deltaY, -maxPanY, maxPanY);
+        applyUserTransform(false);
+        return;
+      }
+
+      // At 1x zoom, dragging swipes to the next/previous photo with counter-rotation
+      const progress = clamp(deltaX / (window.innerWidth * 0.6), -1, 1);
+      const rot = progress * 15;
+      const scaleVal = 1 - Math.abs(progress) * 0.14;
+
+      modalCardCurrent.style.transform = `translate3d(${deltaX * 0.65}px, 0px, 0px) scale(${scaleVal}) rotate(${rot}deg)`;
+      modalImgCurrent.style.transform = `rotate(${userRotationDeg - rot}deg)`;
+    }
+
+    function handleDragEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+
+      if (userZoomScale > 1.02) {
+        return;
+      }
+
+      const deltaX = dragCurrentX - dragStartX;
+      const threshold = 45;
+
+      if (deltaX < -threshold) {
+        transitionToPhoto(currentModalIndex + 1, "next");
+      } else if (deltaX > threshold) {
+        transitionToPhoto(currentModalIndex - 1, "prev");
+      } else {
+        const easeCurve = "cubic-bezier(0.22, 1, 0.36, 1)";
+        modalCardCurrent.style.transition = `transform 0.35s ${easeCurve}`;
+        modalImgCurrent.style.transition = `transform 0.35s ${easeCurve}`;
+        modalCardCurrent.style.transform = "translate3d(0px, 0px, 0px) scale(1) rotate(0deg)";
+        modalImgCurrent.style.transform = `translate3d(0px, 0px, 0px) scale(1) rotate(${userRotationDeg}deg)`;
+      }
+    }
+
+    // Touch Events: Supports 2-Finger Pinch-to-Zoom, Double-Tap Zoom & 1-Finger Pan/Swipe
+    discreteStage.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 2) {
+        isDragging = false;
+        isPinching = true;
+        pinchStartDist = getTouchDistance(e.touches);
+        pinchStartScale = userZoomScale;
+      } else if (e.touches.length === 1) {
+        const now = Date.now();
+        const touchX = e.touches[0].clientX;
+        const touchY = e.touches[0].clientY;
+
+        // Double-tap to toggle 2.5x zoom or reset to 1x
+        if (now - lastTapTimestamp < 280) {
+          if (userZoomScale > 1.05) {
+            userZoomScale = 1;
+            userPanX = 0;
+            userPanY = 0;
+          } else {
+            userZoomScale = 2.5;
+            userPanX = 0;
+            userPanY = 0;
+          }
+          applyUserTransform(true);
+          lastTapTimestamp = 0;
+          return;
+        }
+        lastTapTimestamp = now;
+
+        handleDragStart(touchX, touchY);
+      }
+    }, { passive: true });
+
+    discreteStage.addEventListener("touchmove", (e) => {
+      if (isPinching && e.touches.length === 2) {
+        const dist = getTouchDistance(e.touches);
+        if (pinchStartDist > 0) {
+          const nextScale = clamp(pinchStartScale * (dist / pinchStartDist), 1, 5);
+          userZoomScale = nextScale;
+          if (userZoomScale <= 1.02) {
+            userPanX = 0;
+            userPanY = 0;
+          }
+          applyUserTransform(false);
+        }
+      } else if (e.touches.length === 1 && !isPinching) {
+        handleDragMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    discreteStage.addEventListener("touchend", (e) => {
+      if (isPinching && e.touches.length < 2) {
+        isPinching = false;
+        if (userZoomScale < 1.05) {
+          userZoomScale = 1;
+          userPanX = 0;
+          userPanY = 0;
+          applyUserTransform(true);
+        }
+        if (e.touches.length === 1) {
+          handleDragStart(e.touches[0].clientX, e.touches[0].clientY);
+        }
+        return;
+      }
+      if (e.touches.length === 0) {
+        handleDragEnd();
+      }
+    });
+
+    // Desktop Mouse Wheel Zoom & Drag Support
+    discreteStage.addEventListener("wheel", (e) => {
+      if (stickyModalOverlay.classList.contains("hidden")) return;
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.15 : 0.88;
+      userZoomScale = clamp(userZoomScale * zoomFactor, 1, 5);
+      if (userZoomScale <= 1.03) {
+        userZoomScale = 1;
+        userPanX = 0;
+        userPanY = 0;
+      }
+      applyUserTransform(true);
+    }, { passive: false });
+
+    discreteStage.addEventListener("mousedown", (e) => {
+      if (e.button === 0) handleDragStart(e.clientX, e.clientY);
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (isDragging) handleDragMove(e.clientX, e.clientY);
+    });
+
+    window.addEventListener("mouseup", () => {
+      if (isDragging) handleDragEnd();
+    });
+
+    document.getElementById("modalPrevBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      transitionToPhoto(currentModalIndex - 1, "prev");
+    });
+
+    document.getElementById("modalNextBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      transitionToPhoto(currentModalIndex + 1, "next");
+    });
+
+    document.getElementById("closeStickyModalBtn").addEventListener("click", closeStickyModal);
+
+    // Clicking outside or on the image frame no longer closes the lightbox (only close button or Esc works)
+    stickyModalOverlay.addEventListener("click", (e) => {
+      // Intentionally empty so accidental taps on the photo or background do not close it
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (stickyModalOverlay.classList.contains("hidden")) return;
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        transitionToPhoto(currentModalIndex + 1, "next");
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        transitionToPhoto(currentModalIndex - 1, "prev");
+      } else if (e.key === "r" || e.key === "R") {
+        e.preventDefault();
+        rotateMediaBtn.click();
+      } else if (e.key === "Escape") {
+        closeStickyModal();
+      }
+    });
+
+    const ambientCanvas = document.getElementById("ambientCanvas");
+    const ambientCtx = ambientCanvas ? ambientCanvas.getContext("2d") : null;
+    let particles = [];
+    const PARTICLE_COUNT = 38;
+
+    // ==========================================================================
+    // 30-MINUTE + 15-MINUTE SLIDING SESSION MEMORY & GATE LOGIC
+    // ==========================================================================
+    const SESSION_KEY_EXPIRY = "pankaj_renu_gallery_expiry_v1";
+
+    function getSessionExpiry() {
+      const val = localStorage.getItem(SESSION_KEY_EXPIRY);
+      if (!val) return 0;
+      const exp = parseInt(val, 10);
+      return isNaN(exp) ? 0 : exp;
+    }
+
+    function isSessionValid() {
+      return Date.now() < getSessionExpiry();
+    }
+
+    function extendSessionByFifteenMinutes() {
+      const now = Date.now();
+      const currentExpiry = getSessionExpiry();
+      const extMs = (SITE_CONFIG.extensionMinutes || 15) * 60 * 1000;
+      const initMs = (SITE_CONFIG.initialSessionMinutes || 30) * 60 * 1000;
+
+      let newExpiry;
+      if (currentExpiry > now) {
+        newExpiry = currentExpiry + extMs;
+      } else {
+        newExpiry = now + initMs;
+      }
+      localStorage.setItem(SESSION_KEY_EXPIRY, newExpiry.toString());
+    }
+
+    function showEngagementGalleryView() {
+      const landing = document.getElementById("landingPortalView");
+      const gallery = document.getElementById("engagementGalleryView");
+      const gateModal = document.getElementById("passcodeGateModal");
+
+      if (gateModal) {
+        gateModal.classList.add("hidden");
+        gateModal.classList.remove("flex");
+      }
+      if (landing) landing.classList.add("hidden");
+      if (gallery) gallery.classList.remove("hidden");
+
+      window.scrollTo({ top: 0, behavior: "instant" });
+      loadGoogleDriveGallery();
+    }
+
+    function showInvitationLandingView() {
+      const landing = document.getElementById("landingPortalView");
+      const gallery = document.getElementById("engagementGalleryView");
+
+      if (gallery) gallery.classList.add("hidden");
+      if (landing) landing.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    function initInvitationAndPasscodeGate() {
+      const openGateBtn = document.getElementById("openGalleryGateBtn");
+      const closeGateBtn = document.getElementById("closePasscodeGateBtn");
+      const gateModal = document.getElementById("passcodeGateModal");
+      const passcodeForm = document.getElementById("passcodeForm");
+      const passcodeInput = document.getElementById("passcodeInput");
+      const passcodeErrorMsg = document.getElementById("passcodeErrorMsg");
+      const backToInviteBtn = document.getElementById("backToInvitationBtn");
+
+      // Check if session is already active (30m + 15m sliding window)
+      if (isSessionValid()) {
+        extendSessionByFifteenMinutes();
+      }
+
+      if (openGateBtn) {
+        openGateBtn.addEventListener("click", () => {
+          if (isSessionValid()) {
+            extendSessionByFifteenMinutes();
+            showEngagementGalleryView();
+          } else {
+            if (gateModal) {
+              gateModal.classList.remove("hidden");
+              gateModal.classList.add("flex");
+              if (passcodeInput) {
+                passcodeInput.value = "";
+                setTimeout(() => passcodeInput.focus(), 100);
+              }
+              if (passcodeErrorMsg) passcodeErrorMsg.classList.add("hidden");
+            }
+          }
+        });
+      }
+
+      if (closeGateBtn && gateModal) {
+        closeGateBtn.addEventListener("click", () => {
+          gateModal.classList.add("hidden");
+          gateModal.classList.remove("flex");
+        });
+      }
+
+      if (gateModal) {
+        gateModal.addEventListener("click", (e) => {
+          if (e.target === gateModal) {
+            gateModal.classList.add("hidden");
+            gateModal.classList.remove("flex");
+          }
+        });
+      }
+
+      if (passcodeForm) {
+        passcodeForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const entered = (passcodeInput ? passcodeInput.value : "").trim().toLowerCase();
+          const expected = (SITE_CONFIG.familyAccessCode || "pankajrenu").trim().toLowerCase();
+
+          // Remove spaces or case differences
+          const cleanEntered = entered.replace(/\s+/g, "");
+          const cleanExpected = expected.replace(/\s+/g, "");
+
+          if (cleanEntered === cleanExpected) {
+            const initMs = (SITE_CONFIG.initialSessionMinutes || 30) * 60 * 1000;
+            localStorage.setItem(SESSION_KEY_EXPIRY, (Date.now() + initMs).toString());
+            if (passcodeErrorMsg) passcodeErrorMsg.classList.add("hidden");
+            showEngagementGalleryView();
+          } else {
+            if (passcodeErrorMsg) passcodeErrorMsg.classList.remove("hidden");
+            if (passcodeInput) {
+              passcodeInput.classList.add("border-red-500", "animate-shake");
+              setTimeout(() => passcodeInput.classList.remove("border-red-500", "animate-shake"), 600);
+            }
+          }
+        });
+      }
+
+      if (backToInviteBtn) {
+        backToInviteBtn.addEventListener("click", () => {
+          showInvitationLandingView();
+        });
+      }
+    }
+
+    function resizeAmbientCanvas() {
+      if (!ambientCanvas) return;
+      ambientCanvas.width = window.innerWidth;
+      ambientCanvas.height = window.innerHeight;
+    }
+
+    function initParticles() {
+      if (!ambientCanvas || !ambientCtx) return;
+      resizeAmbientCanvas();
+      particles = [];
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push({
+          x: Math.random() * ambientCanvas.width,
+          y: Math.random() * ambientCanvas.height,
+          size: Math.random() * 2.2 + 0.8,
+          speedX: (Math.random() - 0.5) * 0.35,
+          speedY: -Math.random() * 0.45 - 0.15,
+          alpha: Math.random() * 0.65 + 0.25,
+          pulseSpeed: Math.random() * 0.02 + 0.01,
+          phase: Math.random() * Math.PI * 2
+        });
+      }
+      window.addEventListener("resize", resizeAmbientCanvas);
+    }
+
+    function animateAmbientParticles() {
+      if (!ambientCanvas || !ambientCtx) return;
+      ambientCtx.clearRect(0, 0, ambientCanvas.width, ambientCanvas.height);
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.speedX;
+        p.y += p.speedY;
+        p.phase += p.pulseSpeed;
+
+        if (p.y < -10) {
+          p.y = ambientCanvas.height + 10;
+          p.x = Math.random() * ambientCanvas.width;
+        }
+        if (p.x < -10) p.x = ambientCanvas.width + 10;
+        if (p.x > ambientCanvas.width + 10) p.x = -10;
+
+        const currentAlpha = p.alpha * (0.6 + 0.4 * Math.sin(p.phase));
+
+        ambientCtx.beginPath();
+        ambientCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ambientCtx.fillStyle = `rgba(229, 195, 120, ${currentAlpha})`;
+        ambientCtx.shadowBlur = 8;
+        ambientCtx.shadowColor = "rgba(197, 160, 89, 0.45)";
+        ambientCtx.fill();
+      }
+
+      requestAnimationFrame(animateAmbientParticles);
+    }
+
+    window.onload = function () {
+      initParticles();
+      animateAmbientParticles();
+      initInvitationAndPasscodeGate();
+      updateMasterVideoAndHeroOnScroll();
+    };
+  </script>
+</body>
+</html>
