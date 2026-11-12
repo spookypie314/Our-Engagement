@@ -20,8 +20,8 @@
       coupleSecondName: "Renu",
 
       // Background Video Filename in ./media/ folder (change anytime here)
-      backgroundVideoFilename: "master1.mp4",
-      fallbackBackgroundVideo: "ring_ceremony1.mp4",
+      backgroundVideoFilename: "mas1ter.mp4",
+      fallbackBackgroundVideo: "ring_cer1emony.mp4",
 
       // Session Memory (30 mins initial + 15 mins automatic extension)
       initialSessionMinutes: 0,
@@ -1486,9 +1486,16 @@
     }
 
     function isSessionValid() {
+      const initialMins = SITE_CONFIG.initialSessionMinutes;
+      // If configured to 0 or negative, sessions are disabled and passcode is always required
+      if (initialMins === undefined || initialMins <= 0) {
+        clearGallerySession();
+        return false;
+      }
+
       const exp = getSessionExpiry();
       const activeDuration = getStoredActiveMillis();
-      const maxAllowedIdle = (SITE_CONFIG.initialSessionMinutes || 30) * 60 * 1000;
+      const maxAllowedIdle = initialMins * 60 * 1000;
 
       // If physical wall-clock time passed or true inactive time exceeded, invalidate
       if (Date.now() >= exp || activeDuration > maxAllowedIdle) {
@@ -1515,8 +1522,14 @@
     }
 
     function extendSessionByFifteenMinutes() {
+      const initialMins = SITE_CONFIG.initialSessionMinutes;
+      if (initialMins === undefined || initialMins <= 0) {
+        clearGallerySession();
+        return;
+      }
+
       const now = Date.now();
-      const initMs = (SITE_CONFIG.initialSessionMinutes || 30) * 60 * 1000;
+      const initMs = initialMins * 60 * 1000;
       const extMs = (SITE_CONFIG.extensionMinutes || 15) * 60 * 1000;
 
       const currentExpiry = getSessionExpiry();
@@ -1529,6 +1542,9 @@
     }
 
     function startActiveSessionTracker() {
+      const initialMins = SITE_CONFIG.initialSessionMinutes;
+      if (initialMins === undefined || initialMins <= 0) return;
+
       if (activeSessionTimerInterval) clearInterval(activeSessionTimerInterval);
 
       lastActiveTimestamp = Date.now();
@@ -1543,7 +1559,7 @@
           let activeMillis = getStoredActiveMillis() + elapsed;
           setStoredActiveMillis(activeMillis);
 
-          const maxAllowedIdle = (SITE_CONFIG.initialSessionMinutes || 30) * 60 * 1000;
+          const maxAllowedIdle = initialMins * 60 * 1000;
           if (activeMillis >= maxAllowedIdle || Date.now() >= getSessionExpiry()) {
             clearGallerySession();
             clearInterval(activeSessionTimerInterval);
@@ -1686,10 +1702,15 @@
           const cleanExpected = expected.replace(/\s+/g, "");
 
           if (cleanEntered === cleanExpected) {
-            const initMs = (SITE_CONFIG.initialSessionMinutes || 30) * 60 * 1000;
-            localStorage.setItem(SESSION_KEY_EXPIRY, (Date.now() + initMs).toString());
-            setStoredActiveMillis(0);
-            startActiveSessionTracker();
+            const initialMins = SITE_CONFIG.initialSessionMinutes;
+            if (initialMins !== undefined && initialMins > 0) {
+              const initMs = initialMins * 60 * 1000;
+              localStorage.setItem(SESSION_KEY_EXPIRY, (Date.now() + initMs).toString());
+              setStoredActiveMillis(0);
+              startActiveSessionTracker();
+            } else {
+              clearGallerySession();
+            }
 
             if (passcodeErrorMsg) passcodeErrorMsg.classList.add("hidden");
             showEngagementGalleryView();
