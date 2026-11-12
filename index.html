@@ -20,8 +20,8 @@
       coupleSecondName: "Renu",
 
       // Background Video Filename in ./media/ folder (change anytime here)
-      backgroundVideoFilename: "VID-20261111-WA0031_1.mp4",
-      fallbackBackgroundVideo: "ring_ceremony.mp4",
+      backgroundVideoFilename: "master1.mp4",
+      fallbackBackgroundVideo: "ring_ceremony1.mp4",
 
       // Session Memory (30 mins initial + 15 mins automatic extension)
       initialSessionMinutes: 1,
@@ -1471,9 +1471,12 @@
     const PARTICLE_COUNT = 38;
 
     // ==========================================================================
-    // 30-MINUTE + 15-MINUTE SLIDING SESSION MEMORY & GATE LOGIC
+    // 30-MINUTE + 15-MINUTE TRUE ACTIVE-TIME SLIDING SESSION MEMORY & GATE LOGIC
     // ==========================================================================
     const SESSION_KEY_EXPIRY = "pankaj_renu_gallery_expiry_v1";
+    const SESSION_KEY_ACTIVEMILLIS = "pankaj_renu_active_millis_v1";
+    let activeSessionTimerInterval = null;
+    let lastActiveTimestamp = Date.now();
 
     function getSessionExpiry() {
       const val = localStorage.getItem(SESSION_KEY_EXPIRY);
@@ -1483,23 +1486,90 @@
     }
 
     function isSessionValid() {
-      return Date.now() < getSessionExpiry();
+      const exp = getSessionExpiry();
+      const activeDuration = getStoredActiveMillis();
+      const maxAllowedIdle = (SITE_CONFIG.initialSessionMinutes || 30) * 60 * 1000;
+
+      // If physical wall-clock time passed or true inactive time exceeded, invalidate
+      if (Date.now() >= exp || activeDuration > maxAllowedIdle) {
+        clearGallerySession();
+        return false;
+      }
+      return true;
+    }
+
+    function getStoredActiveMillis() {
+      const val = localStorage.getItem(SESSION_KEY_ACTIVEMILLIS);
+      if (!val) return 0;
+      const ms = parseInt(val, 10);
+      return isNaN(ms) ? 0 : ms;
+    }
+
+    function setStoredActiveMillis(ms) {
+      localStorage.setItem(SESSION_KEY_ACTIVEMILLIS, ms.toString());
+    }
+
+    function clearGallerySession() {
+      localStorage.removeItem(SESSION_KEY_EXPIRY);
+      localStorage.removeItem(SESSION_KEY_ACTIVEMILLIS);
     }
 
     function extendSessionByFifteenMinutes() {
       const now = Date.now();
-      const currentExpiry = getSessionExpiry();
-      const extMs = (SITE_CONFIG.extensionMinutes || 15) * 60 * 1000;
       const initMs = (SITE_CONFIG.initialSessionMinutes || 30) * 60 * 1000;
+      const extMs = (SITE_CONFIG.extensionMinutes || 15) * 60 * 1000;
 
-      let newExpiry;
-      if (currentExpiry > now) {
-        newExpiry = currentExpiry + extMs;
-      } else {
-        newExpiry = now + initMs;
-      }
+      const currentExpiry = getSessionExpiry();
+      const newExpiry = currentExpiry > now ? currentExpiry + extMs : now + initMs;
+
       localStorage.setItem(SESSION_KEY_EXPIRY, newExpiry.toString());
+      setStoredActiveMillis(0); // Reset active idle counter on interaction
+      lastActiveTimestamp = Date.now();
+      startActiveSessionTracker();
     }
+
+    function startActiveSessionTracker() {
+      if (activeSessionTimerInterval) clearInterval(activeSessionTimerInterval);
+
+      lastActiveTimestamp = Date.now();
+
+      activeSessionTimerInterval = setInterval(() => {
+        // Only accumulate active time if tab is visible and active in foreground
+        if (document.visibilityState === "visible") {
+          const now = Date.now();
+          const elapsed = now - lastActiveTimestamp;
+          lastActiveTimestamp = now;
+
+          let activeMillis = getStoredActiveMillis() + elapsed;
+          setStoredActiveMillis(activeMillis);
+
+          const maxAllowedIdle = (SITE_CONFIG.initialSessionMinutes || 30) * 60 * 1000;
+          if (activeMillis >= maxAllowedIdle || Date.now() >= getSessionExpiry()) {
+            clearGallerySession();
+            clearInterval(activeSessionTimerInterval);
+            
+            // If user is currently inside the gallery, gently return them to the passcode gate or invitation
+            const galleryView = document.getElementById("engagementGalleryView");
+            if (galleryView && !galleryView.classList.contains("hidden")) {
+              showInvitationLandingView();
+            }
+          }
+        } else {
+          // Tab is in background / minimized / phone locked — freeze timer baseline
+          lastActiveTimestamp = Date.now();
+        }
+      }, 1000);
+    }
+
+    // Handle visibility change (pause tracking when switching away to another tab or app)
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        lastActiveTimestamp = Date.now();
+        if (!isSessionValid()) {
+          showInvitationLandingView();
+        }
+      }
+    });
 
     function showEngagementGalleryView() {
       const landing = document.getElementById("landingPortalView");
@@ -1563,9 +1633,11 @@
       const passcodeErrorMsg = document.getElementById("passcodeErrorMsg");
       const backToInviteBtn = document.getElementById("backToInvitationBtn");
 
-      // Check if session is already active (30m + 15m sliding window)
+      // Check if session is already active (with true active time tracking)
       if (isSessionValid()) {
         extendSessionByFifteenMinutes();
+      } else {
+        clearGallerySession();
       }
 
       if (openGateBtn) {
@@ -1616,6 +1688,9 @@
           if (cleanEntered === cleanExpected) {
             const initMs = (SITE_CONFIG.initialSessionMinutes || 30) * 60 * 1000;
             localStorage.setItem(SESSION_KEY_EXPIRY, (Date.now() + initMs).toString());
+            setStoredActiveMillis(0);
+            startActiveSessionTracker();
+
             if (passcodeErrorMsg) passcodeErrorMsg.classList.add("hidden");
             showEngagementGalleryView();
           } else {
