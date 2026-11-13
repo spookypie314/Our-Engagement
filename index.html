@@ -6,8 +6,11 @@
        ========================================================================== -->
   <script>
     window.SITE_CONFIG = {
-      // Family Gallery Passcode (case-insensitive, spaces ignored)
+      // Primary Family Gallery Passcode (case-insensitive, spaces ignored)
       familyAccessCode: "renupankaj",
+
+      // Optional Secondary / Temporary Access Code (Leave empty "" if not needed)
+      secondaryAccessCode: "myengagement",
 
       // Google Drive Folder URL or Folder ID
       googleDriveFolderId: "1IcifgGCUJtC2Oeivb7pUhdevywaKhl47",
@@ -1709,12 +1712,17 @@
         passcodeForm.addEventListener("submit", (e) => {
           e.preventDefault();
           const entered = (passcodeInput ? passcodeInput.value : "").trim().toLowerCase();
-          const expected = (SITE_CONFIG.familyAccessCode || "renupankaj").trim().toLowerCase();
-
           const cleanEntered = entered.replace(/\s+/g, "");
-          const cleanExpected = expected.replace(/\s+/g, "");
 
-          if (cleanEntered === cleanExpected) {
+          const primaryCode = (SITE_CONFIG.familyAccessCode || "renupankaj").trim().toLowerCase().replace(/\s+/g, "");
+          const secondaryCode = (SITE_CONFIG.secondaryAccessCode || "").trim().toLowerCase().replace(/\s+/g, "");
+
+          let isMatch = (cleanEntered === primaryCode);
+          if (!isMatch && secondaryCode.length > 0) {
+            isMatch = (cleanEntered === secondaryCode);
+          }
+
+          if (isMatch) {
             sessionStorage.setItem(AUTH_SESSION_KEY, "true");
             if (passcodeErrorMsg) passcodeErrorMsg.classList.add("hidden");
             showEngagementGalleryView();
