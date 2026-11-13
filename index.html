@@ -1619,6 +1619,16 @@
     // ==========================================================================
     const AUTH_SESSION_KEY = "pankaj_renu_gallery_unlocked_v3";
 
+    // Force clear session on fresh page load or browser refresh so it always asks for code
+    if (window.performance) {
+      const navEntries = performance.getEntriesByType("navigation");
+      if (navEntries.length > 0 && navEntries[0].type === "reload") {
+        sessionStorage.removeItem(AUTH_SESSION_KEY);
+      } else if (performance.navigation && performance.navigation.type === 1) {
+        sessionStorage.removeItem(AUTH_SESSION_KEY);
+      }
+    }
+
     function isSessionValid() {
       return sessionStorage.getItem(AUTH_SESSION_KEY) === "true";
     }
