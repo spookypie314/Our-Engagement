@@ -2,7 +2,7 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <!-- ==========================================================================
-       1. EDIT YOUR PASSWORD, GOOGLE DRIVE FOLDER ID, API KEY & BACKGROUND VIDEO HERE
+       1. EDIT YOUR PASSWORD, GOOGLE DRIVE FOLDER ID & API KEY RIGHT HERE AT TOP
        ========================================================================== -->
   <script>
     window.SITE_CONFIG = {
@@ -19,13 +19,8 @@
       coupleFirstName: "Pankaj",
       coupleSecondName: "Renu",
 
-      // Background Video Filename in ./media/ folder (change anytime here)
-      backgroundVideoFilename: "mas1ter.mp4",
-      fallbackBackgroundVideo: "ring_cer1emony.mp4",
-
-      // Session Memory (30 mins initial + 15 mins automatic extension)
-      initialSessionMinutes: 0,
-      extensionMinutes: 0
+      // Slideshow Default Interval in Seconds (Easily editable here)
+      slideshowDefaultSeconds: 1
     };
   </script>
 
@@ -160,7 +155,7 @@
 </head>
 <body class="relative min-h-screen selection:bg-[#c5a059] selection:text-[#0e0e0d]">
 
-  <!-- MASTER RING CEREMONY BACKGROUND VIDEO (FADES SMOOTHLY ON SCROLL) -->
+  <!-- MASTER RING CEREMONY BACKGROUND VIDEO -->
   <div id="masterVideoStage" aria-hidden="true">
     <video
       id="masterVideo"
@@ -169,7 +164,8 @@
       loop
       playsinline
     >
-      <!-- Source injected dynamically from SITE_CONFIG.backgroundVideoFilename -->
+      <source src="./media/master.mp4" type="video/mp4" />
+      <source src="./media/ring_ceremony.mp4" type="video/mp4" />
     </video>
     <div class="absolute inset-0 bg-gradient-to-b from-[#0e0e0d]/55 via-[#0e0e0d]/75 to-[#0e0e0d]"></div>
   </div>
@@ -231,15 +227,16 @@
         <!-- Premium Action Button to Open Family Gallery Gate -->
         <div class="mt-7 sm:mt-8">
           <button
-          id="openGalleryGateBtn"
-          type="button"
-          class="group relative inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-9 sm:py-4 rounded-full bg-gradient-to-r from-[#c5a059] via-[#e5c378] to-[#c5a059] text-[#0e0e0d] text-xs sm:text-sm tracking-[0.16em] sm:tracking-[0.2em] uppercase font-semibold shadow-[0_12px_35px_rgba(197,160,89,0.32)] hover:shadow-[0_16px_45px_rgba(229,195,120,0.45)] transition-all duration-300 hover:scale-[1.03] active:scale-95"
-        >
-          <span>Visit Engagement Gallery</span>
-          <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14M13 5l7 7-7 7"/>
-          </svg>
-        </button>
+            id="openGalleryGateBtn"
+            type="button"
+            class="group relative inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-9 sm:py-4 rounded-full bg-gradient-to-r from-[#c5a059] via-[#e5c378] to-[#c5a059] text-[#0e0e0d] text-xs sm:text-sm tracking-[0.16em] sm:tracking-[0.2em] uppercase font-semibold shadow-[0_12px_35px_rgba(197,160,89,0.32)] hover:shadow-[0_16px_45px_rgba(229,195,120,0.45)] transition-all duration-300 hover:scale-[1.03] active:scale-95"
+          >
+            <span>Visit Engagement Gallery</span>
+            <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M13 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -249,7 +246,7 @@
   </section>
 
   <!-- ==========================================================================
-       FAMILY PASSCODE GATE MODAL (CASE-INSENSITIVE: pankajrenu)
+       FAMILY PASSCODE GATE MODAL
        ========================================================================== -->
   <div
     id="passcodeGateModal"
@@ -311,7 +308,7 @@
   </div>
 
   <!-- ==========================================================================
-       VIEW 2: PROTECTED ENGAGEMENT GALLERY VIEW (4 COLUMNS ON MOBILE)
+       VIEW 2: PROTECTED ENGAGEMENT GALLERY VIEW
        ========================================================================== -->
   <div id="engagementGalleryView" class="relative z-10 hidden">
     <!-- Compact Back-to-Invitation Bar -->
@@ -357,13 +354,13 @@
           Tap any memory for uncropped fullscreen view — pinch to zoom, rotate, swipe, or save.
         </p>
 
-        <!-- Loading Indicator while fetching Google Drive Thumbnails -->
+        <!-- Loading Indicator -->
         <div id="driveSyncStatus" class="hidden mt-4 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#171614]/90 border border-[#c5a059]/35 text-xs text-[#e5c378]">
           <span class="w-2 h-2 rounded-full bg-[#e5c378] animate-ping"></span>
           <span>Fetching photos &amp; videos from Google Drive...</span>
         </div>
 
-        <!-- Diagnostic Message Box (Only shown if Drive Folder is empty or restricted) -->
+        <!-- Diagnostic Message Box -->
         <div id="driveErrorContainer" class="hidden mt-6 w-full max-w-lg rounded-2xl bg-[#171614]/95 border border-[#c5a059]/45 p-5 sm:p-6 text-left shadow-2xl">
           <div class="flex items-start gap-3">
             <div class="w-8 h-8 rounded-full bg-[#c5a059]/15 border border-[#c5a059]/40 flex items-center justify-center text-[#e5c378] shrink-0 mt-0.5">
@@ -389,14 +386,14 @@
       </div>
     </header>
 
-    <!-- MAIN PHOTO STREAM: 4 PHOTOS HORIZONTALLY ON MOBILE (grid-cols-4), 5 ON DESKTOP -->
+    <!-- MAIN PHOTO STREAM -->
     <main class="relative z-10 w-full min-h-screen pb-24 pt-2">
       <div class="max-w-7xl mx-auto px-2 sm:px-6">
         <div
           id="scatteredGalleryGrid"
           class="grid grid-cols-4 md:grid-cols-5 gap-2 sm:gap-5 md:gap-7"
         >
-          <!-- Populated dynamically with actual Google Drive photos & videos ONLY -->
+          <!-- Populated dynamically -->
         </div>
       </div>
 
@@ -432,7 +429,7 @@
   </button>
 
   <!-- ==========================================================================
-       TRUE FULLSCREEN UNCROPPED LIGHTBOX WITH PINCH-TO-ZOOM, ROTATE & DOWNLOAD
+       TRUE FULLSCREEN UNCROPPED LIGHTBOX (HIDDEN UNTIL PHOTO IS CLICKED)
        ========================================================================== -->
   <div
     id="stickyModalOverlay"
@@ -440,9 +437,22 @@
     role="dialog"
     aria-modal="true"
   >
-    <!-- Top Action Controls: Zoom Reset (when zoomed), Rotate 90°, Download & Close -->
-    <div class="fixed top-3 right-3 sm:top-5 sm:right-6 z-50 flex items-center gap-2 sm:gap-2.5">
-      <!-- Reset Zoom Pill (Appears automatically when pinched/zoomed in) -->
+    <!-- Top Action Controls: Slideshow, Reset Zoom, Rotate 90°, Download & Close -->
+    <div class="fixed top-3 right-3 sm:top-5 sm:right-6 z-50 flex items-center gap-1.5 sm:gap-2.5">
+      <!-- Slideshow Control Pill (Desktop) -->
+      <div id="slideshowControlGroup" class="hidden sm:flex items-center gap-1.5 px-3 h-9 sm:h-10 rounded-full bg-[#171614]/90 border border-[#c5a059]/45 text-[#e5c378] text-[10px] sm:text-xs tracking-wider uppercase shadow-2xl">
+        <button id="slideshowToggleBtn" type="button" class="hover:text-[#f7f3ee] flex items-center gap-1 font-semibold transition-colors">
+          <svg id="slideshowIconPlay" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <svg id="slideshowIconPause" class="w-3.5 h-3.5 hidden" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          <span id="slideshowLabel">Slide</span>
+        </button>
+        <span class="opacity-40">|</span>
+        <button id="slideshowSpeedMinus" type="button" class="hover:text-[#f7f3ee] px-1 font-bold">−</button>
+        <span id="slideshowSpeedReadout" class="w-6 text-center font-mono">2s</span>
+        <button id="slideshowSpeedPlus" type="button" class="hover:text-[#f7f3ee] px-1 font-bold">+</button>
+      </div>
+
+      <!-- Reset Zoom Pill -->
       <button
         id="resetZoomBtn"
         type="button"
@@ -453,7 +463,7 @@
         <span class="text-[9px] opacity-75">✕</span>
       </button>
 
-      <!-- Rotate 90° Button (View vertical or horizontal photos conveniently) -->
+      <!-- Rotate 90° Button -->
       <button
         id="rotateMediaBtn"
         type="button"
@@ -464,7 +474,7 @@
           <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
           <path d="M21 3v5h-5"/>
         </svg>
-        <span>Rotate</span>
+        <span class="hidden sm:inline">Rotate</span>
       </button>
 
       <!-- Download Original Button -->
@@ -479,7 +489,7 @@
           <polyline points="7 10 12 15 17 10"/>
           <line x1="12" y1="15" x2="12" y2="3"/>
         </svg>
-        <span>Save</span>
+        <span class="hidden sm:inline">Save</span>
       </button>
 
       <!-- Close Button -->
@@ -495,16 +505,29 @@
       </button>
     </div>
 
-    <!-- Subtle Full-Resolution Loading Pill -->
+    <!-- Compact Mobile Slideshow Bar with Speed Controls (+ / -) -->
+    <div id="mobileSlideshowControlGroup" class="sm:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#171614]/90 border border-[#c5a059]/45 text-[#e5c378] text-[11px] tracking-wider uppercase font-medium shadow-xl backdrop-blur-md">
+      <button id="mobileSlideshowToggleBtn" type="button" class="hover:text-[#f7f3ee] flex items-center gap-1.5">
+        <svg id="mobileIconPlay" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <svg id="mobileIconPause" class="w-3.5 h-3.5 hidden" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        <span id="mobileSlideshowLabel">Slide</span>
+      </button>
+      <span class="opacity-40">|</span>
+      <button id="mobileSlideshowSpeedMinus" type="button" class="hover:text-[#f7f3ee] px-1 font-bold">−</button>
+      <span id="mobileSlideshowSpeedReadout" class="w-5 text-center font-mono">2s</span>
+      <button id="mobileSlideshowSpeedPlus" type="button" class="hover:text-[#f7f3ee] px-1 font-bold">+</button>
+    </div>
+
+    <!-- Full-Resolution Loading Pill -->
     <div
       id="fullResLoaderBadge"
-      class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#171614]/90 border border-[#c5a059]/35 text-[10px] sm:text-[11px] tracking-wider text-[#e5c378] shadow-xl pointer-events-none"
+      class="fixed bottom-14 sm:bottom-4 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-2 px-3 py-1 rounded-full bg-[#171614]/90 border border-[#c5a059]/35 text-[10px] tracking-wider text-[#e5c378] shadow-xl pointer-events-none"
     >
       <span class="w-2 h-2 rounded-full bg-[#e5c378] animate-ping"></span>
       <span>Loading Full HD...</span>
     </div>
 
-    <!-- Previous Photo Arrow -->
+    <!-- Lightbox Navigation Arrows (Inside Lightbox Only) -->
     <button
       id="modalPrevBtn"
       class="fixed left-2 sm:left-5 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#171614]/75 border border-[#c5a059]/35 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl"
@@ -515,7 +538,6 @@
       </svg>
     </button>
 
-    <!-- Next Photo Arrow -->
     <button
       id="modalNextBtn"
       class="fixed right-2 sm:right-5 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#171614]/75 border border-[#c5a059]/35 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl"
@@ -526,12 +548,11 @@
       </svg>
     </button>
 
-    <!-- True Fullscreen Edge-to-Edge Stage (No Aspect Ratio Cropping) -->
+    <!-- Stage Area -->
     <div
       id="discreteStage"
       class="relative w-screen h-screen flex items-center justify-center cursor-grab active:cursor-grabbing overflow-hidden"
     >
-      <!-- Outgoing Card (Used during swipe transition) -->
       <div
         id="modalCardOutgoing"
         class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none opacity-0"
@@ -542,12 +563,11 @@
           src=""
           alt=""
           referrerpolicy="no-referrer"
-          class="max-w-[96vw] max-h-[92vh] w-auto h-auto object-contain pointer-events-none select-none rounded-lg shadow-[0_25px_70px_rgba(0,0,0,0.9)]"
+          class="max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain pointer-events-none select-none rounded-lg shadow-[0_25px_70px_rgba(0,0,0,0.9)]"
           style="will-change: transform;"
         />
       </div>
 
-      <!-- Current Active Fullscreen Container (100% Uncropped + Pinch Zoom + Rotate) -->
       <div
         id="modalCardCurrent"
         class="relative w-full h-full flex items-center justify-center"
@@ -558,7 +578,7 @@
           src=""
           alt=""
           referrerpolicy="no-referrer"
-          class="max-w-[96vw] max-h-[92vh] w-auto h-auto object-contain pointer-events-none select-none rounded-lg shadow-[0_25px_70px_rgba(0,0,0,0.9)]"
+          class="max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain pointer-events-none select-none rounded-lg shadow-[0_25px_70px_rgba(0,0,0,0.9)]"
           style="will-change: transform;"
         />
         <video
@@ -573,31 +593,10 @@
   </div>
 
   <!-- ==========================================================================
-       APPLICATION LOGIC (UNCROPPED FULLSCREEN + PINCH ZOOM + ROTATE)
+       APPLICATION LOGIC
        ========================================================================== -->
   <script>
     const SITE_CONFIG = window.SITE_CONFIG;
-
-    // Initialize Background Video Source from SITE_CONFIG
-    function initMasterBackgroundVideo() {
-      const masterVideoEl = document.getElementById("masterVideo");
-      if (!masterVideoEl) return;
-      
-      masterVideoEl.innerHTML = "";
-      const sourceMain = document.createElement("source");
-      sourceMain.src = `./media/${SITE_CONFIG.backgroundVideoFilename || 'master.mp4'}`;
-      sourceMain.type = "video/mp4";
-      masterVideoEl.appendChild(sourceMain);
-
-      if (SITE_CONFIG.fallbackBackgroundVideo) {
-        const sourceFallback = document.createElement("source");
-        sourceFallback.src = `./media/${SITE_CONFIG.fallbackBackgroundVideo}`;
-        sourceFallback.type = "video/mp4";
-        masterVideoEl.appendChild(sourceFallback);
-      }
-      masterVideoEl.load();
-      masterVideoEl.play().catch(() => {});
-    }
 
     function scrollToTopSmooth() {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -641,7 +640,7 @@
     }
 
     let galleryItems = [];
-    let galleryScrollRestorationY = 0; // Remembers gallery scroll position when opening lightbox
+    let galleryScrollRestorationY = 0;
 
     function showDriveDiagnostic(title, detailsHtml) {
       const errBox = document.getElementById("driveErrorContainer");
@@ -780,8 +779,8 @@
           const directMediaUrl = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(fileId)}?alt=media&key=${encodeURIComponent(apiKey)}`;
 
           const lowResThumb = file.thumbnailLink
-            ? file.thumbnailLink.replace(/=s\d+$/, "=s1600")
-            : `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w1600`;
+            ? file.thumbnailLink.replace(/=s\d+$/, "=s300")
+            : `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w300`;
 
           const fullMediaUrl = isVideo
             ? directMediaUrl
@@ -794,7 +793,7 @@
             name: file.name || `${SITE_CONFIG.coupleFirstName}-${SITE_CONFIG.coupleSecondName}-${idx + 1}`,
             isVideo,
             thumbnailUrl: lowResThumb,
-            fallbackThumbUrl: `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w1600`,
+            fallbackThumbUrl: `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w300`,
             directMediaUrl,
             fullUrl: fullMediaUrl,
             downloadUrl: directMediaUrl
@@ -878,11 +877,14 @@
       }
     }
 
+    let galleryCardElements = [];
+
     function renderScatteredGrid() {
       const galleryContainer = document.getElementById("scatteredGalleryGrid");
       if (!galleryContainer) return;
 
       galleryContainer.innerHTML = "";
+      galleryCardElements = [];
 
       galleryItems.forEach((item, idx) => {
         const figure = document.createElement("figure");
@@ -914,30 +916,17 @@
             ${decoHtml}
             <div class="relative w-full h-full overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl bg-[#0e0e0d]">
               <img
-                src="${item.thumbnailUrl}"
+                data-src="${item.thumbnailUrl}"
                 alt="Engagement Memory ${idx + 1}"
                 loading="lazy"
                 decoding="async"
                 referrerpolicy="no-referrer"
-                class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108 opacity-0 transition-opacity duration-300"
               />
               ${videoBadge}
             </div>
           </div>
         `;
-
-        const imgEl = figure.querySelector("img");
-        if (imgEl) {
-          let fallbackStep = 0;
-          imgEl.onerror = () => {
-            fallbackStep++;
-            if (fallbackStep === 1 && item.fallbackThumbUrl) {
-              imgEl.src = item.fallbackThumbUrl;
-            } else if (fallbackStep === 2 && item.directMediaUrl && !item.isVideo) {
-              imgEl.src = item.directMediaUrl;
-            }
-          };
-        }
 
         figure.addEventListener("click", () => {
           galleryScrollRestorationY = window.scrollY || window.pageYOffset;
@@ -945,6 +934,41 @@
         });
 
         galleryContainer.appendChild(figure);
+        galleryCardElements.push({ figure, item, loaded: false });
+      });
+
+      updateVisibleGalleryThumbnails();
+    }
+
+    function updateVisibleGalleryThumbnails() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const windowHeight = window.innerHeight || 800;
+      const bufferZone = windowHeight * 2;
+
+      galleryCardElements.forEach((entry) => {
+        if (entry.loaded) return;
+        const rect = entry.figure.getBoundingClientRect();
+        const elementTop = rect.top + scrollY;
+
+        if (elementTop < scrollY + windowHeight + bufferZone && rect.bottom >= -bufferZone) {
+          const imgEl = entry.figure.querySelector("img");
+          if (imgEl && imgEl.dataset.src) {
+            imgEl.src = imgEl.dataset.src;
+            imgEl.onload = () => {
+              imgEl.classList.remove("opacity-0");
+            };
+            let fallbackStep = 0;
+            imgEl.onerror = () => {
+              fallbackStep++;
+              if (fallbackStep === 1 && entry.item.fallbackThumbUrl) {
+                imgEl.src = entry.item.fallbackThumbUrl;
+              } else if (fallbackStep === 2 && entry.item.directMediaUrl && !entry.item.isVideo) {
+                imgEl.src = entry.item.directMediaUrl;
+              }
+            };
+            entry.loaded = true;
+          }
+        }
       });
     }
 
@@ -957,6 +981,10 @@
         const scrollY = window.scrollY || window.pageYOffset;
         const vh = window.innerHeight || 800;
         const isGalleryOpen = galleryView && !galleryView.classList.contains("hidden");
+
+        if (isGalleryOpen) {
+          updateVisibleGalleryThumbnails();
+        }
 
         if (masterStage) {
           if (!isGalleryOpen) {
@@ -987,7 +1015,7 @@
     }
 
     // ==========================================================================
-    // TRUE FULLSCREEN UNCROPPED VIEWER + PINCH-TO-ZOOM + 90° ROTATE + SWIPE
+    // LIGHTBOX & SLIDESHOW LOGIC
     // ==========================================================================
     const stickyModalOverlay = document.getElementById("stickyModalOverlay");
     const discreteStage = document.getElementById("discreteStage");
@@ -1009,9 +1037,14 @@
     let dragCurrentX = 0;
     let dragCurrentY = 0;
     let isTransitioning = false;
-    let preloadedImagesCache = new Map(); // Fuzzy preloading cache for adjacent items
+    let preloadedImagesCache = new Map();
 
-    // Pinch-to-Zoom, Pan & Rotation State
+    // Slideshow state
+    let isSlideshowActive = false;
+    let slideshowTimer = null;
+    let slideshowIntervalSeconds = SITE_CONFIG.slideshowDefaultSeconds || 2;
+    let imageLoadToken = 0; // Prevents stale/overlapping slow network callbacks from auto-advancing
+
     let userZoomScale = 1;
     let userPanX = 0;
     let userPanY = 0;
@@ -1024,7 +1057,6 @@
     let panStartOffsetY = 0;
     let lastTapTimestamp = 0;
 
-    // Dynamically adjust max-width / max-height when rotated 90° or 270° so vertical photos fill horizontal screens without clipping
     function updateImageBoundsForRotation() {
       const isSideways = Math.abs(userRotationDeg % 180) === 90;
       const activeEl = modalVideoCurrent.classList.contains("hidden")
@@ -1036,7 +1068,7 @@
         activeEl.style.maxHeight = "94vw";
       } else {
         activeEl.style.maxWidth = "96vw";
-        activeEl.style.maxHeight = "92vh";
+        activeEl.style.maxHeight = "90vh";
       }
     }
 
@@ -1070,7 +1102,6 @@
       applyUserTransform(animate);
     }
 
-    // Fuzzy preloader for adjacent images (prev and next)
     function preloadAdjacentImages(currentIndex) {
       if (!galleryItems.length) return;
       const total = galleryItems.length;
@@ -1087,6 +1118,8 @@
     }
 
     function renderActiveMediaInModal(item) {
+      imageLoadToken++;
+      const currentLoadToken = imageLoadToken;
       resetZoomAndRotation(false);
       preloadAdjacentImages(currentModalIndex);
 
@@ -1103,30 +1136,124 @@
         modalVideoCurrent.classList.add("hidden");
         modalImgCurrent.classList.remove("hidden");
 
-        // Instantly display high-res ready thumbnail first
-        modalImgCurrent.src = item.thumbnailUrl;
-
-        if (item.fullUrl && item.fullUrl !== item.thumbnailUrl) {
-          if (preloadedImagesCache.has(item.fullUrl) && preloadedImagesCache.get(item.fullUrl).complete) {
-            modalImgCurrent.src = item.fullUrl;
-          } else {
-            const hiResLoader = new Image();
-            hiResLoader.referrerPolicy = "no-referrer";
-            hiResLoader.onload = () => {
-              if (galleryItems[currentModalIndex]?.id === item.id) {
-                modalImgCurrent.src = item.fullUrl;
-              }
-              preloadedImagesCache.set(item.fullUrl, hiResLoader);
-            };
-            hiResLoader.src = item.fullUrl;
+        const fullResTarget = item.fullUrl || item.thumbnailUrl;
+        
+        // Use a detached image loader to prevent any slow network flickering/stale triggering
+        const testImg = new Image();
+        testImg.referrerPolicy = "no-referrer";
+        testImg.onload = () => {
+          if (imageLoadToken === currentLoadToken) {
+            modalImgCurrent.src = fullResTarget;
           }
-        }
+        };
+        testImg.src = fullResTarget;
+        // Also set immediately so fast loads show instantly
+        modalImgCurrent.src = fullResTarget;
       }
     }
 
+    function startSlideshow() {
+      isSlideshowActive = true;
+      updateSlideshowUI();
+      scheduleNextSlide();
+    }
+
+    function stopSlideshow() {
+      isSlideshowActive = false;
+      if (slideshowTimer) {
+        clearTimeout(slideshowTimer);
+        slideshowTimer = null;
+      }
+      updateSlideshowUI();
+    }
+
+    function toggleSlideshow() {
+      if (isSlideshowActive) {
+        stopSlideshow();
+      } else {
+        startSlideshow();
+      }
+    }
+
+    function scheduleNextSlide() {
+      if (!isSlideshowActive) return;
+      if (slideshowTimer) clearTimeout(slideshowTimer);
+      slideshowTimer = setTimeout(() => {
+        if (isSlideshowActive) {
+          transitionToPhoto(currentModalIndex + 1, "next");
+          scheduleNextSlide();
+        }
+      }, slideshowIntervalSeconds * 1000);
+    }
+
+    function updateSlideshowUI() {
+      const iconPlay = document.getElementById("slideshowIconPlay");
+      const iconPause = document.getElementById("slideshowIconPause");
+      const label = document.getElementById("slideshowLabel");
+      const mobileIconPlay = document.getElementById("mobileIconPlay");
+      const mobileIconPause = document.getElementById("mobileIconPause");
+      const mobileLabel = document.getElementById("mobileSlideshowLabel");
+      const speedReadout = document.getElementById("slideshowSpeedReadout");
+      const mobileSpeedReadout = document.getElementById("mobileSlideshowSpeedReadout");
+
+      if (speedReadout) speedReadout.textContent = `${slideshowIntervalSeconds}s`;
+      if (mobileSpeedReadout) mobileSpeedReadout.textContent = `${slideshowIntervalSeconds}s`;
+
+      if (isSlideshowActive) {
+        if (iconPlay) iconPlay.classList.add("hidden");
+        if (iconPause) iconPause.classList.remove("hidden");
+        if (label) label.textContent = "Pause";
+        if (mobileIconPlay) mobileIconPlay.classList.add("hidden");
+        if (mobileIconPause) mobileIconPause.classList.remove("hidden");
+        if (mobileLabel) mobileLabel.textContent = "Pause";
+      } else {
+        if (iconPlay) iconPlay.classList.remove("hidden");
+        if (iconPause) iconPause.classList.add("hidden");
+        if (label) label.textContent = "Slide";
+        if (mobileIconPlay) mobileIconPlay.classList.remove("hidden");
+        if (mobileIconPause) mobileIconPause.classList.add("hidden");
+        if (mobileLabel) mobileLabel.textContent = "Slide";
+      }
+    }
+
+    document.getElementById("slideshowToggleBtn")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleSlideshow();
+    });
+
+    document.getElementById("mobileSlideshowToggleBtn")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleSlideshow();
+    });
+
+    function changeSlideshowSpeed(delta) {
+      slideshowIntervalSeconds = clamp(slideshowIntervalSeconds + delta, 1, 15);
+      updateSlideshowUI();
+      if (isSlideshowActive) scheduleNextSlide();
+    }
+
+    document.getElementById("slideshowSpeedMinus")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      changeSlideshowSpeed(-1);
+    });
+
+    document.getElementById("slideshowSpeedPlus")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      changeSlideshowSpeed(1);
+    });
+
+    document.getElementById("mobileSlideshowSpeedMinus")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      changeSlideshowSpeed(-1);
+    });
+
+    document.getElementById("mobileSlideshowSpeedPlus")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      changeSlideshowSpeed(1);
+    });
+
     function openStickyModal(index) {
       if (!galleryItems.length) return;
-      extendSessionByFifteenMinutes();
       currentModalIndex = ((index % galleryItems.length) + galleryItems.length) % galleryItems.length;
       const item = galleryItems[currentModalIndex];
 
@@ -1143,11 +1270,11 @@
       stickyModalOverlay.classList.add("flex");
       document.body.style.overflow = "hidden";
 
-      // Push history state so mobile back button closes lightbox instead of exiting site
-      history.pushState({ modalOpen: true }, "");
+      history.pushState({ modalOpen: true, modalIndex: currentModalIndex }, "");
     }
 
     function closeStickyModal() {
+      stopSlideshow();
       modalVideoCurrent.pause();
       modalVideoCurrent.removeAttribute("src");
       if (fullResLoaderBadge) {
@@ -1162,9 +1289,28 @@
       isPinching = false;
       isTransitioning = false;
 
-      // Restore scroll position back to where the photo was in the gallery grid
       window.scrollTo({ top: galleryScrollRestorationY, behavior: "instant" });
     }
+
+    window.addEventListener("popstate", (e) => {
+      const gateModal = document.getElementById("passcodeGateModal");
+      const galleryView = document.getElementById("engagementGalleryView");
+
+      if (!stickyModalOverlay.classList.contains("hidden")) {
+        closeStickyModal();
+        return;
+      }
+
+      if (gateModal && !gateModal.classList.contains("hidden")) {
+        gateModal.classList.add("hidden");
+        gateModal.classList.remove("flex");
+        return;
+      }
+
+      if (galleryView && !galleryView.classList.contains("hidden")) {
+        showInvitationLandingView();
+      }
+    });
 
     function transitionToPhoto(targetIndex, direction) {
       if (isTransitioning || !galleryItems.length) return;
@@ -1181,7 +1327,6 @@
       const exitRot = isNext ? -16 : 16;
       const enterRot = isNext ? 16 : -16;
 
-      // Copy current photo into outgoing layer uncropped
       modalImgOutgoing.src = modalImgCurrent.src || outgoingItem.thumbnailUrl;
       modalImgOutgoing.style.transform = `rotate(${userRotationDeg}deg)`;
       modalCardOutgoing.style.transition = "none";
@@ -1191,6 +1336,10 @@
 
       currentModalIndex = nextIndex;
       renderActiveMediaInModal(incomingItem);
+
+      if (window.history.state?.modalOpen) {
+        window.history.replaceState({ modalOpen: true, modalIndex: currentModalIndex }, "");
+      }
 
       modalCardCurrent.style.transition = "none";
       modalImgCurrent.style.transition = "none";
@@ -1219,7 +1368,6 @@
       }, 460);
     }
 
-    // Rotate 90 degrees button handler
     if (rotateMediaBtn) {
       rotateMediaBtn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -1231,7 +1379,6 @@
       });
     }
 
-    // Reset Zoom pill button handler
     if (resetZoomBtn) {
       resetZoomBtn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -1242,7 +1389,6 @@
       });
     }
 
-    // Download original full-quality photo or video from Google Drive
     if (downloadMediaBtn) {
       downloadMediaBtn.addEventListener("click", async (e) => {
         e.stopPropagation();
@@ -1294,7 +1440,6 @@
       const deltaX = dragCurrentX - dragStartX;
       const deltaY = dragCurrentY - dragStartY;
 
-      // If image is zoomed in (> 1.02x), dragging pans around the zoomed photo instead of swiping
       if (userZoomScale > 1.02) {
         const maxPanX = (window.innerWidth * (userZoomScale - 1)) * 0.6;
         const maxPanY = (window.innerHeight * (userZoomScale - 1)) * 0.6;
@@ -1304,7 +1449,6 @@
         return;
       }
 
-      // At 1x zoom, dragging swipes to the next/previous photo with counter-rotation
       const progress = clamp(deltaX / (window.innerWidth * 0.6), -1, 1);
       const rot = progress * 15;
       const scaleVal = 1 - Math.abs(progress) * 0.14;
@@ -1317,9 +1461,7 @@
       if (!isDragging) return;
       isDragging = false;
 
-      if (userZoomScale > 1.02) {
-        return;
-      }
+      if (userZoomScale > 1.02) return;
 
       const deltaX = dragCurrentX - dragStartX;
       const threshold = 45;
@@ -1337,7 +1479,6 @@
       }
     }
 
-    // Touch Events: Supports 2-Finger Pinch-to-Zoom, Double-Tap Zoom & 1-Finger Pan/Swipe
     discreteStage.addEventListener("touchstart", (e) => {
       if (e.touches.length === 2) {
         isDragging = false;
@@ -1349,7 +1490,6 @@
         const touchX = e.touches[0].clientX;
         const touchY = e.touches[0].clientY;
 
-        // Double-tap to toggle 2.5x zoom or reset to 1x
         if (now - lastTapTimestamp < 280) {
           if (userZoomScale > 1.05) {
             userZoomScale = 1;
@@ -1406,7 +1546,6 @@
       }
     });
 
-    // Desktop Mouse Wheel Zoom & Drag Support
     discreteStage.addEventListener("wheel", (e) => {
       if (stickyModalOverlay.classList.contains("hidden")) return;
       e.preventDefault();
@@ -1442,11 +1581,12 @@
       transitionToPhoto(currentModalIndex + 1, "next");
     });
 
-    document.getElementById("closeStickyModalBtn").addEventListener("click", closeStickyModal);
-
-    // Clicking outside or on the image frame no longer closes the lightbox (only close button or Esc works)
-    stickyModalOverlay.addEventListener("click", (e) => {
-      // Intentionally empty so accidental taps on the photo or background do not close it
+    document.getElementById("closeStickyModalBtn").addEventListener("click", () => {
+      if (window.history.state?.modalOpen) {
+        window.history.back();
+      } else {
+        closeStickyModal();
+      }
     });
 
     window.addEventListener("keydown", (e) => {
@@ -1461,7 +1601,11 @@
         e.preventDefault();
         rotateMediaBtn.click();
       } else if (e.key === "Escape") {
-        closeStickyModal();
+        if (window.history.state?.modalOpen) {
+          window.history.back();
+        } else {
+          closeStickyModal();
+        }
       }
     });
 
@@ -1471,121 +1615,13 @@
     const PARTICLE_COUNT = 38;
 
     // ==========================================================================
-    // 30-MINUTE + 15-MINUTE TRUE ACTIVE-TIME SLIDING SESSION MEMORY & GATE LOGIC
+    // PERSISTENT UNTIL REFRESH GATE LOGIC
     // ==========================================================================
-    const SESSION_KEY_EXPIRY = "pankaj_renu_gallery_expiry_v1";
-    const SESSION_KEY_ACTIVEMILLIS = "pankaj_renu_active_millis_v1";
-    let activeSessionTimerInterval = null;
-    let lastActiveTimestamp = Date.now();
-
-    function getSessionExpiry() {
-      const val = localStorage.getItem(SESSION_KEY_EXPIRY);
-      if (!val) return 0;
-      const exp = parseInt(val, 10);
-      return isNaN(exp) ? 0 : exp;
-    }
+    const AUTH_SESSION_KEY = "pankaj_renu_gallery_unlocked_v2";
 
     function isSessionValid() {
-      const initialMins = SITE_CONFIG.initialSessionMinutes;
-      // If configured to 0 or negative, sessions are disabled and passcode is always required
-      if (initialMins === undefined || initialMins <= 0) {
-        clearGallerySession();
-        return false;
-      }
-
-      const exp = getSessionExpiry();
-      const activeDuration = getStoredActiveMillis();
-      const maxAllowedIdle = initialMins * 60 * 1000;
-
-      // If physical wall-clock time passed or true inactive time exceeded, invalidate
-      if (Date.now() >= exp || activeDuration > maxAllowedIdle) {
-        clearGallerySession();
-        return false;
-      }
-      return true;
+      return sessionStorage.getItem(AUTH_SESSION_KEY) === "true";
     }
-
-    function getStoredActiveMillis() {
-      const val = localStorage.getItem(SESSION_KEY_ACTIVEMILLIS);
-      if (!val) return 0;
-      const ms = parseInt(val, 10);
-      return isNaN(ms) ? 0 : ms;
-    }
-
-    function setStoredActiveMillis(ms) {
-      localStorage.setItem(SESSION_KEY_ACTIVEMILLIS, ms.toString());
-    }
-
-    function clearGallerySession() {
-      localStorage.removeItem(SESSION_KEY_EXPIRY);
-      localStorage.removeItem(SESSION_KEY_ACTIVEMILLIS);
-    }
-
-    function extendSessionByFifteenMinutes() {
-      const initialMins = SITE_CONFIG.initialSessionMinutes;
-      if (initialMins === undefined || initialMins <= 0) {
-        clearGallerySession();
-        return;
-      }
-
-      const now = Date.now();
-      const initMs = initialMins * 60 * 1000;
-      const extMs = (SITE_CONFIG.extensionMinutes || 15) * 60 * 1000;
-
-      const currentExpiry = getSessionExpiry();
-      const newExpiry = currentExpiry > now ? currentExpiry + extMs : now + initMs;
-
-      localStorage.setItem(SESSION_KEY_EXPIRY, newExpiry.toString());
-      setStoredActiveMillis(0); // Reset active idle counter on interaction
-      lastActiveTimestamp = Date.now();
-      startActiveSessionTracker();
-    }
-
-    function startActiveSessionTracker() {
-      const initialMins = SITE_CONFIG.initialSessionMinutes;
-      if (initialMins === undefined || initialMins <= 0) return;
-
-      if (activeSessionTimerInterval) clearInterval(activeSessionTimerInterval);
-
-      lastActiveTimestamp = Date.now();
-
-      activeSessionTimerInterval = setInterval(() => {
-        // Only accumulate active time if tab is visible and active in foreground
-        if (document.visibilityState === "visible") {
-          const now = Date.now();
-          const elapsed = now - lastActiveTimestamp;
-          lastActiveTimestamp = now;
-
-          let activeMillis = getStoredActiveMillis() + elapsed;
-          setStoredActiveMillis(activeMillis);
-
-          const maxAllowedIdle = initialMins * 60 * 1000;
-          if (activeMillis >= maxAllowedIdle || Date.now() >= getSessionExpiry()) {
-            clearGallerySession();
-            clearInterval(activeSessionTimerInterval);
-            
-            // If user is currently inside the gallery, gently return them to the passcode gate or invitation
-            const galleryView = document.getElementById("engagementGalleryView");
-            if (galleryView && !galleryView.classList.contains("hidden")) {
-              showInvitationLandingView();
-            }
-          }
-        } else {
-          // Tab is in background / minimized / phone locked — freeze timer baseline
-          lastActiveTimestamp = Date.now();
-        }
-      }, 1000);
-    }
-
-    // Handle visibility change (pause tracking when switching away to another tab or app)
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
-        lastActiveTimestamp = Date.now();
-        if (!isSessionValid()) {
-          showInvitationLandingView();
-        }
-      }
-    });
 
     function showEngagementGalleryView() {
       const landing = document.getElementById("landingPortalView");
@@ -1601,9 +1637,6 @@
 
       window.scrollTo({ top: 0, behavior: "instant" });
       loadGoogleDriveGallery();
-
-      // Push history state so mobile back button returns to invitation instead of exiting site
-      history.pushState({ galleryOpen: true }, "");
     }
 
     function showInvitationLandingView() {
@@ -1615,31 +1648,6 @@
       window.scrollTo({ top: 0, behavior: "instant" });
     }
 
-    // Handle Mobile Back Button (Popstate) to prevent exiting the browser unexpectedly
-    window.addEventListener("popstate", (e) => {
-      const gateModal = document.getElementById("passcodeGateModal");
-      const galleryView = document.getElementById("engagementGalleryView");
-
-      if (!stickyModalOverlay.classList.contains("hidden")) {
-        // If lightbox is open, close it first
-        closeStickyModal();
-        return;
-      }
-
-      if (gateModal && !gateModal.classList.contains("hidden")) {
-        // If passcode modal is open, close it
-        gateModal.classList.add("hidden");
-        gateModal.classList.remove("flex");
-        return;
-      }
-
-      if (galleryView && !galleryView.classList.contains("hidden")) {
-        // If inside gallery view, return to invitation landing page
-        showInvitationLandingView();
-        return;
-      }
-    });
-
     function initInvitationAndPasscodeGate() {
       const openGateBtn = document.getElementById("openGalleryGateBtn");
       const closeGateBtn = document.getElementById("closePasscodeGateBtn");
@@ -1649,17 +1657,13 @@
       const passcodeErrorMsg = document.getElementById("passcodeErrorMsg");
       const backToInviteBtn = document.getElementById("backToInvitationBtn");
 
-      // Check if session is already active (with true active time tracking)
       if (isSessionValid()) {
-        extendSessionByFifteenMinutes();
-      } else {
-        clearGallerySession();
+        showEngagementGalleryView();
       }
 
       if (openGateBtn) {
         openGateBtn.addEventListener("click", () => {
           if (isSessionValid()) {
-            extendSessionByFifteenMinutes();
             showEngagementGalleryView();
           } else {
             if (gateModal) {
@@ -1695,23 +1699,13 @@
         passcodeForm.addEventListener("submit", (e) => {
           e.preventDefault();
           const entered = (passcodeInput ? passcodeInput.value : "").trim().toLowerCase();
-          const expected = (SITE_CONFIG.familyAccessCode || "pankajrenu").trim().toLowerCase();
+          const expected = (SITE_CONFIG.familyAccessCode || "renupankaj").trim().toLowerCase();
 
-          // Remove spaces or case differences
           const cleanEntered = entered.replace(/\s+/g, "");
           const cleanExpected = expected.replace(/\s+/g, "");
 
           if (cleanEntered === cleanExpected) {
-            const initialMins = SITE_CONFIG.initialSessionMinutes;
-            if (initialMins !== undefined && initialMins > 0) {
-              const initMs = initialMins * 60 * 1000;
-              localStorage.setItem(SESSION_KEY_EXPIRY, (Date.now() + initMs).toString());
-              setStoredActiveMillis(0);
-              startActiveSessionTracker();
-            } else {
-              clearGallerySession();
-            }
-
+            sessionStorage.setItem(AUTH_SESSION_KEY, "true");
             if (passcodeErrorMsg) passcodeErrorMsg.classList.add("hidden");
             showEngagementGalleryView();
           } else {
@@ -1787,7 +1781,6 @@
     }
 
     window.onload = function () {
-      initMasterBackgroundVideo();
       initParticles();
       animateAmbientParticles();
       initInvitationAndPasscodeGate();
