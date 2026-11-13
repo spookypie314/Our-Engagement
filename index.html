@@ -1615,12 +1615,12 @@
     const PARTICLE_COUNT = 38;
 
     // ==========================================================================
-    // PERSISTENT UNTIL REFRESH GATE LOGIC (USING LOCALSTORAGE)
+    // PERSISTENT UNTIL REFRESH GATE LOGIC (USING SESSIONSTORAGE)
     // ==========================================================================
     const AUTH_SESSION_KEY = "pankaj_renu_gallery_unlocked_v3";
 
     function isSessionValid() {
-      return localStorage.getItem(AUTH_SESSION_KEY) === "true";
+      return sessionStorage.getItem(AUTH_SESSION_KEY) === "true";
     }
 
     function showEngagementGalleryView() {
@@ -1705,7 +1705,7 @@
           const cleanExpected = expected.replace(/\s+/g, "");
 
           if (cleanEntered === cleanExpected) {
-            localStorage.setItem(AUTH_SESSION_KEY, "true");
+            sessionStorage.setItem(AUTH_SESSION_KEY, "true");
             if (passcodeErrorMsg) passcodeErrorMsg.classList.add("hidden");
             showEngagementGalleryView();
           } else {
