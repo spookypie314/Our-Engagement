@@ -1,34 +1,30 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <!-- ==========================================================================
-       GALLERY SETTINGS & CONFIGURATION
-       ========================================================================== -->
   <script>
-    window.GALLERY_CONFIG = {
-      homeInvitationPageUrl: "index.html",
+    window.SITE_CONFIG = {
       googleDriveFolderId: "1IcifgGCUJtC2Oeivb7pUhdevywaKhl47",
       googleDriveApiKey: "AIzaSyBU992oO3J8QGx4B1_0kjm3_JUJ00SnnKc",
       coupleFirstName: "Pankaj",
-      coupleSecondName: "nRenu",
+      coupleSecondName: "Renu",
       slideshowDefaultSeconds: 2
     };
+
+    // SECURITY GUARD: If session token is missing (direct link or refreshed), redirect to index.html immediately!
+    const AUTH_SESSION_KEY = "pankaj_renu_gallery_unlocked_v3";
+    if (sessionStorage.getItem(AUTH_SESSION_KEY) !== "true") {
+      window.location.replace("index.html");
+    }
   </script>
 
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
   <title>Pankaj &amp; Renu — Engagement Gallery</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Rozha+One&family=Noto+Serif+Devanagari:wght@400;600&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Rozha+One&family=Noto+Serif+Devanagari:wght@400;600&display=swap" rel="stylesheet" />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -36,7 +32,6 @@
   <style>
     :root {
       --bg-primary: #0e0e0d;
-      --bg-secondary: #171614;
       --text-main: #f7f3ee;
       --text-muted: #b5a48b;
       --accent-gold: #c5a059;
@@ -46,86 +41,69 @@
       --font-devanagari: 'Rozha One', 'Noto Serif Devanagari', serif;
     }
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { background-color: var(--bg-primary); color: var(--text-muted); font-family: var(--font-sans); overflow-x: hidden; width: 100%; margin: 0; padding: 0; }
+    h1, h2, .couple-title { font-family: var(--font-serif); color: var(--text-main); letter-spacing: 0.05em; }
+    .devanagari-sacred { font-family: var(--font-devanagari); }
+    .gold-accent { color: var(--accent-gold); }
+    .tracking-regal { letter-spacing: 0.25em; text-transform: uppercase; }
 
-    html, body {
-      background-color: var(--bg-primary);
-      color: var(--text-muted);
-      font-family: var(--font-sans);
-      overflow-x: hidden;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-    }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #0e0e0d; }
+    ::-webkit-scrollbar-thumb { background: #c5a059; border-radius: 9999px; }
 
-    h1, h2, .couple-title {
-      font-family: var(--font-serif);
-      color: var(--text-main);
-      letter-spacing: 0.05em;
-    }
+    #masterVideoStage { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; overflow: hidden; opacity: 0.35; filter: blur(5px); }
+    #masterVideo { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); object-fit: cover; }
+    #ambientCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 
-    .devanagari-sacred {
-      font-family: var(--font-devanagari);
+    @keyframes cuteTwinkle {
+      0%, 100% { transform: scale(0.85) rotate(0deg); opacity: 0.6; }
+      50% { transform: scale(1.15) rotate(25deg); opacity: 1; }
     }
-
-    .gold-accent {
-      color: var(--accent-gold);
-    }
-
-    .tracking-regal {
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-    }
-
-    ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0e0e0d;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #c5a059;
-      border-radius: 9999px;
-    }
+    .cute-sparkle { animation: cuteTwinkle 2.8s ease-in-out infinite; }
+    .cute-sparkle-delayed { animation: cuteTwinkle 3.2s ease-in-out 1.4s infinite; }
   </style>
 </head>
 <body class="relative min-h-screen selection:bg-[#c5a059] selection:text-[#0e0e0d]">
 
-  <!-- ENGAGEMENT GALLERY VIEW -->
+  <div id="masterVideoStage" aria-hidden="true">
+    <video id="masterVideo" autoplay muted loop playsinline>
+      <source src="./media/master.mp4" type="video/mp4" />
+      <source src="./media/ring_ceremony.mp4" type="video/mp4" />
+    </video>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0e0e0d]/55 via-[#0e0e0d]/75 to-[#0e0e0d]"></div>
+  </div>
+
+  <canvas id="ambientCanvas"></canvas>
+
+  <!-- Gallery View -->
   <div id="engagementGalleryView" class="relative z-10">
     <div class="sticky top-0 z-30 flex items-center justify-between gap-2 px-3 sm:px-8 py-2.5 sm:py-3 bg-[#0e0e0d]/90 backdrop-blur-xl border-b border-[#c5a059]/20">
-      <button
-        id="backToInvitationBtn"
-        type="button"
-        class="inline-flex items-center gap-1 text-[10px] sm:text-xs tracking-[0.1em] sm:tracking-[0.18em] uppercase text-[#e5c378] hover:text-[#f7f3ee] transition-colors shrink-0 py-1 cursor-pointer"
-      >
-        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
-        </svg>
+      <a href="index.html" class="inline-flex items-center gap-1 text-[10px] sm:text-xs tracking-[0.1em] sm:tracking-[0.18em] uppercase text-[#e5c378] hover:text-[#f7f3ee] transition-colors shrink-0 py-1">
+        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         <span>Invitation</span>
-      </button>
+      </a>
 
       <span class="couple-title text-sm sm:text-xl text-[#f7f3ee] tracking-wide truncate text-center">
         Pankaj <span class="gold-accent italic">&amp;</span> Renu
       </span>
 
       <span id="photoCounterBadge" class="text-[9px] sm:text-[10px] tracking-[0.1em] sm:tracking-[0.18em] uppercase text-[#b5a48b] shrink-0 text-right">
-        10th Memories
+        Engagement Memories
       </span>
     </div>
 
-    <header id="topHeroSection" class="relative z-10 flex flex-col items-center justify-center px-3 sm:px-8 pt-6 sm:pt-10 pb-4 sm:pb-8 text-center">
-      <div id="heroContentWrapper" class="max-w-2xl mx-auto flex flex-col items-center">
-        <h2 class="couple-title text-2xl sm:text-5xl font-normal text-[#f7f3ee] tracking-wide leading-snug">
-          Sweet Moments Together
-        </h2>
+    <header class="relative z-10 flex flex-col items-center justify-center px-3 sm:px-8 pt-6 sm:pt-10 pb-4 sm:pb-8 text-center">
+      <div class="max-w-2xl mx-auto flex flex-col items-center">
+        <div class="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+          <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 cute-sparkle shrink-0" viewBox="0 0 32 32" fill="none"><path d="M16 2C16.8 10.5 21.5 15.2 30 16C21.5 16.8 16.8 21.5 16 30C15.2 21.5 10.5 16.8 2 16C10.5 15.2 15.2 10.5 16 2Z" fill="#f3d8a0" stroke="#c5a059" stroke-width="1.2"/></svg>
+          <span class="text-[9px] sm:text-xs tracking-[0.15em] sm:tracking-regal text-[#e5c378] font-medium">ENGAGEMENT ARCHIVE • 10TH</span>
+          <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 cute-sparkle-delayed shrink-0" viewBox="0 0 32 32" fill="none"><path d="M16 2C16.8 10.5 21.5 15.2 30 16C21.5 16.8 16.8 21.5 16 30C15.2 21.5 10.5 16.8 2 16C10.5 15.2 15.2 10.5 16 2Z" fill="#f3d8a0" stroke="#c5a059" stroke-width="1.2"/></svg>
+        </div>
 
+        <h2 class="couple-title text-2xl sm:text-5xl font-normal text-[#f7f3ee] tracking-wide leading-snug">Sweet Moments Together</h2>
         <p class="mt-1.5 text-[11px] sm:text-sm text-[#b5a48b] font-light max-w-md leading-relaxed px-2">
-          Tap any memory for uncropped fullscreen view — pinch to zoom, rotate, slideshow, or save.
+          Tap any memory for uncropped fullscreen view — pinch to zoom, rotate, swipe, or save.
         </p>
 
         <div id="driveSyncStatus" class="hidden mt-4 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#171614]/90 border border-[#c5a059]/35 text-xs text-[#e5c378]">
@@ -139,6 +117,9 @@
             <div class="flex-1">
               <h3 id="driveErrorTitle" class="couple-title text-lg sm:text-xl text-[#f7f3ee] font-normal">Unable to load Google Drive folder</h3>
               <p id="driveErrorDetails" class="mt-1.5 text-xs text-[#b5a48b] leading-relaxed"></p>
+              <div class="mt-4 flex flex-wrap items-center gap-2.5">
+                <button onclick="loadGoogleDriveGallery()" type="button" class="px-4 py-2 rounded-full bg-[#c5a059] text-[#0e0e0d] text-[11px] tracking-wider uppercase font-semibold hover:bg-[#e5c378] transition-colors">Retry Connection</button>
+              </div>
             </div>
           </div>
         </div>
@@ -149,111 +130,85 @@
       <div class="max-w-7xl mx-auto px-2 sm:px-6">
         <div id="scatteredGalleryGrid" class="grid grid-cols-4 md:grid-cols-5 gap-2 sm:gap-5 md:gap-7"></div>
       </div>
+
+      <div class="mt-16 flex flex-col items-center justify-center gap-4">
+        <button onclick="scrollToTopSmooth()" class="px-7 py-3 rounded-full bg-[#171614]/85 border border-[#c5a059]/40 hover:border-[#e5c378] text-[#e5c378] text-xs tracking-widest uppercase font-medium transition-all hover:scale-105 active:scale-95 shadow-lg backdrop-blur-md flex items-center gap-2">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+          <span>Back To Top</span>
+        </button>
+        <p class="devanagari-sacred text-xs sm:text-sm text-[#c5a059]/75 mt-2 tracking-wider">॥ सदा मंगलम् भवतु ॥</p>
+      </div>
     </main>
   </div>
 
-  <!-- LIGHTBOX MODAL -->
-  <div
-    id="stickyModalOverlay"
-    class="fixed inset-0 z-50 hidden bg-[#080807]/98 backdrop-blur-2xl items-center justify-center select-none overflow-hidden touch-none"
-    role="dialog"
-    aria-modal="true"
-  >
+  <button id="quickScrollTopBtn" onclick="scrollToTopSmooth()" class="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-[#171614]/85 border border-[#c5a059]/45 text-[#e5c378] flex items-center justify-center shadow-2xl backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 active:scale-95" aria-label="Back to top">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 15l7-7 7 7"/></svg>
+  </button>
+
+  <!-- Fullscreen Lightbox -->
+  <div id="stickyModalOverlay" class="fixed inset-0 z-50 hidden bg-[#080807]/98 backdrop-blur-2xl items-center justify-center select-none overflow-hidden touch-none" role="dialog" aria-modal="true">
     <div class="fixed top-3 right-3 sm:top-5 sm:right-6 z-50 flex items-center gap-1.5 sm:gap-2.5">
       <div id="slideshowControlGroup" class="hidden sm:flex items-center gap-1.5 px-3 h-9 sm:h-10 rounded-full bg-[#171614]/90 border border-[#c5a059]/45 text-[#e5c378] text-[10px] sm:text-xs tracking-wider uppercase shadow-2xl">
-        <button id="slideshowToggleBtn" type="button" class="hover:text-[#f7f3ee] flex items-center gap-1 font-semibold transition-colors cursor-pointer">
+        <button id="slideshowToggleBtn" type="button" class="hover:text-[#f7f3ee] flex items-center gap-1 font-semibold transition-colors">
           <svg id="slideshowIconPlay" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           <svg id="slideshowIconPause" class="w-3.5 h-3.5 hidden" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
           <span id="slideshowLabel">Slide</span>
         </button>
         <span class="opacity-40">|</span>
-        <button id="slideshowSpeedMinus" type="button" class="hover:text-[#f7f3ee] px-1 font-bold cursor-pointer">−</button>
+        <button id="slideshowSpeedMinus" type="button" class="hover:text-[#f7f3ee] px-1 font-bold">−</button>
         <span id="slideshowSpeedReadout" class="w-6 text-center font-mono">2s</span>
-        <button id="slideshowSpeedPlus" type="button" class="hover:text-[#f7f3ee] px-1 font-bold cursor-pointer">+</button>
+        <button id="slideshowSpeedPlus" type="button" class="hover:text-[#f7f3ee] px-1 font-bold">+</button>
       </div>
 
-      <button
-        id="resetZoomBtn"
-        type="button"
-        class="hidden h-9 sm:h-10 px-3 sm:px-3.5 rounded-full bg-[#171614]/90 border border-[#c5a059]/50 text-[#e5c378] items-center justify-center gap-1 text-[10px] sm:text-xs tracking-wider uppercase font-semibold shadow-2xl transition-all active:scale-95 cursor-pointer"
-      >
+      <button id="resetZoomBtn" type="button" class="hidden h-9 sm:h-10 px-3 sm:px-3.5 rounded-full bg-[#171614]/90 border border-[#c5a059]/50 text-[#e5c378] items-center justify-center gap-1 text-[10px] sm:text-xs tracking-wider uppercase font-semibold shadow-2xl transition-all active:scale-95" aria-label="Reset zoom">
         <span id="zoomLevelReadout">100%</span>
         <span class="text-[9px] opacity-75">✕</span>
       </button>
 
-      <button
-        id="rotateMediaBtn"
-        type="button"
-        class="h-9 sm:h-10 px-3 sm:px-4 rounded-full bg-[#171614]/90 border border-[#c5a059]/45 hover:border-[#e5c378] text-[#e5c378] hover:text-[#f7f3ee] flex items-center justify-center gap-1.5 text-[10px] sm:text-xs tracking-[0.12em] uppercase font-medium transition-all hover:scale-105 active:scale-95 shadow-2xl cursor-pointer"
-      >
-        <span>Rotate</span>
+      <button id="rotateMediaBtn" type="button" class="h-9 sm:h-10 px-3 sm:px-4 rounded-full bg-[#171614]/90 border border-[#c5a059]/45 hover:border-[#e5c378] text-[#e5c378] hover:text-[#f7f3ee] flex items-center justify-center gap-1.5 text-[10px] sm:text-xs tracking-[0.12em] uppercase font-medium transition-all hover:scale-105 active:scale-95 shadow-2xl" aria-label="Rotate">
+        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+        <span class="hidden sm:inline">Rotate</span>
       </button>
 
-      <button
-        id="downloadMediaBtn"
-        type="button"
-        class="h-9 sm:h-10 px-3 sm:px-4 rounded-full bg-[#171614]/90 border border-[#c5a059]/45 hover:border-[#e5c378] text-[#e5c378] hover:text-[#f7f3ee] flex items-center justify-center gap-1.5 text-[10px] sm:text-xs tracking-[0.12em] uppercase font-medium transition-all hover:scale-105 active:scale-95 shadow-2xl cursor-pointer"
-      >
-        <span>Save</span>
+      <button id="downloadMediaBtn" type="button" class="h-9 sm:h-10 px-3 sm:px-4 rounded-full bg-[#171614]/90 border border-[#c5a059]/45 hover:border-[#e5c378] text-[#e5c378] hover:text-[#f7f3ee] flex items-center justify-center gap-1.5 text-[10px] sm:text-xs tracking-[0.12em] uppercase font-medium transition-all hover:scale-105 active:scale-95 shadow-2xl" aria-label="Save">
+        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span class="hidden sm:inline">Save</span>
       </button>
 
-      <button
-        id="closeStickyModalBtn"
-        type="button"
-        class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#171614]/90 border border-[#c5a059]/40 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl cursor-pointer"
-      >
-        ✕
+      <button id="closeStickyModalBtn" type="button" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#171614]/90 border border-[#c5a059]/40 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl" aria-label="Close">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
     </div>
 
-    <!-- Compact Mobile Slideshow Bar -->
-    <div id="mobileSlideshowControlGroup" class="sm:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#171614]/90 border border-[#c5a059]/45 text-[#e5c378] text-[10px] tracking-wider uppercase font-medium shadow-xl backdrop-blur-md">
-      <button id="mobileSlideshowToggleBtn" type="button" class="hover:text-[#f7f3ee] flex items-center gap-1 cursor-pointer">
-        <svg id="mobileIconPlay" class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        <svg id="mobileIconPause" class="w-3 h-3 hidden" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="3" height="16"/><rect x="15" y="4" width="3" height="16"/></svg>
-        <span id="mobileSlideshowLabel">Slide</span>
-      </button>
-      <span class="opacity-40">|</span>
-      <button id="mobileSlideshowSpeedMinus" type="button" class="hover:text-[#f7f3ee] px-1 font-bold cursor-pointer">−</button>
-      <span id="mobileSlideshowSpeedReadout" class="w-4 text-center font-mono">2s</span>
-      <button id="mobileSlideshowSpeedPlus" type="button" class="hover:text-[#f7f3ee] px-1 font-bold cursor-pointer">+</button>
-    </div>
-
-    <button
-      id="modalPrevBtn"
-      class="fixed left-2 sm:left-5 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#171614]/75 border border-[#c5a059]/35 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl cursor-pointer"
-    >
-      ❮
+    <button id="modalPrevBtn" class="fixed left-2 sm:left-5 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#171614]/75 border border-[#c5a059]/35 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl" aria-label="Previous">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="#e5c378" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
-
-    <button
-      id="modalNextBtn"
-      class="fixed right-2 sm:right-5 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#171614]/75 border border-[#c5a059]/35 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl cursor-pointer"
-    >
-      ❯
+    <button id="modalNextBtn" class="fixed right-2 sm:right-5 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#171614]/75 border border-[#c5a059]/35 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl" aria-label="Next">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="#e5c378" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
     </button>
 
     <div id="discreteStage" class="relative w-screen h-screen flex items-center justify-center cursor-grab active:cursor-grabbing overflow-hidden">
-      <div id="modalCardOutgoing" class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none opacity-0">
-        <img id="modalImgOutgoing" src="" alt="" class="max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain rounded-lg shadow-2xl" />
+      <div id="modalCardOutgoing" class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none opacity-0" style="will-change: transform, opacity;">
+        <img id="modalImgOutgoing" src="" alt="" referrerpolicy="no-referrer" class="max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain pointer-events-none select-none rounded-lg shadow-2xl" />
       </div>
-
-      <div id="modalCardCurrent" class="relative w-full h-full flex items-center justify-center">
-        <img id="modalImgCurrent" src="" alt="" class="max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain rounded-lg shadow-2xl" />
-        <video id="modalVideoCurrent" controls playsinline class="hidden max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain bg-black rounded-lg shadow-2xl"></video>
+      <div id="modalCardCurrent" class="relative w-full h-full flex items-center justify-center" style="will-change: transform, opacity;">
+        <img id="modalImgCurrent" src="" alt="" referrerpolicy="no-referrer" class="max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain pointer-events-none select-none rounded-lg shadow-2xl" />
+        <video id="modalVideoCurrent" controls playsinline preload="metadata" class="hidden max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain bg-black rounded-lg shadow-2xl"></video>
       </div>
     </div>
   </div>
 
   <script>
-    const GALLERY_CONFIG = window.GALLERY_CONFIG;
+    const SITE_CONFIG = window.SITE_CONFIG;
 
-    function extractCleanFolderId(rawInput) {
-      const str = (rawInput || "").trim();
-      const match = str.match(/\/folders\/([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) return match[1];
-      const idParam = str.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (idParam && idParam[1]) return idParam[1];
+    function scrollToTopSmooth() { window.scrollTo({ top: 0, behavior: "smooth" }); }
+    function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
+    function extractCleanFolderId(raw) {
+      const str = (raw || "").trim();
+      const m1 = str.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+      if (m1 && m1[1]) return m1[1];
+      const m2 = str.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (m2 && m2[1]) return m2[1];
       return str;
     }
 
@@ -265,83 +220,187 @@
         targetId = file.shortcutDetails.targetId || file.id;
         mime = (file.shortcutDetails.targetMimeType || "").toLowerCase();
       }
-      const isImage = mime.startsWith("image/") || /\.(jpe?g|png|webp|gif|heic)$/i.test(name);
-      const isVideo = mime.startsWith("video/") || /\.(mp4|mov|webm)$/i.test(name);
-      return { isMedia: isImage || isVideo, isVideo, effectiveId: targetId };
+      const isVideo = mime.startsWith("video/") || /\.(mp4|mov|webm|m4v|mkv|avi|3gp)$/i.test(name);
+      const isImage = mime.startsWith("image/") || /\.(jpe?g|png|webp|gif|heic|heif|avif|bmp|tiff?)$/i.test(name);
+      return { isMedia: isImage || isVideo, isVideo, effectiveId: targetId, effectiveMime: mime };
     }
 
     let galleryItems = [];
+    let galleryScrollRestorationY = 0;
+
+    function showDriveDiagnostic(title, detailsHtml) {
+      const box = document.getElementById("driveErrorContainer");
+      if (!box) return;
+      document.getElementById("driveErrorTitle").textContent = title;
+      document.getElementById("driveErrorDetails").innerHTML = detailsHtml;
+      box.classList.remove("hidden");
+    }
+
+    async function fetchDriveFolderContents(folderId, apiKey) {
+      let items = [];
+      let pageToken = "";
+      do {
+        const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
+        const fields = encodeURIComponent("nextPageToken, files(id, name, mimeType, thumbnailLink, webContentLink, shortcutDetails)");
+        const pageParam = pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : "";
+        const url = `https://www.googleapis.com/drive/v3/files?q=${query}&fields=${fields}&pageSize=500&orderBy=createdTime%20desc&supportsAllDrives=true&includeItemsFromAllDrives=true${pageParam}&key=${encodeURIComponent(apiKey)}`;
+        const res = await fetch(url);
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
+        if (Array.isArray(data.files)) items = items.concat(data.files);
+        pageToken = data.nextPageToken || "";
+      } while (pageToken);
+      return items;
+    }
+
     async function loadGoogleDriveGallery() {
       const statusBadge = document.getElementById("driveSyncStatus");
+      const counterBadge = document.getElementById("photoCounterBadge");
       if (statusBadge) statusBadge.classList.remove("hidden");
+      document.getElementById("driveErrorContainer")?.classList.add("hidden");
 
-      const folderId = extractCleanFolderId(GALLERY_CONFIG.googleDriveFolderId);
-      const apiKey = (GALLERY_CONFIG.googleDriveApiKey || "").trim();
+      const folderId = extractCleanFolderId(SITE_CONFIG.googleDriveFolderId);
+      const apiKey = (SITE_CONFIG.googleDriveApiKey || "").trim();
+
+      if (!folderId || !apiKey) {
+        statusBadge?.classList.add("hidden");
+        showDriveDiagnostic("Missing Google Drive Credentials", "Please set <code>googleDriveFolderId</code> and <code>googleDriveApiKey</code>.");
+        return;
+      }
 
       try {
-        const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
-        const fields = encodeURIComponent("files(id, name, mimeType, thumbnailLink, shortcutDetails)");
-        const url = `https://www.googleapis.com/drive/v3/files?q=${query}&fields=${fields}&pageSize=200&orderBy=createdTime%20desc&key=${encodeURIComponent(apiKey)}`;
-        
-        const res = await fetch(url);
-        const data = await res.json();
-        if (!res.ok) throw new Error(data?.error?.message || "Drive error");
+        const topFiles = await fetchDriveFolderContents(folderId, apiKey);
+        let allFiles = [...topFiles];
+
+        const subFolders = topFiles.filter(f => f.mimeType === "application/vnd.google-apps.folder" || (f.mimeType === "application/vnd.google-apps.shortcut" && f.shortcutDetails?.targetMimeType === "application/vnd.google-apps.folder"));
+        for (const sf of subFolders) {
+          const subId = sf.shortcutDetails?.targetId || sf.id;
+          try {
+            const subItems = await fetchDriveFolderContents(subId, apiKey);
+            allFiles = allFiles.concat(subItems);
+          } catch(e) {}
+        }
 
         const mediaEntries = [];
-        (data.files || []).forEach(file => {
+        for (const file of allFiles) {
           const info = classifyMediaItem(file);
           if (info.isMedia) mediaEntries.push({ file, info });
-        });
+        }
+
+        if (mediaEntries.length === 0) {
+          galleryItems = [];
+          renderScatteredGrid();
+          showDriveDiagnostic("Folder Connected — 0 Photos Visible", `Folder <code>${folderId}</code> returned 0 items. Please ensure General Access is set to <strong>Anyone with the link (Viewer)</strong> in Google Drive.`);
+          return;
+        }
 
         galleryItems = mediaEntries.map(({ file, info }, idx) => {
           const fileId = info.effectiveId;
-          const directUrl = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(fileId)}?alt=media&key=${encodeURIComponent(apiKey)}`;
-          return {
-            id: fileId,
-            name: file.name || `Memory-${idx + 1}`,
-            isVideo: info.isVideo,
-            thumbnailUrl: file.thumbnailLink ? file.thumbnailLink.replace(/=s\d+$/, "=s300") : directUrl,
-            fullUrl: directUrl,
-            downloadUrl: directUrl
-          };
+          const isVideo = info.isVideo;
+          const directMediaUrl = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(fileId)}?alt=media&key=${encodeURIComponent(apiKey)}`;
+          const lowResThumb = file.thumbnailLink ? file.thumbnailLink.replace(/=s\d+$/, "=s300") : `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w300`;
+          const fullMediaUrl = isVideo ? directMediaUrl : (file.thumbnailLink ? file.thumbnailLink.replace(/=s\d+$/, "=s2400") : lowResThumb);
+          return { id: fileId, name: file.name || `Memory-${idx+1}`, isVideo, thumbnailUrl: lowResThumb, directMediaUrl, fullUrl: fullMediaUrl, downloadUrl: directMediaUrl };
         });
 
+        if (counterBadge) counterBadge.textContent = `${galleryItems.length} Memories`;
         renderScatteredGrid();
       } catch (err) {
-        console.error(err);
+        galleryItems = [];
+        renderScatteredGrid();
+        showDriveDiagnostic("Google Drive API Error", err.message);
       } finally {
-        if (statusBadge) statusBadge.classList.add("hidden");
+        statusBadge?.classList.add("hidden");
       }
     }
 
+    function getCuteDecorationSvg(idx) {
+      const v = idx % 5;
+      if (v === 0) return `<div class="absolute -top-2 -right-2 sm:-top-3.5 sm:-right-3.5 z-25 pointer-events-none drop-shadow-md"><svg class="w-5 h-5 sm:w-8 sm:h-8 text-[#e5c378]" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><path d="M24 24 C18 14 6 16 12 28 C16 34 22 28 24 24 Z" fill="rgba(229,195,120,0.3)"/><path d="M24 24 C30 14 42 16 36 28 C32 34 26 28 24 24 Z" fill="rgba(229,195,120,0.3)"/><circle cx="24" cy="24" r="3.5" fill="#f7f3ee" stroke="#c5a059"/></svg></div>`;
+      if (v === 1) return `<div class="absolute -bottom-2 -left-2 sm:-bottom-3 sm:-left-3 z-25 pointer-events-none drop-shadow"><svg class="w-5 h-5 sm:w-9 sm:h-9 text-[#c5a059]" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 34 C14 28 26 20 34 8"/></svg></div>`;
+      return `<div class="absolute -top-1.5 right-1.5 sm:-top-2.5 sm:right-4 z-25 pointer-events-none drop-shadow"><div class="w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-[#171614]/85 border border-[#c5a059]/40 flex items-center justify-center text-[8px] text-[#e5c378]">♥</div></div>`;
+    }
+
+    let galleryCardElements = [];
     function renderScatteredGrid() {
       const grid = document.getElementById("scatteredGalleryGrid");
       if (!grid) return;
       grid.innerHTML = "";
+      galleryCardElements = [];
 
       galleryItems.forEach((item, idx) => {
         const fig = document.createElement("figure");
-        fig.className = "relative aspect-[1/1.25] w-full p-2 rounded-2xl bg-[#171614]/90 border border-[#c5a059]/35 cursor-pointer group";
+        fig.className = "relative z-10 m-0 gallery-card-figure cursor-pointer group";
+        const isEven = idx % 2 === 0;
+        const colShift = isEven ? "-2%" : "2%";
+        const tilt = isEven ? "-1.8deg" : "2deg";
+        const deco = getCuteDecorationSvg(idx);
+        const videoBadge = item.isVideo ? `<div class="absolute inset-0 flex items-center justify-center bg-black/25 pointer-events-none"><div class="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-[#0e0e0d]/80 border border-[#e5c378]/70 flex items-center justify-center text-[#e5c378]"><svg class="w-3.5 h-3.5 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div>` : "";
+
         fig.innerHTML = `
-          <div class="relative w-full h-full overflow-hidden rounded-xl bg-[#0e0e0d]">
-            <img src="${item.thumbnailUrl}" alt="" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+          <div class="relative aspect-[1/1.25] w-full p-1.5 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl md:rounded-3xl bg-[#171614]/90 border border-[#c5a059]/35 hover:border-[#e5c378] transition-all duration-500 shadow-[0_10px_25px_rgba(0,0,0,0.65)] group-hover:shadow-[0_20px_45px_rgba(197,160,89,0.22)]" style="transform: translateX(${colShift}) rotateZ(${tilt});">
+            ${deco}
+            <div class="relative w-full h-full overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl bg-[#0e0e0d]">
+              <img data-src="${item.thumbnailUrl}" alt="Memory ${idx+1}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108 opacity-0 transition-opacity duration-300" />
+              ${videoBadge}
+            </div>
           </div>
         `;
-        fig.addEventListener("click", () => openStickyModal(idx));
+        fig.addEventListener("click", () => {
+          galleryScrollRestorationY = window.scrollY || window.pageYOffset;
+          openStickyModal(idx);
+        });
         grid.appendChild(fig);
+        galleryCardElements.push({ figure: fig, item, loaded: false });
+      });
+      updateVisibleThumbnails();
+    }
+
+    function updateVisibleThumbnails() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const vh = window.innerHeight || 800;
+      galleryCardElements.forEach(e => {
+        if (e.loaded) return;
+        const rect = e.figure.getBoundingClientRect();
+        if (rect.top < scrollY + vh * 2 && rect.bottom >= -vh * 2) {
+          const img = e.figure.querySelector("img");
+          if (img && img.dataset.src) {
+            img.src = img.dataset.src;
+            img.onload = () => img.classList.remove("opacity-0");
+            e.loaded = true;
+          }
+        }
       });
     }
 
-    // Lightbox Logic
-    const stickyModalOverlay = document.getElementById("stickyModalOverlay");
-    const modalImgCurrent = document.getElementById("modalImgCurrent");
-    let currentModalIndex = 0;
-    let isSlideshowActive = false;
-    let slideshowTimer = null;
-    let slideshowIntervalSeconds = GALLERY_CONFIG.slideshowDefaultSeconds || 2;
+    window.addEventListener("scroll", () => {
+      updateVisibleThumbnails();
+      const quickBtn = document.getElementById("quickScrollTopBtn");
+      if (quickBtn) {
+        if ((window.scrollY || window.pageYOffset) > window.innerHeight * 0.45) {
+          quickBtn.style.opacity = "1"; quickBtn.style.pointerEvents = "auto";
+        } else {
+          quickBtn.style.opacity = "0"; quickBtn.style.pointerEvents = "none";
+        }
+      }
+    }, { passive: true });
 
-    function openStickyModal(index) {
-      currentModalIndex = index;
+    // Lightbox & Slideshow logic
+    const stickyModalOverlay = document.getElementById("stickyModalOverlay");
+    const discreteStage = document.getElementById("discreteStage");
+    const modalCardCurrent = document.getElementById("modalCardCurrent");
+    const modalImgCurrent = document.getElementById("modalImgCurrent");
+    const modalVideoCurrent = document.getElementById("modalVideoCurrent");
+    const modalCardOutgoing = document.getElementById("modalCardOutgoing");
+    const modalImgOutgoing = document.getElementById("modalImgOutgoing");
+
+    let currentModalIndex = 0;
+    let userZoomScale = 1, userPanX = 0, userPanY = 0, userRotationDeg = 0;
+    let isSlideshowActive = false, slideshowTimer = null, slideshowIntervalSeconds = SITE_CONFIG.slideshowDefaultSeconds;
+
+    function openStickyModal(idx) {
+      if (!galleryItems.length) return;
+      currentModalIndex = ((idx % galleryItems.length) + galleryItems.length) % galleryItems.length;
       renderActiveMediaInModal(galleryItems[currentModalIndex]);
       stickyModalOverlay.classList.remove("hidden");
       stickyModalOverlay.classList.add("flex");
@@ -351,99 +410,77 @@
 
     function closeStickyModal() {
       stopSlideshow();
+      modalVideoCurrent.pause();
+      modalVideoCurrent.removeAttribute("src");
       stickyModalOverlay.classList.add("hidden");
       stickyModalOverlay.classList.remove("flex");
       document.body.style.overflow = "";
+      window.scrollTo({ top: galleryScrollRestorationY, behavior: "instant" });
     }
-
-    window.addEventListener("popstate", () => {
-      if (!stickyModalOverlay.classList.contains("hidden")) {
-        closeStickyModal();
-      }
-    });
 
     function renderActiveMediaInModal(item) {
-      if (item) modalImgCurrent.src = item.fullUrl;
-    }
-
-    function transitionToPhoto(targetIndex) {
-      const total = galleryItems.length;
-      currentModalIndex = ((targetIndex % total) + total) % total;
-      renderActiveMediaInModal(galleryItems[currentModalIndex]);
-    }
-
-    function startSlideshow() {
-      isSlideshowActive = true;
-      updateSlideshowUI();
-      scheduleNextSlide();
-    }
-
-    function stopSlideshow() {
-      isSlideshowActive = false;
-      if (slideshowTimer) clearTimeout(slideshowTimer);
-      updateSlideshowUI();
+      userZoomScale = 1; userPanX = 0; userPanY = 0; userRotationDeg = 0;
+      modalImgCurrent.style.transform = "none";
+      if (item.isVideo) {
+        modalImgCurrent.classList.add("hidden");
+        modalVideoCurrent.classList.remove("hidden");
+        modalVideoCurrent.src = item.fullUrl;
+        modalVideoCurrent.play().catch(() => {});
+      } else {
+        modalVideoCurrent.pause();
+        modalVideoCurrent.removeAttribute("src");
+        modalVideoCurrent.classList.add("hidden");
+        modalImgCurrent.classList.remove("hidden");
+        modalImgCurrent.src = item.fullUrl;
+      }
     }
 
     function toggleSlideshow() {
       if (isSlideshowActive) stopSlideshow();
       else startSlideshow();
     }
-
+    function startSlideshow() { isSlideshowActive = true; updateSlideshowUI(); scheduleNextSlide(); }
+    function stopSlideshow() { isSlideshowActive = false; if (slideshowTimer) clearTimeout(slideshowTimer); updateSlideshowUI(); }
     function scheduleNextSlide() {
       if (!isSlideshowActive) return;
-      if (slideshowTimer) clearTimeout(slideshowTimer);
       slideshowTimer = setTimeout(() => {
-        if (isSlideshowActive) {
-          transitionToPhoto(currentModalIndex + 1);
-          scheduleNextSlide();
-        }
+        if (isSlideshowActive) { transitionToPhoto(currentModalIndex + 1); scheduleNextSlide(); }
       }, slideshowIntervalSeconds * 1000);
     }
-
     function updateSlideshowUI() {
-      const label = document.getElementById("slideshowLabel");
-      const mLabel = document.getElementById("mobileSlideshowLabel");
-      const readout = document.getElementById("slideshowSpeedReadout");
-      const mReadout = document.getElementById("mobileSlideshowSpeedReadout");
-      if (readout) readout.textContent = `${slideshowIntervalSeconds}s`;
-      if (mReadout) mReadout.textContent = `${slideshowIntervalSeconds}s`;
-      if (label) label.textContent = isSlideshowActive ? "Pause" : "Slide";
-      if (mLabel) mLabel.textContent = isSlideshowActive ? "Pause" : "Slide";
+      const lbl = document.getElementById("slideshowLabel");
+      if (lbl) lbl.textContent = isSlideshowActive ? "Pause" : "Slide";
+    }
+
+    function transitionToPhoto(targetIdx) {
+      if (!galleryItems.length) return;
+      currentModalIndex = ((targetIdx % galleryItems.length) + galleryItems.length) % galleryItems.length;
+      renderActiveMediaInModal(galleryItems[currentModalIndex]);
     }
 
     document.getElementById("slideshowToggleBtn")?.addEventListener("click", toggleSlideshow);
-    document.getElementById("mobileSlideshowToggleBtn")?.addEventListener("click", toggleSlideshow);
-
-    function changeSpeed(delta) {
-      slideshowIntervalSeconds = clamp(slideshowIntervalSeconds + delta, 1, 15);
-      updateSlideshowUI();
-      if (isSlideshowActive) scheduleNextSlide();
-    }
-
-    document.getElementById("slideshowSpeedMinus")?.addEventListener("click", () => changeSpeed(-1));
-    document.getElementById("slideshowSpeedPlus")?.addEventListener("click", () => changeSpeed(1));
-    document.getElementById("mobileSlideshowSpeedMinus")?.addEventListener("click", () => changeSpeed(-1));
-    document.getElementById("mobileSlideshowSpeedPlus")?.addEventListener("click", () => changeSpeed(1));
-
+    document.getElementById("closeStickyModalBtn")?.addEventListener("click", () => {
+      if (window.history.state?.modalOpen) window.history.back();
+      else closeStickyModal();
+    });
     document.getElementById("modalPrevBtn")?.addEventListener("click", () => transitionToPhoto(currentModalIndex - 1));
     document.getElementById("modalNextBtn")?.addEventListener("click", () => transitionToPhoto(currentModalIndex + 1));
-    document.getElementById("closeStickyModalBtn")?.addEventListener("click", () => window.history.back());
+    document.getElementById("rotateMediaBtn")?.addEventListener("click", () => {
+      userRotationDeg = (userRotationDeg + 90) % 360;
+      modalImgCurrent.style.transform = `rotate(${userRotationDeg}deg)`;
+    });
+    document.getElementById("downloadMediaBtn")?.addEventListener("click", () => {
+      const item = galleryItems[currentModalIndex];
+      if (item) window.open(item.downloadUrl, "_blank");
+    });
 
-    document.getElementById("backToInvitationBtn")?.addEventListener("click", () => {
-      const container = document.getElementById("dynamicPageContainer");
-      const landing = document.getElementById("landingPortalView");
-      if (container) container.classList.add("hidden");
-      if (landing) landing.classList.remove("hidden");
+    window.addEventListener("popstate", () => {
+      if (!stickyModalOverlay.classList.contains("hidden")) closeStickyModal();
     });
 
     window.onload = function() {
       loadGoogleDriveGallery();
     };
-
-    // If loaded dynamically via fetch() inside index.html, ensure initialization runs immediately
-    if (document.readyState === "complete" || document.readyState === "interactive") {
-      setTimeout(loadGoogleDriveGallery, 50);
-    }
   </script>
 </body>
 </html>
