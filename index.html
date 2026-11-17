@@ -339,12 +339,15 @@
                   const galleryContent = doc.body.innerHTML;
                   container.innerHTML = galleryContent;
 
-                  // Run scripts inside loaded content
+                  // Execute script tags manually so gallery functions and loadGoogleDriveGallery() run
                   const scripts = container.querySelectorAll("script");
                   scripts.forEach(script => {
                     const newScript = document.createElement("script");
-                    if (script.src) newScript.src = script.src;
-                    else newScript.text = script.text;
+                    if (script.src) {
+                      newScript.src = script.src;
+                    } else {
+                      newScript.text = script.text;
+                    }
                     document.body.appendChild(newScript);
                   });
                 } catch (err) {
