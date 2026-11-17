@@ -37,6 +37,12 @@
           artist: "Sintaa, Riyaazi",
           url: "https://aac.saavncdn.com/325/fa04b0386637ae2acee576ee39fa6404_320.mp4",
           image: "https://c.saavncdn.com/325/Jadugarni-Haryanvi-2026-20260629120738-500x500.jpg"
+        },
+        {
+          name: "JADUGARNI (Bala Records)",
+          artist: "Devender Ahlawat",
+          url: "https://aac.saavncdn.com/970/9bd848796aa63b33c4d9d3681675ad02_320.mp4",
+          image: "https://c.saavncdn.com/970/JADUGARNI-Unknown-2026-20260915173504-500x500.jpg"
         }
       ]
     };
@@ -511,7 +517,7 @@
   <!-- Hidden Audio Element -->
   <audio id="globalAudioPlayer" preload="auto"></audio>
 
-  <!-- 1. Initial Bottom Experience Banner with Vibrant Border -->
+  <!-- 1. Initial Bottom Experience Banner with Vibrant Border (Auto collapses in 2 seconds) -->
   <div
     id="musicIntroBanner"
     class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 max-w-md w-[92%] sm:w-auto px-5 py-3.5 rounded-2xl bg-[#171614]/95 vibrant-border backdrop-blur-xl shadow-[0_15px_45px_rgba(0,0,0,0.8)] flex items-center justify-between gap-4 transition-all duration-700"
@@ -565,7 +571,7 @@
       <!-- Modal Header -->
       <div class="flex items-center justify-between pb-4 border-b border-[#c5a059]/20 shrink-0">
         <div class="flex items-center gap-2.5">
-          <span class="text-xl">💍</span>
+          <span class="text-xl">🎵</span>
           <div>
             <h3 class="couple-title text-xl sm:text-2xl text-[#f7f3ee]">Renu &amp; Pankaj Music Player</h3>
             <p class="text-[10px] sm:text-xs text-[#b5a48b] tracking-wider uppercase">Search or Play Directly</p>
@@ -1475,6 +1481,18 @@
         renderPlaylistUI(currentPlaylist);
       }
 
+      // Automatically collapse intro banner after 2 seconds
+      setTimeout(() => {
+        if (musicIntroBanner && !musicIntroBanner.classList.contains("hidden") && musicIntroBanner.style.opacity !== "0") {
+          musicIntroBanner.style.transform = "translateY(150%) scale(0.8)";
+          musicIntroBanner.style.opacity = "0";
+          setTimeout(() => {
+            musicIntroBanner.classList.add("hidden");
+            floatingMusicBtn.classList.remove("hidden");
+          }, 500);
+        }
+      }, 2000);
+
       function formatTime(seconds) {
         if (isNaN(seconds)) return "0:00";
         const mins = Math.floor(seconds / 60);
@@ -1568,7 +1586,7 @@
         musicPlayerModal.classList.add("flex");
       });
 
-      // Single close button that minimizes player while audio keeps playing
+      // Single cross button that minimizes player while audio keeps playing
       const minimizeHandler = () => {
         musicPlayerModal.classList.add("hidden");
         musicPlayerModal.classList.remove("flex");
