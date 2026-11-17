@@ -2,18 +2,19 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <!-- ==========================================================================
-       1. EDIT YOUR PASSWORDS, PATHS & SETTINGS RIGHT HERE AT TOP
+       1. EDIT YOUR PASSWORDS & GOOGLE DRIVE FOLDER ID RIGHT HERE AT TOP
        ========================================================================== -->
   <script>
     window.SITE_CONFIG = {
-      // Primary Family Gallery Passcode (case-insensitive, spaces ignored)
+      // Primary Family Access Code
       familyAccessCode: "renupankaj",
 
-      // Optional Secondary / Temporary Access Code (Leave empty "" if not needed)
+      // Optional Secondary Temporary Access Code (leave empty "" if not needed)
       secondaryAccessCode: "",
 
-      // Path to separate Engagement Gallery Page
-      engagementGalleryPageUrl: "engagement_gallery.html"
+      // Couple Names
+      coupleFirstName: "Pankaj",
+      coupleSecondName: "Renu"
     };
   </script>
 
@@ -24,7 +25,7 @@
   />
   <title>Pankaj &amp; Renu — Engagement Memories</title>
 
-  <!-- Google Fonts: Luxury Serif & Regal Devanagari -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -94,7 +95,6 @@
       border-radius: 9999px;
     }
 
-    /* Fixed Background Video Layer */
     #masterVideoStage {
       position: fixed;
       top: 0;
@@ -136,9 +136,6 @@
     .cute-sparkle {
       animation: cuteTwinkle 2.8s ease-in-out infinite;
     }
-    .cute-sparkle-delayed {
-      animation: cuteTwinkle 3.2s ease-in-out 1.4s infinite;
-    }
   </style>
 </head>
 <body class="relative min-h-screen selection:bg-[#c5a059] selection:text-[#0e0e0d]">
@@ -153,10 +150,8 @@
 
   <canvas id="ambientCanvas"></canvas>
 
-  <!-- ==========================================================================
-       VIEW 1: ROYAL WEDDING INVITATION LANDING
-       ========================================================================== -->
-  <section id="landingPortalView" class="relative z-10 min-h-screen flex flex-col items-center justify-between px-4 sm:px-8 py-8 sm:py-12 text-center transition-all duration-700">
+  <!-- LANDING INVITATION VIEW -->
+  <section id="landingPortalView" class="relative z-10 min-h-screen flex flex-col items-center justify-between px-4 sm:px-8 py-8 sm:py-12 text-center">
     <div class="w-full max-w-2xl mx-auto flex flex-col items-center pt-1">
       <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-[#c5a059]/45 bg-[#171614]/70 backdrop-blur-md flex items-center justify-center mb-2 shadow-[0_0_25px_rgba(197,160,89,0.2)]">
         <span class="devanagari-sacred text-lg sm:text-xl text-[#e5c378] leading-none">ॐ</span>
@@ -164,18 +159,10 @@
       <p class="devanagari-sacred text-sm sm:text-lg text-[#e5c378] tracking-wider">
         ॥ श्री गणेशाय नमः ॥
       </p>
-      <p class="devanagari-sacred text-[11px] sm:text-xs text-[#f7f3ee]/80 mt-1 max-w-md leading-relaxed px-2">
-        वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ । निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥
-      </p>
     </div>
 
     <div class="my-auto w-full max-w-xl mx-auto py-6">
       <div class="relative px-5 py-8 sm:px-11 sm:py-12 rounded-[26px] bg-[#171614]/70 backdrop-blur-xl border border-[#c5a059]/35 shadow-[0_30px_80px_rgba(0,0,0,0.85)]">
-        <span class="absolute top-3.5 left-4 text-[#c5a059]/50 text-xs">✦</span>
-        <span class="absolute top-3.5 right-4 text-[#c5a059]/50 text-xs">✦</span>
-        <span class="absolute bottom-3.5 left-4 text-[#c5a059]/50 text-xs">✦</span>
-        <span class="absolute bottom-3.5 right-4 text-[#c5a059]/50 text-xs">✦</span>
-
         <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-[#e5c378] font-medium mb-2.5">
           ENGAGED ON THE 10TH
         </p>
@@ -193,13 +180,6 @@
         <p class="text-xs sm:text-sm text-[#f7f3ee]/90 font-light leading-relaxed max-w-md mx-auto">
           With full hearts, we celebrate our engagement held on the 10th and extend a gentle thank you to everyone for your warm wishes, blessings, and presence.
         </p>
-
-        <div class="mt-5 sm:mt-6 inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#0e0e0d]/75 border border-[#c5a059]/25 max-w-full">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#e5c378] animate-pulse shrink-0"></span>
-          <span class="text-[10px] sm:text-xs tracking-[0.12em] sm:tracking-[0.16em] uppercase text-[#e5c378]/95 font-medium leading-snug">
-            Wedding Invitations &amp; Dates — To Be Announced Soon
-          </span>
-        </div>
 
         <div class="mt-7 sm:mt-8">
           <button
@@ -221,9 +201,7 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       FAMILY PASSCODE GATE MODAL (SUPPORTS DUAL PASSCODES)
-       ========================================================================== -->
+  <!-- PASSCODE MODAL -->
   <div
     id="passcodeGateModal"
     class="fixed inset-0 z-50 hidden items-center justify-center px-5 bg-[#0e0e0d]/90 backdrop-blur-2xl transition-opacity duration-300"
@@ -255,7 +233,7 @@
       </h2>
 
       <p class="mt-3 text-xs sm:text-[13px] text-[#b5a48b] font-light leading-relaxed">
-        As these are intimate family function moments, please enter the family access code to step inside the gallery.
+        Please enter the family access code to step inside the gallery.
       </p>
 
       <form id="passcodeForm" class="mt-6 flex flex-col gap-3.5" autocomplete="off">
@@ -283,9 +261,9 @@
     </div>
   </div>
 
-  <!-- ==========================================================================
-       HOME PAGE LOGIC (DUAL PASSCODE VALIDATION)
-       ========================================================================== -->
+  <!-- CONTAINER FOR DYNAMIC SAME-URL GALLERY LOADING -->
+  <div id="dynamicPageContainer" class="hidden relative z-10"></div>
+
   <script>
     const SITE_CONFIG = window.SITE_CONFIG;
 
@@ -328,37 +306,78 @@
       }
 
       if (passcodeForm) {
-        passcodeForm.addEventListener("submit", (e) => {
+        passcodeForm.addEventListener("submit", async (e) => {
           e.preventDefault();
           const entered = (passcodeInput ? passcodeInput.value : "").trim().toLowerCase().replace(/\s+/g, "");
-          
-          const primaryCode = (SITE_CONFIG.familyAccessCode || "renupankaj").trim().toLowerCase().replace(/\s+/g, "");
+          const primaryCode = (SITE_CONFIG.familyAccessCode || "").trim().toLowerCase().replace(/\s+/g, "");
           const secondaryCode = (SITE_CONFIG.secondaryAccessCode || "").trim().toLowerCase().replace(/\s+/g, "");
 
-          let isMatch = false;
-          if (entered === primaryCode) {
-            isMatch = true;
-          } else if (secondaryCode !== "" && entered === secondaryCode) {
-            isMatch = true;
-          }
+          const isPrimaryValid = entered === primaryCode;
+          const isSecondaryValid = secondaryCode !== "" && entered === secondaryCode;
 
-          if (isMatch) {
+          if (isPrimaryValid || isSecondaryValid) {
             if (passcodeErrorMsg) passcodeErrorMsg.classList.add("hidden");
-            window.location.href = SITE_CONFIG.engagementGalleryPageUrl || "engagement_gallery.html";
+            if (gateModal) {
+              gateModal.classList.add("hidden");
+              gateModal.classList.remove("flex");
+            }
+
+            const landingView = document.getElementById("landingPortalView");
+            const container = document.getElementById("dynamicPageContainer");
+
+            if (landingView) landingView.classList.add("hidden");
+            if (container) {
+              container.classList.remove("hidden");
+              if (!container.innerHTML.trim()) {
+                try {
+                  const res = await fetch("engagement_gallery.html");
+                  const htmlText = await res.text();
+                  
+                  // Extract body content from engagement_gallery.html
+                  const parser = new DOMParser();
+                  const doc = parser.parseFromString(htmlText, "text/html");
+                  const galleryContent = doc.body.innerHTML;
+                  container.innerHTML = galleryContent;
+
+                  // Run scripts inside loaded content
+                  const scripts = container.querySelectorAll("script");
+                  scripts.forEach(script => {
+                    const newScript = document.createElement("script");
+                    if (script.src) newScript.src = script.src;
+                    else newScript.text = script.text;
+                    document.body.appendChild(newScript);
+                  });
+                } catch (err) {
+                  container.innerHTML = `<div class="py-24 text-center text-amber-200 text-sm">Unable to load gallery page. Please make sure <code>engagement_gallery.html</code> is in the same folder.</div>`;
+                }
+              }
+            }
+
+            window.history.pushState({ galleryActive: true }, "", window.location.pathname);
           } else {
             if (passcodeErrorMsg) passcodeErrorMsg.classList.remove("hidden");
             if (passcodeInput) {
-              passcodeInput.classList.add("border-red-500");
-              setTimeout(() => passcodeInput.classList.remove("border-red-500"), 600);
+              passcodeInput.classList.add("border-red-500", "animate-shake");
+              setTimeout(() => passcodeInput.classList.remove("border-red-500", "animate-shake"), 600);
             }
           }
         });
       }
     }
 
+    window.addEventListener("popstate", () => {
+      const landingView = document.getElementById("landingPortalView");
+      const container = document.getElementById("dynamicPageContainer");
+      if (container && !container.classList.contains("hidden")) {
+        container.classList.add("hidden");
+        if (landingView) landingView.classList.remove("hidden");
+      }
+    });
+
     const ambientCanvas = document.getElementById("ambientCanvas");
     const ambientCtx = ambientCanvas ? ambientCanvas.getContext("2d") : null;
     let particles = [];
+    const PARTICLE_COUNT = 38;
 
     function resizeAmbientCanvas() {
       if (!ambientCanvas) return;
@@ -370,7 +389,7 @@
       if (!ambientCanvas || !ambientCtx) return;
       resizeAmbientCanvas();
       particles = [];
-      for (let i = 0; i < 38; i++) {
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
         particles.push({
           x: Math.random() * ambientCanvas.width,
           y: Math.random() * ambientCanvas.height,
