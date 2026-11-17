@@ -23,7 +23,12 @@
       coupleSecondName: "Renu",
 
       // Slideshow Default Interval in Seconds (Easily editable here)
-      slideshowDefaultSeconds: 2
+      slideshowDefaultSeconds: 2,
+
+      // Wedding Date Details
+      weddingDateString: "11th February 2027",
+      weddingDayOfWeek: "Thursday",
+      weddingMuhurat: "07:15 PM Onwards"
     };
   </script>
 
@@ -32,7 +37,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"
   />
-  <title>Pankaj &amp; Renu — Engagement Memories</title>
+  <title>Pankaj &amp; Renu — Wedding Announcement &amp; Memories</title>
 
   <!-- Google Fonts: Luxury Serif & Regal Devanagari -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -154,6 +159,23 @@
     .cute-sparkle-delayed {
       animation: cuteTwinkle 3.2s ease-in-out 1.4s infinite;
     }
+
+    /* Scratch Card Canvas Styles */
+    .scratch-container {
+      position: relative;
+      user-select: none;
+      touch-action: none;
+    }
+    #scratchCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+      border-radius: 1rem;
+      touch-action: none;
+    }
   </style>
 </head>
 <body class="relative min-h-screen selection:bg-[#c5a059] selection:text-[#0e0e0d]">
@@ -177,7 +199,7 @@
   <canvas id="ambientCanvas"></canvas>
 
   <!-- ==========================================================================
-       VIEW 1: ROYAL WEDDING INVITATION PREVIEW & ENGAGEMENT GREETING LANDING
+       VIEW 1: ROYAL WEDDING INVITATION PREVIEW & WEDDING DATE ANNOUNCEMENT
        ========================================================================== -->
   <section id="landingPortalView" class="relative z-10 min-h-screen flex flex-col items-center justify-between px-4 sm:px-8 py-8 sm:py-12 text-center transition-all duration-700">
     <!-- Top Sacred Invocation -->
@@ -193,46 +215,66 @@
       </p>
     </div>
 
-    <!-- Center Bespoke Invitation & Engagement Tribute Card -->
+    <!-- Center Bespoke Wedding Invitation & Scratch Card -->
     <div class="my-auto w-full max-w-xl mx-auto py-6">
-      <div class="relative px-5 py-8 sm:px-11 sm:py-12 rounded-[26px] bg-[#171614]/70 backdrop-blur-xl border border-[#c5a059]/35 shadow-[0_30px_80px_rgba(0,0,0,0.85)]">
+      <div class="relative px-5 py-8 sm:px-10 sm:py-10 rounded-[26px] bg-[#171614]/75 backdrop-blur-xl border border-[#c5a059]/40 shadow-[0_30px_80px_rgba(0,0,0,0.85)]">
         <span class="absolute top-3.5 left-4 text-[#c5a059]/50 text-xs">✦</span>
         <span class="absolute top-3.5 right-4 text-[#c5a059]/50 text-xs">✦</span>
         <span class="absolute bottom-3.5 left-4 text-[#c5a059]/50 text-xs">✦</span>
         <span class="absolute bottom-3.5 right-4 text-[#c5a059]/50 text-xs">✦</span>
 
-        <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-[#e5c378] font-medium mb-2.5">
-          ENGAGED ON THE 10TH
+        <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-[#e5c378] font-medium mb-2">
+          THE WEDDING BELLS ARE RINGING
         </p>
 
         <h1 class="couple-title text-4xl sm:text-6xl font-normal text-[#f7f3ee] tracking-wide leading-tight">
           Pankaj <span class="gold-accent italic font-light">&amp;</span> Renu
         </h1>
 
-        <div class="my-4 sm:my-5 flex items-center justify-center gap-3 opacity-80">
+        <div class="my-3 sm:my-4 flex items-center justify-center gap-3 opacity-80">
           <span class="h-px w-10 sm:w-12 bg-gradient-to-r from-transparent to-[#c5a059]"></span>
           <span class="text-[#e5c378] text-xs">❖</span>
           <span class="h-px w-10 sm:w-12 bg-gradient-to-l from-transparent to-[#c5a059]"></span>
         </div>
 
-        <p class="text-xs sm:text-sm text-[#f7f3ee]/90 font-light leading-relaxed max-w-md mx-auto">
-          With full hearts, we celebrate our engagement held on the 10th and extend a gentle thank you to everyone for your warm wishes, blessings, and presence.
+        <p class="text-xs sm:text-sm text-[#f7f3ee]/90 font-light leading-relaxed max-w-md mx-auto mb-5">
+          Together with our families, with immense joy we invite you to celebrate our sacred union.
         </p>
 
-        <!-- Wedding Dates Status Badge -->
-        <div class="mt-5 sm:mt-6 inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#0e0e0d]/75 border border-[#c5a059]/25 max-w-full">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#e5c378] animate-pulse shrink-0"></span>
-          <span class="text-[10px] sm:text-xs tracking-[0.12em] sm:tracking-[0.16em] uppercase text-[#e5c378]/95 font-medium leading-snug">
-            Wedding Invitations &amp; Dates — To Be Announced Soon
-          </span>
+        <!-- Golden Scratch & View Card for Wedding Date -->
+        <div class="mb-6">
+          <div class="flex items-center justify-center mb-2 px-1">
+            <span class="text-[10px] tracking-[0.16em] uppercase text-[#e5c378] font-semibold flex items-center gap-1.5">
+              <span>✨</span> Scratch to Reveal Wedding Date
+            </span>
+          </div>
+
+          <div class="scratch-container relative w-full h-28 sm:h-32 rounded-2xl bg-[#121210] border-2 border-[#c5a059]/50 overflow-hidden shadow-inner flex flex-col items-center justify-center p-4 text-center">
+            <!-- Hidden Secret Wedding Date Content (placed underneath canvas) -->
+            <div id="scratchSecretContent" class="absolute inset-0 z-0 flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-[#1c1b18] to-[#121210]">
+              <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-[#e5c378] font-semibold mb-1">
+                WEDDING DATE ANNOUNCED
+              </p>
+              <h3 class="couple-title text-xl sm:text-3xl text-[#f7f3ee] font-normal tracking-wide">
+                <span style="font-family: Montserrat, sans-serif; font-weight: 500;">11</span><sup>th</sup> February <span style="font-family: Montserrat, sans-serif; font-weight: 500;">2027</span>
+              </h3>
+              <p class="text-[11px] sm:text-xs text-[#b5a48b] mt-1 font-light">
+                Thursday
+              </p>
+            </div>
+
+            <!-- Interactive Golden Scratch Canvas Layer (covers secret content fully) -->
+            <canvas id="scratchCanvas" class="absolute inset-0 z-10 w-full h-full cursor-crosshair"></canvas>
+          </div>
         </div>
 
-        <!-- Premium Action Button to Open Family Gallery Gate -->
-        <div class="mt-7 sm:mt-8">
+        <!-- Premium Action Buttons Layout -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+          <!-- Visit Engagement Gallery Button -->
           <button
             id="openGalleryGateBtn"
             type="button"
-            class="group relative inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-9 sm:py-4 rounded-full bg-gradient-to-r from-[#c5a059] via-[#e5c378] to-[#c5a059] text-[#0e0e0d] text-xs sm:text-sm tracking-[0.16em] sm:tracking-[0.2em] uppercase font-semibold shadow-[0_12px_35px_rgba(197,160,89,0.32)] hover:shadow-[0_16px_45px_rgba(229,195,120,0.45)] transition-all duration-300 hover:scale-[1.03] active:scale-95"
+            class="w-full sm:w-auto group relative inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-[#c5a059] via-[#e5c378] to-[#c5a059] text-[#0e0e0d] text-xs sm:text-sm tracking-[0.16em] uppercase font-semibold shadow-[0_12px_35px_rgba(197,160,89,0.32)] hover:shadow-[0_16px_45px_rgba(229,195,120,0.45)] transition-all duration-300 hover:scale-[1.03] active:scale-95"
           >
             <span>Visit Engagement Gallery</span>
             <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -244,7 +286,7 @@
     </div>
 
     <div class="text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-[#b5a48b]/70">
-      A New Chapter Begins
+      A Lifetime of Love Begins Here
     </div>
   </section>
 
@@ -332,7 +374,7 @@
       </span>
 
       <span id="photoCounterBadge" class="text-[9px] sm:text-[10px] tracking-[0.1em] sm:tracking-[0.18em] uppercase text-[#b5a48b] shrink-0 text-right">
-        10th Memories
+        Engagement Memories
       </span>
     </div>
 
@@ -788,8 +830,8 @@
           const fullMediaUrl = isVideo
             ? directMediaUrl
             : file.thumbnailLink
-              ? file.thumbnailLink.replace(/=s\d+$/, "=s2400")
-              : `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w2400`;
+            ? file.thumbnailLink.replace(/=s\d+$/, "=s2400")
+            : `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w2400`;
 
           return {
             id: fileId,
@@ -1018,6 +1060,174 @@
     }
 
     // ==========================================================================
+    // SCRATCH CARD INITIALIZATION & LOGIC WITH LIGHT SHOWER EFFECT
+    // ==========================================================================
+    let isScratching = false;
+    let scratchCanvas, scratchCtx;
+    let isRevealed = false;
+
+    function initScratchCard() {
+      scratchCanvas = document.getElementById("scratchCanvas");
+      if (!scratchCanvas) return;
+      scratchCtx = scratchCanvas.getContext("2d", { willReadFrequently: true });
+
+      function resizeScratch() {
+        if (isRevealed) return;
+        const parent = scratchCanvas.parentElement;
+        if (!parent) return;
+        scratchCanvas.width = parent.clientWidth;
+        scratchCanvas.height = parent.clientHeight;
+
+        // Fill with luxury golden foil gradient & texture
+        const gradient = scratchCtx.createLinearGradient(0, 0, scratchCanvas.width, scratchCanvas.height);
+        gradient.addColorStop(0, "#b0893a");
+        gradient.addColorStop(0.3, "#e5c378");
+        gradient.addColorStop(0.5, "#d4af37");
+        gradient.addColorStop(0.8, "#c5a059");
+        gradient.addColorStop(1, "#9e7728");
+
+        scratchCtx.fillStyle = gradient;
+        scratchCtx.fillRect(0, 0, scratchCanvas.width, scratchCanvas.height);
+
+        // Add ornate texture dots on foil
+        scratchCtx.fillStyle = "rgba(255, 255, 255, 0.25)";
+        for (let i = 0; i < 40; i++) {
+          const rx = Math.random() * scratchCanvas.width;
+          const ry = Math.random() * scratchCanvas.height;
+          scratchCtx.fillRect(rx, ry, 2, 2);
+        }
+
+        // Add watermark text on foil
+        scratchCtx.font = "bold 12px Montserrat, sans-serif";
+        scratchCtx.fillStyle = "rgba(40, 30, 10, 0.65)";
+        scratchCtx.textAlign = "center";
+        scratchCtx.textBaseline = "middle";
+        scratchCtx.fillText("✨ SCRATCH HERE TO REVEAL WEDDING DATE ✨", scratchCanvas.width / 2, scratchCanvas.height / 2);
+      }
+
+      resizeScratch();
+      window.addEventListener("resize", resizeScratch);
+
+      function scratchAt(x, y) {
+        if (!scratchCtx || isRevealed) return;
+        scratchCtx.globalCompositeOperation = "destination-out";
+        scratchCtx.beginPath();
+        scratchCtx.arc(x, y, 26, 0, Math.PI * 2, false);
+        scratchCtx.fill();
+        checkScratchPercentage();
+      }
+
+      function getTouchPos(canvasDom, touchEvent) {
+        const rect = canvasDom.getBoundingClientRect();
+        return {
+          x: touchEvent.touches[0].clientX - rect.left,
+          y: touchEvent.touches[0].clientY - rect.top
+        };
+      }
+
+      function getMousePos(canvasDom, mouseEvent) {
+        const rect = canvasDom.getBoundingClientRect();
+        return {
+          x: mouseEvent.clientX - rect.left,
+          y: mouseEvent.clientY - rect.top
+        };
+      }
+
+      scratchCanvas.addEventListener("mousedown", (e) => {
+        if (isRevealed) return;
+        isScratching = true;
+        const pos = getMousePos(scratchCanvas, e);
+        scratchAt(pos.x, pos.y);
+      });
+
+      scratchCanvas.addEventListener("mousemove", (e) => {
+        if (!isScratching || isRevealed) return;
+        const pos = getMousePos(scratchCanvas, e);
+        scratchAt(pos.x, pos.y);
+      });
+
+      window.addEventListener("mouseup", () => {
+        isScratching = false;
+      });
+
+      scratchCanvas.addEventListener("touchstart", (e) => {
+        if (isRevealed) return;
+        isScratching = true;
+        const pos = getTouchPos(scratchCanvas, e);
+        scratchAt(pos.x, pos.y);
+        e.preventDefault();
+      }, { passive: false });
+
+      scratchCanvas.addEventListener("touchmove", (e) => {
+        if (!isScratching || isRevealed) return;
+        const pos = getTouchPos(scratchCanvas, e);
+        scratchAt(pos.x, pos.y);
+        e.preventDefault();
+      }, { passive: false });
+
+      scratchCanvas.addEventListener("touchend", () => {
+        isScratching = false;
+      });
+    }
+
+    function checkScratchPercentage() {
+      if (!scratchCtx || !scratchCanvas || isRevealed) return;
+      const imageData = scratchCtx.getImageData(0, 0, scratchCanvas.width, scratchCanvas.height);
+      const pixels = imageData.data;
+      let transparentPixels = 0;
+      for (let i = 3; i < pixels.length; i += 16) {
+        if (pixels[i] < 128) transparentPixels++;
+      }
+      const totalSampled = pixels.length / 16;
+      if (transparentPixels / totalSampled > 0.35) {
+        revealScratchCard();
+      }
+    }
+
+    function revealScratchCard() {
+      if (isRevealed) return;
+      isRevealed = true;
+      if (!scratchCanvas) return;
+      
+      scratchCanvas.style.transition = "opacity 0.6s ease";
+      scratchCanvas.style.opacity = "0";
+      setTimeout(() => {
+        scratchCanvas.style.display = "none";
+      }, 600);
+
+      triggerLightShower();
+    }
+
+    function triggerLightShower() {
+      const container = scratchCanvas?.parentElement;
+      if (!container) return;
+
+      for (let i = 0; i < 24; i++) {
+        const particle = document.createElement("div");
+        particle.className = "absolute pointer-events-none rounded-full bg-[#e5c378]";
+        const size = Math.random() * 6 + 3;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `20px`;
+        particle.style.boxShadow = "0 0 10px #c5a059";
+        particle.style.opacity = "1";
+        particle.style.transition = `all ${Math.random() * 0.8 + 0.6}s cubic-bezier(0.25, 1, 0.5, 1)`;
+
+        container.appendChild(particle);
+
+        requestAnimationFrame(() => {
+          particle.style.transform = `translate(${(Math.random() - 0.5) * 160}px, ${Math.random() * 90 + 30}px) scale(0.2)`;
+          particle.style.opacity = "0";
+        });
+
+        setTimeout(() => {
+          particle.remove();
+        }, 1500);
+      }
+    }
+
+    // ==========================================================================
     // LIGHTBOX & SLIDESHOW LOGIC
     // ==========================================================================
     const stickyModalOverlay = document.getElementById("stickyModalOverlay");
@@ -1046,7 +1256,7 @@
     let isSlideshowActive = false;
     let slideshowTimer = null;
     let slideshowIntervalSeconds = SITE_CONFIG.slideshowDefaultSeconds || 2;
-    let imageLoadToken = 0; // Prevents stale/overlapping slow network callbacks from auto-advancing
+    let imageLoadToken = 0;
 
     let userZoomScale = 1;
     let userPanX = 0;
@@ -1140,8 +1350,6 @@
         modalImgCurrent.classList.remove("hidden");
 
         const fullResTarget = item.fullUrl || item.thumbnailUrl;
-        
-        // Use a detached image loader to prevent any slow network flickering/stale triggering
         const testImg = new Image();
         testImg.referrerPolicy = "no-referrer";
         testImg.onload = () => {
@@ -1150,7 +1358,6 @@
           }
         };
         testImg.src = fullResTarget;
-        // Also set immediately so fast loads show instantly
         modalImgCurrent.src = fullResTarget;
       }
     }
@@ -1622,7 +1829,6 @@
     // ==========================================================================
     const AUTH_SESSION_KEY = "pankaj_renu_gallery_unlocked_v3";
 
-    // Force clear session on fresh page load or browser refresh so it always asks for code
     if (window.performance) {
       const navEntries = performance.getEntriesByType("navigation");
       if (navEntries.length > 0 && navEntries[0].type === "reload") {
@@ -1801,6 +2007,7 @@
     window.onload = function () {
       initParticles();
       animateAmbientParticles();
+      initScratchCard();
       initInvitationAndPasscodeGate();
       updateMasterVideoAndHeroOnScroll();
     };
