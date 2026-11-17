@@ -250,8 +250,11 @@
           </div>
 
           <div class="scratch-container relative w-full h-28 sm:h-32 rounded-2xl bg-[#121210] border-2 border-[#c5a059]/50 overflow-hidden shadow-inner flex flex-col items-center justify-center p-4 text-center">
+            <!-- Interactive Golden Scratch Canvas Layer (covers secret content fully from the start) -->
+            <canvas id="scratchCanvas" class="absolute inset-0 z-20 w-full h-full cursor-crosshair opacity-0 transition-opacity duration-300"></canvas>
+
             <!-- Hidden Secret Wedding Date Content (placed underneath canvas) -->
-            <div id="scratchSecretContent" class="absolute inset-0 z-0 flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-[#1c1b18] to-[#121210]">
+            <div id="scratchSecretContent" class="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-[#1c1b18] to-[#121210]">
               <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-[#e5c378] font-semibold mb-1">
                 WEDDING DATE ANNOUNCED
               </p>
@@ -262,9 +265,6 @@
                 Thursday
               </p>
             </div>
-
-            <!-- Interactive Golden Scratch Canvas Layer (covers secret content fully) -->
-            <canvas id="scratchCanvas" class="absolute inset-0 z-10 w-full h-full cursor-crosshair"></canvas>
           </div>
         </div>
 
@@ -1103,6 +1103,9 @@
         scratchCtx.textAlign = "center";
         scratchCtx.textBaseline = "middle";
         scratchCtx.fillText("✨ SCRATCH HERE TO REVEAL WEDDING DATE ✨", scratchCanvas.width / 2, scratchCanvas.height / 2);
+
+        // Make canvas fully visible now that foil is drawn
+        scratchCanvas.classList.remove("opacity-0");
       }
 
       resizeScratch();
