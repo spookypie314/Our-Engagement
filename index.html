@@ -28,7 +28,17 @@
       // Wedding Date Details
       weddingDateString: "11th February 2027",
       weddingDayOfWeek: "Thursday",
-      weddingMuhurat: "07:15 PM Onwards"
+      weddingMuhurat: "07:15 PM Onwards",
+
+      // Default Playlist Audio Links (If empty, wont play automatically on random. If multiple, plays randomly)
+      defaultPlaylistSongs: [
+        {
+          name: "Jadugarni (Hit Music)",
+          artist: "Sintaa, Riyaazi",
+          url: "https://aac.saavncdn.com/325/fa04b0386637ae2acee576ee39fa6404_320.mp4",
+          image: "https://c.saavncdn.com/325/Jadugarni-Haryanvi-2026-20260629120738-500x500.jpg"
+        }
+      ]
     };
   </script>
 
@@ -58,8 +68,8 @@
       --text-muted: #b5a48b;
       --accent-gold: #c5a059;
       --accent-gold-light: #e5c378;
-      --glass-bg: rgba(255, 255, 255, 0.05);
-      --glass-border: rgba(197, 160, 89, 0.25);
+      --glass-bg: rgba(23, 22, 20, 0.88);
+      --glass-border: rgba(197, 160, 89, 0.35);
       --font-serif: 'Cormorant Garamond', serif;
       --font-sans: 'Montserrat', sans-serif;
       --font-devanagari: 'Rozha One', 'Noto Serif Devanagari', serif;
@@ -175,6 +185,28 @@
       cursor: crosshair;
       border-radius: 1rem;
       touch-action: none;
+    }
+
+    /* Vibrant Border Glow */
+    @keyframes vibrantGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(197, 160, 89, 0.45), inset 0 0 10px rgba(229, 195, 120, 0.25); border-color: #c5a059; }
+      50% { box-shadow: 0 0 35px rgba(229, 195, 120, 0.85), inset 0 0 20px rgba(197, 160, 89, 0.6); border-color: #e5c378; }
+    }
+    .vibrant-border {
+      border: 2px solid #c5a059;
+      animation: vibrantGlow 3s ease-in-out infinite;
+    }
+
+    /* Vinyl Record Spin */
+    @keyframes spinVinyl {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .vinyl-spinning {
+      animation: spinVinyl 6s linear infinite;
+    }
+    .vinyl-paused {
+      animation-play-state: paused;
     }
   </style>
 </head>
@@ -472,6 +504,181 @@
       <path d="M5 15l7-7 7 7"/>
     </svg>
   </button>
+
+  <!-- ==========================================================================
+       IMMERSE MUSIC WIDGET & PLAYER OVERLAY (GOLD-BLACK RICH THEME)
+       ========================================================================== -->
+  <!-- Hidden Audio Element -->
+  <audio id="globalAudioPlayer" preload="auto"></audio>
+
+  <!-- 1. Initial Bottom Experience Banner with Vibrant Border -->
+  <div
+    id="musicIntroBanner"
+    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 max-w-md w-[92%] sm:w-auto px-5 py-3.5 rounded-2xl bg-[#171614]/95 vibrant-border backdrop-blur-xl shadow-[0_15px_45px_rgba(0,0,0,0.8)] flex items-center justify-between gap-4 transition-all duration-700"
+  >
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-full bg-[#c5a059]/20 border border-[#c5a059] flex items-center justify-center text-[#e5c378] shrink-0 animate-pulse">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M9 18V5l12-2v13"></path>
+          <circle cx="6" cy="18" r="3"></circle>
+          <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+      </div>
+      <div class="text-left">
+        <p class="text-xs sm:text-sm font-medium text-[#f7f3ee] tracking-wide">Enhance Experience With Music</p>
+        <p class="text-[10px] text-[#b5a48b]">Immerse in wedding melodies &amp; celebration vibes</p>
+      </div>
+    </div>
+    <button
+      id="acceptMusicBannerBtn"
+      type="button"
+      class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#c5a059] via-[#e5c378] to-[#c5a059] text-[#0e0e0d] text-[11px] font-semibold uppercase tracking-wider shadow-lg hover:scale-105 active:scale-95 transition-all shrink-0"
+    >
+      Tune In ✨
+    </button>
+  </div>
+
+  <!-- 2. Minimized Floating Bottom-Left Vibrant Music Button (Collapses from banner) -->
+  <button
+    id="floatingMusicToggleBtn"
+    type="button"
+    class="fixed bottom-6 left-6 z-40 hidden w-14 h-14 rounded-full bg-[#171614] vibrant-border shadow-[0_10px_30px_rgba(197,160,89,0.4)] flex items-center justify-center text-[#e5c378] transition-all duration-300 hover:scale-110 active:scale-95 group"
+    aria-label="Open Music Player"
+  >
+    <div class="relative w-8 h-8 flex items-center justify-center">
+      <svg id="musicButtonIconVinyl" class="w-7 h-7 vinyl-spinning vinyl-paused" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="12" r="10"></circle>
+        <circle cx="12" cy="12" r="3" fill="#c5a059"></circle>
+      </svg>
+    </div>
+    <div class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#c5a059] text-[#0e0e0d] text-[9px] font-bold flex items-center justify-center shadow">♪</div>
+  </button>
+
+  <!-- 3. Full Screen / Drawer Music Player Overlay -->
+  <div
+    id="musicPlayerModal"
+    class="fixed inset-0 z-50 hidden bg-[#080807]/92 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 transition-all duration-300"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="relative w-full max-w-xl rounded-[28px] bg-[#171614]/98 border border-[#c5a059]/50 p-6 sm:p-8 shadow-[0_25px_80px_rgba(0,0,0,0.95)] flex flex-col max-h-[92vh] overflow-hidden">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-[#c5a059]/20 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span class="text-xl">💍</span>
+          <div>
+            <h3 class="couple-title text-xl sm:text-2xl text-[#f7f3ee]">Renu &amp; Pankaj Music Player</h3>
+            <p class="text-[10px] sm:text-xs text-[#b5a48b] tracking-wider uppercase">Search or Play Directly</p>
+          </div>
+        </div>
+        <!-- Single cross button that minimises player while audio keeps playing -->
+        <button
+          id="closePlayerBtn"
+          type="button"
+          class="w-9 h-9 rounded-full bg-[#0e0e0d] border border-[#c5a059]/40 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+          aria-label="Minimize Player"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Currently Playing Track Card -->
+      <div class="my-4 p-4 rounded-2xl bg-[#0e0e0d]/90 border border-[#c5a059]/30 flex items-center gap-4 shrink-0 shadow-inner">
+        <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-[#c5a059]/40 bg-[#1c1b18] shrink-0">
+          <img
+            id="playerTrackImg"
+            src="https://placehold.co/150x150/171614/c5a059?text=♪"
+            alt="Track Cover"
+            class="w-full h-full object-cover vinyl-spinning vinyl-paused"
+          />
+        </div>
+        <div class="flex-1 min-w-0">
+          <p id="playerTrackName" class="text-sm sm:text-base font-medium text-[#f7f3ee] truncate">Select or Play a Song</p>
+          <p id="playerTrackArtist" class="text-xs text-[#b5a48b] truncate mt-0.5">Renu &amp; Pankaj Special Playlist</p>
+          
+          <!-- Audio Playback Controls & Random -->
+          <div class="flex items-center gap-3 mt-3">
+            <button
+              id="playerPlayPauseBtn"
+              type="button"
+              class="w-9 h-9 rounded-full bg-gradient-to-r from-[#c5a059] to-[#e5c378] text-[#0e0e0d] flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all shrink-0"
+            >
+              <svg id="playIconSvg" class="w-4 h-4 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <svg id="pauseIconSvg" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            </button>
+            <button
+              id="playerRandomBtn"
+              type="button"
+              class="px-3 py-1.5 rounded-lg bg-[#171614] border border-[#c5a059]/40 hover:border-[#e5c378] text-[#e5c378] text-[10px] tracking-wider uppercase font-medium transition-all"
+            >
+              🎲 Random Play
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seekbar & Time Readouts -->
+      <div class="space-y-1.5 mb-4 shrink-0">
+        <div class="flex items-center justify-between text-[10px] text-[#b5a48b]">
+          <span id="currentTimeReadout">0:00</span>
+          <span id="durationReadout">0:00</span>
+        </div>
+        <input
+          id="audioSeekbar"
+          type="range"
+          min="0"
+          max="100"
+          value="0"
+          class="w-full h-1.5 bg-[#0e0e0d] rounded-lg appearance-none cursor-pointer accent-[#c5a059]"
+        />
+      </div>
+
+      <!-- Volume Control Bar -->
+      <div class="flex items-center gap-3 mb-4 px-1 shrink-0">
+        <svg class="w-4 h-4 text-[#c5a059] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <input
+          id="volumeSlider"
+          type="range"
+          min="0"
+          max="1"
+          step="0.05"
+          value="1"
+          class="w-full h-1.5 bg-[#0e0e0d] rounded-lg appearance-none cursor-pointer accent-[#c5a059]"
+        />
+      </div>
+
+      <!-- Search Section -->
+      <div class="shrink-0 mb-3">
+        <div class="relative flex items-center">
+          <input
+            id="songSearchInput"
+            type="text"
+            placeholder="Search songs (e.g. Jadugarni, Romantic)..."
+            class="w-full px-4 py-3 pl-10 rounded-xl bg-[#0e0e0d] border border-[#c5a059]/35 focus:border-[#e5c378] focus:outline-none text-xs sm:text-sm text-[#f7f3ee] placeholder:text-[#b5a48b]/50 transition-colors"
+          />
+          <svg class="absolute left-3.5 w-4 h-4 text-[#c5a059]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <button
+            id="songSearchBtn"
+            type="button"
+            class="absolute right-2 px-3 py-1.5 rounded-lg bg-[#c5a059] text-[#0e0e0d] text-[10px] tracking-wider uppercase font-semibold hover:bg-[#e5c378] transition-colors"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Results / Playlist Scroll Area -->
+      <div class="flex-1 overflow-y-auto pr-1 space-y-2 mt-1" id="songPlaylistContainer">
+        <p class="text-xs text-center text-[#b5a48b] py-4">Loading playlist...</p>
+      </div>
+    </div>
+  </div>
 
   <!-- ==========================================================================
        TRUE FULLSCREEN UNCROPPED LIGHTBOX (HIDDEN UNTIL PHOTO IS CLICKED)
@@ -1079,7 +1286,6 @@
         scratchCanvas.width = parent.clientWidth;
         scratchCanvas.height = parent.clientHeight;
 
-        // Fill with luxury golden foil gradient & texture immediately
         const gradient = scratchCtx.createLinearGradient(0, 0, scratchCanvas.width, scratchCanvas.height);
         gradient.addColorStop(0, "#b0893a");
         gradient.addColorStop(0.3, "#e5c378");
@@ -1090,7 +1296,6 @@
         scratchCtx.fillStyle = gradient;
         scratchCtx.fillRect(0, 0, scratchCanvas.width, scratchCanvas.height);
 
-        // Add ornate texture dots on foil
         scratchCtx.fillStyle = "rgba(255, 255, 255, 0.25)";
         for (let i = 0; i < 40; i++) {
           const rx = Math.random() * scratchCanvas.width;
@@ -1098,14 +1303,12 @@
           scratchCtx.fillRect(rx, ry, 2, 2);
         }
 
-        // Add watermark text on foil
         scratchCtx.font = "bold 12px Montserrat, sans-serif";
         scratchCtx.fillStyle = "rgba(40, 30, 10, 0.65)";
         scratchCtx.textAlign = "center";
         scratchCtx.textBaseline = "middle";
         scratchCtx.fillText("✨ SCRATCH HERE TO REVEAL WEDDING DATE ✨", scratchCanvas.width / 2, scratchCanvas.height / 2);
 
-        // Now that foil is fully drawn, reveal the secret container underneath
         secretContent.classList.remove("opacity-0");
       }
 
@@ -1229,6 +1432,283 @@
           particle.remove();
         }, 1500);
       }
+    }
+
+    // ==========================================================================
+    // MUSIC PLAYER & VISPARK API INTEGRATION
+    // ==========================================================================
+    let currentPlaylist = [];
+    let currentTrackIndex = 0;
+    let isPlaying = false;
+
+    function initMusicPlayer() {
+      const audioEl = document.getElementById("globalAudioPlayer");
+      const musicIntroBanner = document.getElementById("musicIntroBanner");
+      const acceptMusicBannerBtn = document.getElementById("acceptMusicBannerBtn");
+      const floatingMusicBtn = document.getElementById("floatingMusicToggleBtn");
+      const musicPlayerModal = document.getElementById("musicPlayerModal");
+      const closePlayerBtn = document.getElementById("closePlayerBtn");
+      const playerPlayPauseBtn = document.getElementById("playerPlayPauseBtn");
+      const playIconSvg = document.getElementById("playIconSvg");
+      const pauseIconSvg = document.getElementById("pauseIconSvg");
+      const playerRandomBtn = document.getElementById("playerRandomBtn");
+      const playerTrackName = document.getElementById("playerTrackName");
+      const playerTrackArtist = document.getElementById("playerTrackArtist");
+      const playerTrackImg = document.getElementById("playerTrackImg");
+      const songSearchInput = document.getElementById("songSearchInput");
+      const songSearchBtn = document.getElementById("songSearchBtn");
+      const songPlaylistContainer = document.getElementById("songPlaylistContainer");
+      const musicButtonIconVinyl = document.getElementById("musicButtonIconVinyl");
+      const audioSeekbar = document.getElementById("audioSeekbar");
+      const currentTimeReadout = document.getElementById("currentTimeReadout");
+      const durationReadout = document.getElementById("durationReadout");
+      const volumeSlider = document.getElementById("volumeSlider");
+
+      // Load default songs if provided
+      if (Array.isArray(SITE_CONFIG.defaultPlaylistSongs) && SITE_CONFIG.defaultPlaylistSongs.length > 0) {
+        currentPlaylist = SITE_CONFIG.defaultPlaylistSongs.map(s => ({
+          name: s.name || "Wedding Melody",
+          artist: s.artist || "Renu & Pankaj",
+          url: s.url,
+          image: s.image || "https://placehold.co/150x150/171614/c5a059?text=♪"
+        }));
+        renderPlaylistUI(currentPlaylist);
+      }
+
+      function formatTime(seconds) {
+        if (isNaN(seconds)) return "0:00";
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      }
+
+      function playTrack(index, autoplay = true) {
+        if (!currentPlaylist.length) return;
+        currentTrackIndex = ((index % currentPlaylist.length) + currentPlaylist.length) % currentPlaylist.length;
+        const track = currentPlaylist[currentTrackIndex];
+
+        if (!track.url) return;
+
+        audioEl.src = track.url;
+        audioEl.load();
+        playerTrackName.textContent = track.name;
+        playerTrackArtist.textContent = track.artist || "Renu & Pankaj";
+        playerTrackImg.src = track.image || "https://placehold.co/150x150/171614/c5a059?text=♪";
+
+        if (autoplay) {
+          audioEl.play().then(() => {
+            isPlaying = true;
+            updatePlayStateUI(true);
+          }).catch(err => {
+            console.log("Autoplay waiting gesture:", err);
+            isPlaying = false;
+            updatePlayStateUI(false);
+          });
+        }
+      }
+
+      function updatePlayStateUI(playing) {
+        if (playing) {
+          playIconSvg.classList.add("hidden");
+          pauseIconSvg.classList.remove("hidden");
+          musicButtonIconVinyl.classList.remove("vinyl-paused");
+          playerTrackImg.classList.remove("vinyl-paused");
+        } else {
+          playIconSvg.classList.remove("hidden");
+          pauseIconSvg.classList.add("hidden");
+          musicButtonIconVinyl.classList.add("vinyl-paused");
+          playerTrackImg.classList.add("vinyl-paused");
+        }
+      }
+
+      audioEl.addEventListener("timeupdate", () => {
+        if (!isNaN(audioEl.duration)) {
+          const percent = (audioEl.currentTime / audioEl.duration) * 100;
+          audioSeekbar.value = percent;
+          currentTimeReadout.textContent = formatTime(audioEl.currentTime);
+          durationReadout.textContent = formatTime(audioEl.duration);
+        }
+      });
+
+      audioSeekbar?.addEventListener("input", () => {
+        if (!isNaN(audioEl.duration)) {
+          audioEl.currentTime = (audioSeekbar.value / 100) * audioEl.duration;
+        }
+      });
+
+      volumeSlider?.addEventListener("input", () => {
+        audioEl.volume = volumeSlider.value;
+      });
+
+      audioEl.addEventListener("ended", () => {
+        if (currentPlaylist.length > 1) {
+          let nextIdx = Math.floor(Math.random() * currentPlaylist.length);
+          playTrack(nextIdx, true);
+        } else if (currentPlaylist.length === 1) {
+          playTrack(0, true);
+        }
+      });
+
+      acceptMusicBannerBtn?.addEventListener("click", () => {
+        musicIntroBanner.style.transform = "translateY(150%) scale(0.8)";
+        musicIntroBanner.style.opacity = "0";
+        setTimeout(() => {
+          musicIntroBanner.classList.add("hidden");
+          floatingMusicBtn.classList.remove("hidden");
+        }, 500);
+
+        if (currentPlaylist.length > 0) {
+          const randomIndex = Math.floor(Math.random() * currentPlaylist.length);
+          playTrack(randomIndex, true);
+        }
+      });
+
+      floatingMusicBtn?.addEventListener("click", () => {
+        musicPlayerModal.classList.remove("hidden");
+        musicPlayerModal.classList.add("flex");
+      });
+
+      // Single close button that minimizes player while audio keeps playing
+      const minimizeHandler = () => {
+        musicPlayerModal.classList.add("hidden");
+        musicPlayerModal.classList.remove("flex");
+        floatingMusicBtn.classList.remove("hidden");
+      };
+
+      closePlayerBtn?.addEventListener("click", minimizeHandler);
+
+      musicPlayerModal?.addEventListener("click", (e) => {
+        if (e.target === musicPlayerModal) {
+          minimizeHandler();
+        }
+      });
+
+      playerPlayPauseBtn?.addEventListener("click", () => {
+        if (!currentPlaylist.length) return;
+        if (audioEl.paused) {
+          if (!audioEl.src && currentPlaylist.length > 0) {
+            playTrack(currentTrackIndex, true);
+          } else {
+            audioEl.play().then(() => {
+              isPlaying = true;
+              updatePlayStateUI(true);
+            });
+          }
+        } else {
+          audioEl.pause();
+          isPlaying = false;
+          updatePlayStateUI(false);
+        }
+      });
+
+      playerRandomBtn?.addEventListener("click", () => {
+        if (currentPlaylist.length > 0) {
+          const rand = Math.floor(Math.random() * currentPlaylist.length);
+          playTrack(rand, true);
+        }
+      });
+
+      // Search songs WITHOUT auto-playing immediately upon search
+      async function searchSongs(query) {
+        if (!query.trim()) return;
+        songPlaylistContainer.innerHTML = `<p class="text-xs text-center text-[#e5c378] py-4">Searching songs...</p>`;
+
+        try {
+          const apiUrl = `https://api.music.vispark.in/api/search/songs?query=${encodeURIComponent(query)}&page=1&limit=20`;
+          const res = await fetch(apiUrl);
+          const json = await res.json();
+
+          if (json.success && json.data && Array.isArray(json.data.results)) {
+            const searchResults = json.data.results.map(item => {
+              let audioUrl = "";
+              if (Array.isArray(item.downloadUrl)) {
+                const highQ = item.downloadUrl.find(d => d.quality === "320kbps") || item.downloadUrl[item.downloadUrl.length - 1];
+                audioUrl = highQ ? highQ.url : "";
+              }
+              let imgUrl = "https://placehold.co/150x150/171614/c5a059?text=♪";
+              if (Array.isArray(item.image)) {
+                const imgQ = item.image.find(im => im.quality === "500x500") || item.image[item.image.length - 1];
+                imgUrl = imgQ ? imgQ.url : imgUrl;
+              }
+              let artistName = "Renu & Pankaj Guest";
+              if (item.artists && Array.isArray(item.artists.primary)) {
+                artistName = item.artists.primary.map(a => a.name).join(", ");
+              }
+
+              return {
+                name: item.name || "Unknown Song",
+                artist: artistName,
+                url: audioUrl,
+                image: imgUrl
+              };
+            }).filter(s => s.url);
+
+            if (searchResults.length > 0) {
+              currentPlaylist = searchResults;
+              renderPlaylistUI(currentPlaylist);
+            } else {
+              songPlaylistContainer.innerHTML = `<p class="text-xs text-center text-[#b5a48b] py-4">No playable songs found for "${query}".</p>`;
+            }
+          } else {
+            songPlaylistContainer.innerHTML = `<p class="text-xs text-center text-[#b5a48b] py-4">No results found.</p>`;
+          }
+        } catch (err) {
+          console.error("Search failed:", err);
+          songPlaylistContainer.innerHTML = `<p class="text-xs text-center text-[#e5c378] py-4">Search error. Please try again.</p>`;
+        }
+      }
+
+      songSearchBtn?.addEventListener("click", () => {
+        searchSongs(songSearchInput.value);
+      });
+
+      songSearchInput?.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          searchSongs(songSearchInput.value);
+        }
+      });
+    }
+
+    function renderPlaylistUI(playlist) {
+      const container = document.getElementById("songPlaylistContainer");
+      if (!container) return;
+
+      container.innerHTML = "";
+      playlist.forEach((song, idx) => {
+        const itemEl = document.createElement("div");
+        itemEl.className = "flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e0d] border border-[#c5a059]/20 hover:border-[#e5c378] transition-all cursor-pointer group";
+        
+        itemEl.innerHTML = `
+          <div class="flex items-center gap-3 min-w-0">
+            <img src="${song.image}" alt="" class="w-10 h-10 rounded-lg object-cover border border-[#c5a059]/30 shrink-0" onerror="this.src='https://placehold.co/100x100/171614/c5a059?text=♪'"/>
+            <div class="min-w-0">
+              <p class="text-xs sm:text-sm font-medium text-[#f7f3ee] truncate group-hover:text-[#e5c378] transition-colors">${song.name}</p>
+              <p class="text-[10px] text-[#b5a48b] truncate">${song.artist}</p>
+            </div>
+          </div>
+          <button type="button" class="px-3 py-1 rounded-lg bg-[#c5a059]/15 border border-[#c5a059]/40 text-[#e5c378] text-[10px] uppercase font-semibold tracking-wider hover:bg-[#c5a059] hover:text-[#0e0e0d] transition-all shrink-0">
+            Play
+          </button>
+        `;
+
+        itemEl.addEventListener("click", () => {
+          currentTrackIndex = idx;
+          const audioEl = document.getElementById("globalAudioPlayer");
+          audioEl.src = song.url;
+          audioEl.load();
+          audioEl.play().then(() => {
+            document.getElementById("playIconSvg").classList.add("hidden");
+            document.getElementById("pauseIconSvg").classList.remove("hidden");
+            document.getElementById("musicButtonIconVinyl").classList.remove("vinyl-paused");
+            document.getElementById("playerTrackImg").classList.remove("vinyl-paused");
+          });
+          document.getElementById("playerTrackName").textContent = song.name;
+          document.getElementById("playerTrackArtist").textContent = song.artist;
+          document.getElementById("playerTrackImg").src = song.image;
+        });
+
+        container.appendChild(itemEl);
+      });
     }
 
     // ==========================================================================
@@ -2014,6 +2494,7 @@
       initScratchCard();
       initInvitationAndPasscodeGate();
       updateMasterVideoAndHeroOnScroll();
+      initMusicPlayer();
     };
   </script>
 </body>
