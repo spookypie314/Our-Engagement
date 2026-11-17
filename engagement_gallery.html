@@ -3,6 +3,8 @@
 <head>
   <script>
     window.SITE_CONFIG = {
+      familyAccessCode: "renupankaj",
+      secondaryAccessCode: "myengagement",
       googleDriveFolderId: "1IcifgGCUJtC2Oeivb7pUhdevywaKhl47",
       googleDriveApiKey: "AIzaSyBU992oO3J8QGx4B1_0kjm3_JUJ00SnnKc",
       coupleFirstName: "Pankaj",
@@ -10,21 +12,15 @@
       slideshowDefaultSeconds: 2
     };
 
-    const AUTH_SESSION_KEY = "pankaj_renu_gallery_unlocked_v3";
-
-    // SECURITY GUARD & REFRESH CHECK:
-    // If page was reloaded or session token is missing, clear and redirect to home immediately!
-    if (performance && performance.navigation && performance.navigation.type === 1) {
-      sessionStorage.removeItem(AUTH_SESSION_KEY);
-      window.location.replace("index.html");
-    } else if (sessionStorage.getItem(AUTH_SESSION_KEY) !== "true") {
+    // Enforce authentication: if session is missing, redirect immediately back to home page
+    if (sessionStorage.getItem("pankaj_renu_gallery_unlocked_v3") !== "true") {
       window.location.replace("index.html");
     }
   </script>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
-  <title>Pankaj &amp; Renu — Engagement Gallery</title>
+  <title>Pankaj &amp; Renu — Engagement Memories</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -57,7 +53,7 @@
     ::-webkit-scrollbar-track { background: #0e0e0d; }
     ::-webkit-scrollbar-thumb { background: #c5a059; border-radius: 9999px; }
 
-    #masterVideoStage { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; overflow: hidden; opacity: 0.35; filter: blur(5px); }
+    #masterVideoStage { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; overflow: hidden; opacity: 0.55; filter: blur(5px); }
     #masterVideo { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); object-fit: cover; }
     #ambientCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 
@@ -71,6 +67,7 @@
 </head>
 <body class="relative min-h-screen selection:bg-[#c5a059] selection:text-[#0e0e0d]">
 
+  <!-- Background Video -->
   <div id="masterVideoStage" aria-hidden="true">
     <video id="masterVideo" autoplay muted loop playsinline>
       <source src="./media/master.mp4" type="video/mp4" />
@@ -81,10 +78,10 @@
 
   <canvas id="ambientCanvas"></canvas>
 
-  <!-- Gallery View -->
+  <!-- Protected Engagement Gallery View -->
   <div id="engagementGalleryView" class="relative z-10">
     <div class="sticky top-0 z-30 flex items-center justify-between gap-2 px-3 sm:px-8 py-2.5 sm:py-3 bg-[#0e0e0d]/90 backdrop-blur-xl border-b border-[#c5a059]/20">
-      <a href="index.html" class="inline-flex items-center gap-1 text-[10px] sm:text-xs tracking-[0.1em] sm:tracking-[0.18em] uppercase text-[#e5c378] hover:text-[#f7f3ee] transition-colors shrink-0 py-1">
+      <a href="index.html" id="backToInvitationBtn" class="inline-flex items-center gap-1 text-[10px] sm:text-xs tracking-[0.1em] sm:tracking-[0.18em] uppercase text-[#e5c378] hover:text-[#f7f3ee] transition-colors shrink-0 py-1">
         <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         <span>Invitation</span>
       </a>
@@ -98,24 +95,34 @@
       </span>
     </div>
 
+    <!-- Hero Section Inside Gallery -->
     <header class="relative z-10 flex flex-col items-center justify-center px-3 sm:px-8 pt-6 sm:pt-10 pb-4 sm:pb-8 text-center">
       <div class="max-w-2xl mx-auto flex flex-col items-center">
         <div class="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
-          <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 cute-sparkle shrink-0" viewBox="0 0 32 32" fill="none"><path d="M16 2C16.8 10.5 21.5 15.2 30 16C21.5 16.8 16.8 21.5 16 30C15.2 21.5 10.5 16.8 2 16C10.5 15.2 15.2 10.5 16 2Z" fill="#f3d8a0" stroke="#c5a059" stroke-width="1.2"/></svg>
-          <span class="text-[9px] sm:text-xs tracking-[0.15em] sm:tracking-regal text-[#e5c378] font-medium">ENGAGEMENT ARCHIVE • 10TH</span>
-          <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 cute-sparkle-delayed shrink-0" viewBox="0 0 32 32" fill="none"><path d="M16 2C16.8 10.5 21.5 15.2 30 16C21.5 16.8 16.8 21.5 16 30C15.2 21.5 10.5 16.8 2 16C10.5 15.2 15.2 10.5 16 2Z" fill="#f3d8a0" stroke="#c5a059" stroke-width="1.2"/></svg>
+          <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 cute-sparkle shrink-0" viewBox="0 0 32 32" fill="none">
+            <path d="M16 2C16.8 10.5 21.5 15.2 30 16C21.5 16.8 16.8 21.5 16 30C15.2 21.5 10.5 16.8 2 16C10.5 15.2 15.2 10.5 16 2Z" fill="#f3d8a0" stroke="#c5a059" stroke-width="1.2"/>
+          </svg>
+          <span class="text-[9px] sm:text-xs tracking-[0.15em] sm:tracking-regal text-[#e5c378] font-medium">ENGAGEMENT ARCHIVE</span>
+          <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 cute-sparkle-delayed shrink-0" viewBox="0 0 32 32" fill="none">
+            <path d="M16 2C16.8 10.5 21.5 15.2 30 16C21.5 16.8 16.8 21.5 16 30C15.2 21.5 10.5 16.8 2 16C10.5 15.2 15.2 10.5 16 2Z" fill="#f3d8a0" stroke="#c5a059" stroke-width="1.2"/>
+          </svg>
         </div>
 
-        <h2 class="couple-title text-2xl sm:text-5xl font-normal text-[#f7f3ee] tracking-wide leading-snug">Sweet Moments Together</h2>
+        <h2 class="couple-title text-2xl sm:text-5xl font-normal text-[#f7f3ee] tracking-wide leading-snug">
+          Sweet Moments Together
+        </h2>
+
         <p class="mt-1.5 text-[11px] sm:text-sm text-[#b5a48b] font-light max-w-md leading-relaxed px-2">
           Tap any memory for uncropped fullscreen view — pinch to zoom, rotate, swipe, or save.
         </p>
 
+        <!-- Loading Indicator -->
         <div id="driveSyncStatus" class="hidden mt-4 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#171614]/90 border border-[#c5a059]/35 text-xs text-[#e5c378]">
           <span class="w-2 h-2 rounded-full bg-[#e5c378] animate-ping"></span>
           <span>Fetching photos &amp; videos from Google Drive...</span>
         </div>
 
+        <!-- Diagnostic Message Box -->
         <div id="driveErrorContainer" class="hidden mt-6 w-full max-w-lg rounded-2xl bg-[#171614]/95 border border-[#c5a059]/45 p-5 sm:p-6 text-left shadow-2xl">
           <div class="flex items-start gap-3">
             <div class="w-8 h-8 rounded-full bg-[#c5a059]/15 border border-[#c5a059]/40 flex items-center justify-center text-[#e5c378] shrink-0 mt-0.5">!</div>
@@ -131,13 +138,16 @@
       </div>
     </header>
 
+    <!-- Main Photo Stream -->
     <main class="relative z-10 w-full min-h-screen pb-24 pt-2">
       <div class="max-w-7xl mx-auto px-2 sm:px-6">
-        <div id="scatteredGalleryGrid" class="grid grid-cols-4 md:grid-cols-5 gap-2 sm:gap-5 md:gap-7"></div>
+        <div id="scatteredGalleryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5 md:gap-7">
+          <!-- Populated dynamically -->
+        </div>
       </div>
 
       <div class="mt-16 flex flex-col items-center justify-center gap-4">
-        <button onclick="scrollToTopSmooth()" class="px-7 py-3 rounded-full bg-[#171614]/85 border border-[#c5a059]/40 hover:border-[#e5c378] text-[#e5c378] text-xs tracking-widest uppercase font-medium transition-all hover:scale-105 active:scale-95 shadow-lg backdrop-blur-md flex items-center gap-2">
+        <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" class="px-7 py-3 rounded-full bg-[#171614]/85 border border-[#c5a059]/40 hover:border-[#e5c378] text-[#e5c378] text-xs tracking-widest uppercase font-medium transition-all hover:scale-105 active:scale-95 shadow-lg backdrop-blur-md flex items-center gap-2">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
           <span>Back To Top</span>
         </button>
@@ -145,10 +155,6 @@
       </div>
     </main>
   </div>
-
-  <button id="quickScrollTopBtn" onclick="scrollToTopSmooth()" class="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-[#171614]/85 border border-[#c5a059]/45 text-[#e5c378] flex items-center justify-center shadow-2xl backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 active:scale-95" aria-label="Back to top">
-    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 15l7-7 7 7"/></svg>
-  </button>
 
   <!-- Fullscreen Lightbox -->
   <div id="stickyModalOverlay" class="fixed inset-0 z-50 hidden bg-[#080807]/98 backdrop-blur-2xl items-center justify-center select-none overflow-hidden touch-none" role="dialog" aria-modal="true">
@@ -185,6 +191,19 @@
       </button>
     </div>
 
+    <!-- Mobile Slideshow Bar -->
+    <div id="mobileSlideshowControlGroup" class="sm:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#171614]/90 border border-[#c5a059]/45 text-[#e5c378] text-[11px] tracking-wider uppercase font-medium shadow-xl backdrop-blur-md">
+      <button id="mobileSlideshowToggleBtn" type="button" class="hover:text-[#f7f3ee] flex items-center gap-1.5">
+        <svg id="mobileIconPlay" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <svg id="mobileIconPause" class="w-3.5 h-3.5 hidden" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        <span id="mobileSlideshowLabel">Slide</span>
+      </button>
+      <span class="opacity-40">|</span>
+      <button id="mobileSlideshowSpeedMinus" type="button" class="hover:text-[#f7f3ee] px-1 font-bold">−</button>
+      <span id="mobileSlideshowSpeedReadout" class="w-5 text-center font-mono">2s</span>
+      <button id="mobileSlideshowSpeedPlus" type="button" class="hover:text-[#f7f3ee] px-1 font-bold">+</button>
+    </div>
+
     <button id="modalPrevBtn" class="fixed left-2 sm:left-5 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#171614]/75 border border-[#c5a059]/35 hover:border-[#e5c378] text-[#f7f3ee] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl" aria-label="Previous">
       <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="#e5c378" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
@@ -197,7 +216,7 @@
         <img id="modalImgOutgoing" src="" alt="" referrerpolicy="no-referrer" class="max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain pointer-events-none select-none rounded-lg shadow-2xl" />
       </div>
       <div id="modalCardCurrent" class="relative w-full h-full flex items-center justify-center" style="will-change: transform, opacity;">
-        <img id="modalImgCurrent" src="" alt="" referrerpolicy="no-referrer" class="max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain pointer-events-none select-none rounded-lg shadow-2xl" />
+        <img id="modalImgCurrent" src="" alt="" referrerpolicy="no-referrer" class="max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain pointer-events-none select-none rounded-lg shadow-2xl" style="will-change: transform;" />
         <video id="modalVideoCurrent" controls playsinline preload="metadata" class="hidden max-w-[96vw] max-h-[90vh] w-auto h-auto object-contain bg-black rounded-lg shadow-2xl"></video>
       </div>
     </div>
@@ -206,14 +225,13 @@
   <script>
     const SITE_CONFIG = window.SITE_CONFIG;
 
-    function scrollToTopSmooth() { window.scrollTo({ top: 0, behavior: "smooth" }); }
     function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
-    function extractCleanFolderId(raw) {
-      const str = (raw || "").trim();
-      const m1 = str.match(/\/folders\/([a-zA-Z0-9_-]+)/);
-      if (m1 && m1[1]) return m1[1];
-      const m2 = str.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (m2 && m2[1]) return m2[1];
+    function extractCleanFolderId(rawInput) {
+      const str = (rawInput || "").trim();
+      const match = str.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) return match[1];
+      const idParam = str.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (idParam && idParam[1]) return idParam[1];
       return str;
     }
 
@@ -225,8 +243,8 @@
         targetId = file.shortcutDetails.targetId || file.id;
         mime = (file.shortcutDetails.targetMimeType || "").toLowerCase();
       }
-      const isVideo = mime.startsWith("video/") || /\.(mp4|mov|webm|m4v|mkv|avi|3gp)$/i.test(name);
       const isImage = mime.startsWith("image/") || /\.(jpe?g|png|webp|gif|heic|heif|avif|bmp|tiff?)$/i.test(name);
+      const isVideo = mime.startsWith("video/") || /\.(mp4|mov|webm|m4v|mkv|avi|3gp)$/i.test(name);
       return { isMedia: isImage || isVideo, isVideo, effectiveId: targetId, effectiveMime: mime };
     }
 
@@ -234,11 +252,13 @@
     let galleryScrollRestorationY = 0;
 
     function showDriveDiagnostic(title, detailsHtml) {
-      const box = document.getElementById("driveErrorContainer");
-      if (!box) return;
-      document.getElementById("driveErrorTitle").textContent = title;
-      document.getElementById("driveErrorDetails").innerHTML = detailsHtml;
-      box.classList.remove("hidden");
+      const errBox = document.getElementById("driveErrorContainer");
+      const errTitle = document.getElementById("driveErrorTitle");
+      const errDetails = document.getElementById("driveErrorDetails");
+      if (!errBox || !errTitle || !errDetails) return;
+      errTitle.textContent = title;
+      errDetails.innerHTML = detailsHtml;
+      errBox.classList.remove("hidden");
     }
 
     async function fetchDriveFolderContents(folderId, apiKey) {
@@ -249,9 +269,9 @@
         const fields = encodeURIComponent("nextPageToken, files(id, name, mimeType, thumbnailLink, webContentLink, shortcutDetails)");
         const pageParam = pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : "";
         const url = `https://www.googleapis.com/drive/v3/files?q=${query}&fields=${fields}&pageSize=500&orderBy=createdTime%20desc&supportsAllDrives=true&includeItemsFromAllDrives=true${pageParam}&key=${encodeURIComponent(apiKey)}`;
-        const res = await fetch(url);
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
+        const response = await fetch(url);
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data?.error?.message || `HTTP ${response.status}`);
         if (Array.isArray(data.files)) items = items.concat(data.files);
         pageToken = data.nextPageToken || "";
       } while (pageToken);
@@ -262,29 +282,13 @@
       const statusBadge = document.getElementById("driveSyncStatus");
       const counterBadge = document.getElementById("photoCounterBadge");
       if (statusBadge) statusBadge.classList.remove("hidden");
-      document.getElementById("driveErrorContainer")?.classList.add("hidden");
 
       const folderId = extractCleanFolderId(SITE_CONFIG.googleDriveFolderId);
       const apiKey = (SITE_CONFIG.googleDriveApiKey || "").trim();
 
-      if (!folderId || !apiKey) {
-        statusBadge?.classList.add("hidden");
-        showDriveDiagnostic("Missing Google Drive Credentials", "Please set <code>googleDriveFolderId</code> and <code>googleDriveApiKey</code>.");
-        return;
-      }
-
       try {
-        const topFiles = await fetchDriveFolderContents(folderId, apiKey);
-        let allFiles = [...topFiles];
-
-        const subFolders = topFiles.filter(f => f.mimeType === "application/vnd.google-apps.folder" || (f.mimeType === "application/vnd.google-apps.shortcut" && f.shortcutDetails?.targetMimeType === "application/vnd.google-apps.folder"));
-        for (const sf of subFolders) {
-          const subId = sf.shortcutDetails?.targetId || sf.id;
-          try {
-            const subItems = await fetchDriveFolderContents(subId, apiKey);
-            allFiles = allFiles.concat(subItems);
-          } catch(e) {}
-        }
+        const topLevelFiles = await fetchDriveFolderContents(folderId, apiKey);
+        let allFiles = [...topLevelFiles];
 
         const mediaEntries = [];
         for (const file of allFiles) {
@@ -295,7 +299,7 @@
         if (mediaEntries.length === 0) {
           galleryItems = [];
           renderScatteredGrid();
-          showDriveDiagnostic("Folder Connected — 0 Photos Visible", `Folder <code>${folderId}</code> returned 0 items. Please ensure General Access is set to <strong>Anyone with the link (Viewer)</strong> in Google Drive.`);
+          showDriveDiagnostic("Folder Connected — 0 Photos Found", "Please ensure your Google Drive folder contains engagement photos and is shared as <strong>Anyone with the link can view</strong>.");
           return;
         }
 
@@ -304,104 +308,101 @@
           const isVideo = info.isVideo;
           const directMediaUrl = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(fileId)}?alt=media&key=${encodeURIComponent(apiKey)}`;
           const lowResThumb = file.thumbnailLink ? file.thumbnailLink.replace(/=s\d+$/, "=s300") : `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w300`;
-          const fullMediaUrl = isVideo ? directMediaUrl : (file.thumbnailLink ? file.thumbnailLink.replace(/=s\d+$/, "=s2400") : lowResThumb);
-          return { id: fileId, name: file.name || `Memory-${idx+1}`, isVideo, thumbnailUrl: lowResThumb, directMediaUrl, fullUrl: fullMediaUrl, downloadUrl: directMediaUrl };
+          const fullMediaUrl = isVideo ? directMediaUrl : (file.thumbnailLink ? file.thumbnailLink.replace(/=s\d+$/, "=s2400") : directMediaUrl);
+
+          return {
+            id: fileId,
+            name: file.name || `Memory-${idx + 1}`,
+            isVideo,
+            thumbnailUrl: lowResThumb,
+            fullUrl: fullMediaUrl,
+            downloadUrl: directMediaUrl
+          };
         });
 
         if (counterBadge) counterBadge.textContent = `${galleryItems.length} Memories`;
         renderScatteredGrid();
       } catch (err) {
-        galleryItems = [];
-        renderScatteredGrid();
         showDriveDiagnostic("Google Drive API Error", err.message);
       } finally {
-        statusBadge?.classList.add("hidden");
+        if (statusBadge) statusBadge.classList.add("hidden");
       }
     }
 
-    function getCuteDecorationSvg(idx) {
-      const v = idx % 5;
-      if (v === 0) return `<div class="absolute -top-2 -right-2 sm:-top-3.5 sm:-right-3.5 z-25 pointer-events-none drop-shadow-md"><svg class="w-5 h-5 sm:w-8 sm:h-8 text-[#e5c378]" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><path d="M24 24 C18 14 6 16 12 28 C16 34 22 28 24 24 Z" fill="rgba(229,195,120,0.3)"/><path d="M24 24 C30 14 42 16 36 28 C32 34 26 28 24 24 Z" fill="rgba(229,195,120,0.3)"/><circle cx="24" cy="24" r="3.5" fill="#f7f3ee" stroke="#c5a059"/></svg></div>`;
-      if (v === 1) return `<div class="absolute -bottom-2 -left-2 sm:-bottom-3 sm:-left-3 z-25 pointer-events-none drop-shadow"><svg class="w-5 h-5 sm:w-9 sm:h-9 text-[#c5a059]" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 34 C14 28 26 20 34 8"/></svg></div>`;
-      return `<div class="absolute -top-1.5 right-1.5 sm:-top-2.5 sm:right-4 z-25 pointer-events-none drop-shadow"><div class="w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-[#171614]/85 border border-[#c5a059]/40 flex items-center justify-center text-[8px] text-[#e5c378]">♥</div></div>`;
-    }
-
-    let galleryCardElements = [];
     function renderScatteredGrid() {
       const grid = document.getElementById("scatteredGalleryGrid");
       if (!grid) return;
       grid.innerHTML = "";
-      galleryCardElements = [];
 
       galleryItems.forEach((item, idx) => {
         const fig = document.createElement("figure");
-        fig.className = "relative z-10 m-0 gallery-card-figure cursor-pointer group";
+        fig.className = "relative z-10 m-0 cursor-pointer group";
         const isEven = idx % 2 === 0;
-        const colShift = isEven ? "-2%" : "2%";
-        const tilt = isEven ? "-1.8deg" : "2deg";
-        const deco = getCuteDecorationSvg(idx);
-        const videoBadge = item.isVideo ? `<div class="absolute inset-0 flex items-center justify-center bg-black/25 pointer-events-none"><div class="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-[#0e0e0d]/80 border border-[#e5c378]/70 flex items-center justify-center text-[#e5c378]"><svg class="w-3.5 h-3.5 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div>` : "";
+        const initialTilt = isEven ? "-1.5deg" : "1.5deg";
+
+        const videoBadge = item.isVideo ? `
+          <div class="absolute inset-0 flex items-center justify-center bg-black/25 pointer-events-none">
+            <div class="w-8 h-8 rounded-full bg-[#0e0e0d]/80 border border-[#e5c378]/70 flex items-center justify-center text-[#e5c378] shadow-lg">
+              <svg class="w-3.5 h-3.5 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+          </div>` : "";
 
         fig.innerHTML = `
-          <div class="relative aspect-[1/1.25] w-full p-1.5 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl md:rounded-3xl bg-[#171614]/90 border border-[#c5a059]/35 hover:border-[#e5c378] transition-all duration-500 shadow-[0_10px_25px_rgba(0,0,0,0.65)] group-hover:shadow-[0_20px_45px_rgba(197,160,89,0.22)]" style="transform: translateX(${colShift}) rotateZ(${tilt});">
-            ${deco}
-            <div class="relative w-full h-full overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl bg-[#0e0e0d]">
-              <img data-src="${item.thumbnailUrl}" alt="Memory ${idx+1}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108 opacity-0 transition-opacity duration-300" />
+          <div class="relative aspect-[1/1.25] w-full p-2 rounded-2xl bg-[#171614]/90 border border-[#c5a059]/35 hover:border-[#e5c378] transition-all duration-300 shadow-lg group-hover:shadow-[0_15px_35px_rgba(197,160,89,0.2)]" style="transform: rotateZ(${initialTilt});">
+            <div class="relative w-full h-full overflow-hidden rounded-xl bg-[#0e0e0d]">
+              <img src="${item.thumbnailUrl}" alt="${item.name}" loading="lazy" referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               ${videoBadge}
             </div>
           </div>
         `;
+
         fig.addEventListener("click", () => {
           galleryScrollRestorationY = window.scrollY || window.pageYOffset;
           openStickyModal(idx);
         });
+
         grid.appendChild(fig);
-        galleryCardElements.push({ figure: fig, item, loaded: false });
-      });
-      updateVisibleThumbnails();
-    }
-
-    function updateVisibleThumbnails() {
-      const scrollY = window.scrollY || window.pageYOffset;
-      const vh = window.innerHeight || 800;
-      galleryCardElements.forEach(e => {
-        if (e.loaded) return;
-        const rect = e.figure.getBoundingClientRect();
-        if (rect.top < scrollY + vh * 2 && rect.bottom >= -vh * 2) {
-          const img = e.figure.querySelector("img");
-          if (img && img.dataset.src) {
-            img.src = img.dataset.src;
-            img.onload = () => img.classList.remove("opacity-0");
-            e.loaded = true;
-          }
-        }
       });
     }
 
-    window.addEventListener("scroll", () => {
-      updateVisibleThumbnails();
-      const quickBtn = document.getElementById("quickScrollTopBtn");
-      if (quickBtn) {
-        if ((window.scrollY || window.pageYOffset) > window.innerHeight * 0.45) {
-          quickBtn.style.opacity = "1"; quickBtn.style.pointerEvents = "auto";
-        } else {
-          quickBtn.style.opacity = "0"; quickBtn.style.pointerEvents = "none";
-        }
-      }
-    }, { passive: true });
-
-    // Lightbox & Slideshow logic
+    // Lightbox & Slideshow & Zoom logic
     const stickyModalOverlay = document.getElementById("stickyModalOverlay");
     const discreteStage = document.getElementById("discreteStage");
     const modalCardCurrent = document.getElementById("modalCardCurrent");
     const modalImgCurrent = document.getElementById("modalImgCurrent");
     const modalVideoCurrent = document.getElementById("modalVideoCurrent");
-    const modalCardOutgoing = document.getElementById("modalCardOutgoing");
-    const modalImgOutgoing = document.getElementById("modalImgOutgoing");
+    const resetZoomBtn = document.getElementById("resetZoomBtn");
+    const zoomLevelReadout = document.getElementById("zoomLevelReadout");
 
     let currentModalIndex = 0;
     let userZoomScale = 1, userPanX = 0, userPanY = 0, userRotationDeg = 0;
+    let isDragging = false, dragStartX = 0, dragStartY = 0, dragCurrentX = 0, dragCurrentY = 0;
+    let panStartOffsetX = 0, panStartOffsetY = 0, isTransitioning = false;
+    let isPinching = false, pinchStartDist = 0, pinchStartScale = 1, lastTapTimestamp = 0;
+
     let isSlideshowActive = false, slideshowTimer = null, slideshowIntervalSeconds = SITE_CONFIG.slideshowDefaultSeconds;
+
+    function applyUserTransform(animate = false) {
+      const ease = animate ? "transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)" : "none";
+      modalImgCurrent.style.transition = ease;
+      modalImgCurrent.style.transform = `translate3d(${userPanX}px, ${userPanY}px, 0px) scale(${userZoomScale}) rotate(${userRotationDeg}deg)`;
+
+      if (resetZoomBtn && zoomLevelReadout) {
+        if (userZoomScale > 1.02) {
+          resetZoomBtn.classList.remove("hidden");
+          resetZoomBtn.classList.add("flex");
+          zoomLevelReadout.textContent = `${Math.round(userZoomScale * 100)}%`;
+        } else {
+          resetZoomBtn.classList.add("hidden");
+          resetZoomBtn.classList.remove("flex");
+        }
+      }
+    }
+
+    function resetZoomAndRotation(animate = false) {
+      userZoomScale = 1; userPanX = 0; userPanY = 0; userRotationDeg = 0;
+      applyUserTransform(animate);
+    }
 
     function openStickyModal(idx) {
       if (!galleryItems.length) return;
@@ -417,6 +418,7 @@
       stopSlideshow();
       modalVideoCurrent.pause();
       modalVideoCurrent.removeAttribute("src");
+      resetZoomAndRotation(false);
       stickyModalOverlay.classList.add("hidden");
       stickyModalOverlay.classList.remove("flex");
       document.body.style.overflow = "";
@@ -424,8 +426,7 @@
     }
 
     function renderActiveMediaInModal(item) {
-      userZoomScale = 1; userPanX = 0; userPanY = 0; userRotationDeg = 0;
-      modalImgCurrent.style.transform = "none";
+      resetZoomAndRotation(false);
       if (item.isVideo) {
         modalImgCurrent.classList.add("hidden");
         modalVideoCurrent.classList.remove("hidden");
@@ -454,16 +455,44 @@
     }
     function updateSlideshowUI() {
       const lbl = document.getElementById("slideshowLabel");
+      const mlbl = document.getElementById("mobileSlideshowLabel");
+      const iconPlay = document.getElementById("slideshowIconPlay");
+      const iconPause = document.getElementById("slideshowIconPause");
+      const mPlay = document.getElementById("mobileIconPlay");
+      const mPause = document.getElementById("mobileIconPause");
+
       if (lbl) lbl.textContent = isSlideshowActive ? "Pause" : "Slide";
+      if (mlbl) mlbl.textContent = isSlideshowActive ? "Pause" : "Slide";
+      if (iconPlay) iconPlay.classList.toggle("hidden", isSlideshowActive);
+      if (iconPause) iconPause.classList.toggle("hidden", !isSlideshowActive);
+      if (mPlay) mPlay.classList.toggle("hidden", isSlideshowActive);
+      if (mPause) mPause.classList.toggle("hidden", !isSlideshowActive);
     }
 
-    function transitionToPhoto(targetIdx) {
-      if (!galleryItems.length) return;
-      currentModalIndex = ((targetIdx % galleryItems.length) + galleryItems.length) % galleryItems.length;
-      renderActiveMediaInModal(galleryItems[currentModalIndex]);
+    function changeSpeed(delta) {
+      slideshowIntervalSeconds = clamp(slideshowIntervalSeconds + delta, 1, 15);
+      const r1 = document.getElementById("slideshowSpeedReadout");
+      const r2 = document.getElementById("mobileSlideshowSpeedReadout");
+      if (r1) r1.textContent = `${slideshowIntervalSeconds}s`;
+      if (r2) r2.textContent = `${slideshowIntervalSeconds}s`;
+      if (isSlideshowActive) scheduleNextSlide();
     }
 
     document.getElementById("slideshowToggleBtn")?.addEventListener("click", toggleSlideshow);
+    document.getElementById("mobileSlideshowToggleBtn")?.addEventListener("click", toggleSlideshow);
+    document.getElementById("slideshowSpeedMinus")?.addEventListener("click", () => changeSpeed(-1));
+    document.getElementById("slideshowSpeedPlus")?.addEventListener("click", () => changeSpeed(1));
+    document.getElementById("mobileSlideshowSpeedMinus")?.addEventListener("click", () => changeSpeed(-1));
+    document.getElementById("mobileSlideshowSpeedPlus")?.addEventListener("click", () => changeSpeed(1));
+
+    function transitionToPhoto(targetIdx) {
+      if (isTransitioning || !galleryItems.length) return;
+      isTransitioning = true;
+      currentModalIndex = ((targetIdx % galleryItems.length) + galleryItems.length) % galleryItems.length;
+      renderActiveMediaInModal(galleryItems[currentModalIndex]);
+      setTimeout(() => { isTransitioning = false; }, 300);
+    }
+
     document.getElementById("closeStickyModalBtn")?.addEventListener("click", () => {
       if (window.history.state?.modalOpen) window.history.back();
       else closeStickyModal();
@@ -472,12 +501,90 @@
     document.getElementById("modalNextBtn")?.addEventListener("click", () => transitionToPhoto(currentModalIndex + 1));
     document.getElementById("rotateMediaBtn")?.addEventListener("click", () => {
       userRotationDeg = (userRotationDeg + 90) % 360;
-      modalImgCurrent.style.transform = `rotate(${userRotationDeg}deg)`;
+      applyUserTransform(true);
     });
+    document.getElementById("resetZoomBtn")?.addEventListener("click", () => resetZoomAndRotation(true));
     document.getElementById("downloadMediaBtn")?.addEventListener("click", () => {
       const item = galleryItems[currentModalIndex];
       if (item) window.open(item.downloadUrl, "_blank");
     });
+
+    // Zoom & Pan gesture handlers
+    function getTouchDist(t) {
+      return Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+    }
+
+    discreteStage.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 2) {
+        isDragging = false; isPinching = true;
+        pinchStartDist = getTouchDist(e.touches);
+        pinchStartScale = userZoomScale;
+      } else if (e.touches.length === 1) {
+        const now = Date.now();
+        const t = e.touches[0];
+        if (now - lastTapTimestamp < 280) {
+          if (userZoomScale > 1.05) resetZoomAndRotation(true);
+          else { userZoomScale = 2.5; userPanX = 0; userPanY = 0; applyUserTransform(true); }
+          lastTapTimestamp = 0; return;
+        }
+        lastTapTimestamp = now;
+        isDragging = true;
+        dragStartX = t.clientX; dragStartY = t.clientY;
+        dragCurrentX = t.clientX; dragCurrentY = t.clientY;
+        panStartOffsetX = userPanX; panStartOffsetY = userPanY;
+      }
+    }, { passive: true });
+
+    discreteStage.addEventListener("touchmove", (e) => {
+      if (isPinching && e.touches.length === 2) {
+        const dist = getTouchDist(e.touches);
+        if (pinchStartDist > 0) {
+          userZoomScale = clamp(pinchStartScale * (dist / pinchStartDist), 1, 5);
+          if (userZoomScale <= 1.02) { userPanX = 0; userPanY = 0; }
+          applyUserTransform(false);
+        }
+      } else if (isDragging && e.touches.length === 1) {
+        dragCurrentX = e.touches[0].clientX; dragCurrentY = e.touches[0].clientY;
+        const dx = dragCurrentX - dragStartX; const dy = dragCurrentY - dragStartY;
+        if (userZoomScale > 1.02) {
+          userPanX = panStartOffsetX + dx; userPanY = panStartOffsetY + dy;
+          applyUserTransform(false);
+        } else if (Math.abs(dx) > 60 && Math.abs(dy) < 40) {
+          isDragging = false;
+          if (dx < 0) transitionToPhoto(currentModalIndex + 1);
+          else transitionToPhoto(currentModalIndex - 1);
+        }
+      }
+    }, { passive: true });
+
+    discreteStage.addEventListener("touchend", (e) => {
+      if (isPinching && e.touches.length < 2) { isPinching = false; }
+      if (e.touches.length === 0) { isDragging = false; }
+    });
+
+    discreteStage.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const factor = e.deltaY < 0 ? 1.15 : 0.88;
+      userZoomScale = clamp(userZoomScale * factor, 1, 5);
+      if (userZoomScale <= 1.03) resetZoomAndRotation(true);
+      else applyUserTransform(true);
+    }, { passive: false });
+
+    discreteStage.addEventListener("mousedown", (e) => {
+      if (e.button === 0) {
+        isDragging = true; dragStartX = e.clientX; dragStartY = e.clientY;
+        panStartOffsetX = userPanX; panStartOffsetY = userPanY;
+      }
+    });
+    window.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - dragStartX; const dy = e.clientY - dragStartY;
+      if (userZoomScale > 1.02) {
+        userPanX = panStartOffsetX + dx; userPanY = panStartOffsetY + dy;
+        applyUserTransform(false);
+      }
+    });
+    window.addEventListener("mouseup", () => { isDragging = false; });
 
     window.addEventListener("popstate", () => {
       if (!stickyModalOverlay.classList.contains("hidden")) closeStickyModal();
