@@ -10,9 +10,14 @@
       slideshowDefaultSeconds: 2
     };
 
-    // SECURITY GUARD: If session token is missing (direct link or refreshed), redirect to index.html immediately!
     const AUTH_SESSION_KEY = "pankaj_renu_gallery_unlocked_v3";
-    if (sessionStorage.getItem(AUTH_SESSION_KEY) !== "true") {
+
+    // SECURITY GUARD & REFRESH CHECK:
+    // If page was reloaded or session token is missing, clear and redirect to home immediately!
+    if (performance && performance.navigation && performance.navigation.type === 1) {
+      sessionStorage.removeItem(AUTH_SESSION_KEY);
+      window.location.replace("index.html");
+    } else if (sessionStorage.getItem(AUTH_SESSION_KEY) !== "true") {
       window.location.replace("index.html");
     }
   </script>
