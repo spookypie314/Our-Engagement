@@ -439,6 +439,11 @@
     window.onload = function() {
       loadGoogleDriveGallery();
     };
+
+    // If loaded dynamically via fetch() inside index.html, ensure initialization runs immediately
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      setTimeout(loadGoogleDriveGallery, 50);
+    }
   </script>
 </body>
 </html>
