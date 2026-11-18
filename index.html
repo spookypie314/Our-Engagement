@@ -30,13 +30,19 @@
       weddingDayOfWeek: "Thursday",
       weddingMuhurat: "07:15 PM Onwards",
 
-      // Default Playlist Audio Links (If empty, wont play automatically on random. If multiple, plays randomly)
+      // Default Playlist Audio Links
       defaultPlaylistSongs: [
         {
           name: "Jadugarni (Hit Music)",
           artist: "Sintaa, Riyaazi",
           url: "https://aac.saavncdn.com/325/fa04b0386637ae2acee576ee39fa6404_320.mp4",
           image: "https://c.saavncdn.com/325/Jadugarni-Haryanvi-2026-20260629120738-500x500.jpg"
+        },
+        {
+          name: "JADUGARNI (Bala Records)",
+          artist: "Devender Ahlawat",
+          url: "https://aac.saavncdn.com/970/9bd848796aa63b33c4d9d3681675ad02_320.mp4",
+          image: "https://c.saavncdn.com/970/JADUGARNI-Unknown-2026-20260915173504-500x500.jpg"
         }
       ]
     };
@@ -208,6 +214,17 @@
     .vinyl-paused {
       animation-play-state: paused;
     }
+
+    /* Smooth Paper-Folding Collapse Animation towards Bottom-Left Icon */
+    @keyframes collapseFoldToCorner {
+      0% { transform: scale(1) translate(0, 0); opacity: 1; border-radius: 1rem; }
+      50% { transform: scale(0.45) translate(-28vw, 35vh) skewX(12deg); opacity: 0.8; }
+      100% { transform: scale(0.08) translate(-42vw, 42vh) rotate(-180deg); opacity: 0; border-radius: 9999px; }
+    }
+    .collapsing-fold {
+      animation: collapseFoldToCorner 0.7s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+      transform-origin: center bottom;
+    }
   </style>
 </head>
 <body class="relative min-h-screen selection:bg-[#c5a059] selection:text-[#0e0e0d]">
@@ -273,7 +290,7 @@
           Together with our families, with immense joy we invite you to celebrate our sacred union.
         </p>
 
-        <!-- Golden Scratch & View Card for Wedding Date -->
+        <!-- Golden Scratch & View Card for Wedding Date (Compact Height) -->
         <div class="mb-6">
           <div class="flex items-center justify-center mb-2 px-1">
             <span class="text-[10px] tracking-[0.16em] uppercase text-[#e5c378] font-semibold flex items-center gap-1.5">
@@ -281,19 +298,19 @@
             </span>
           </div>
 
-          <div class="scratch-container relative w-full h-28 sm:h-32 rounded-2xl bg-[#121210] border-2 border-[#c5a059]/50 overflow-hidden shadow-inner flex flex-col items-center justify-center p-4 text-center">
-            <!-- Interactive Golden Scratch Canvas Layer (covers secret content fully from the start) -->
+          <div class="scratch-container relative w-full h-20 sm:h-24 rounded-2xl bg-[#121210] border-2 border-[#c5a059]/50 overflow-hidden shadow-inner flex flex-col items-center justify-center p-3 text-center">
+            <!-- Interactive Golden Scratch Canvas Layer -->
             <canvas id="scratchCanvas" class="absolute inset-0 z-20 w-full h-full cursor-crosshair touch-none"></canvas>
 
-            <!-- Hidden Secret Wedding Date Content (placed underneath canvas, invisible until scratch initializes or reveals) -->
-            <div id="scratchSecretContent" class="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-[#1c1b18] to-[#121210] opacity-0 transition-opacity duration-300">
-              <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-[#e5c378] font-semibold mb-1">
+            <!-- Hidden Secret Wedding Date Content -->
+            <div id="scratchSecretContent" class="absolute inset-0 z-10 flex flex-col items-center justify-center p-2 text-center bg-gradient-to-br from-[#1c1b18] to-[#121210] opacity-0 transition-opacity duration-300">
+              <p class="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-[#e5c378] font-semibold mb-0.5">
                 WEDDING DATE ANNOUNCED
               </p>
-              <h3 class="couple-title text-xl sm:text-3xl text-[#f7f3ee] font-normal tracking-wide">
+              <h3 class="couple-title text-lg sm:text-2xl text-[#f7f3ee] font-normal tracking-wide">
                 <span style="font-family: Montserrat, sans-serif; font-weight: 500;">11</span><sup>th</sup> February <span style="font-family: Montserrat, sans-serif; font-weight: 500;">2027</span>
               </h3>
-              <p class="text-[11px] sm:text-xs text-[#b5a48b] mt-1 font-light">
+              <p class="text-[10px] sm:text-[11px] text-[#b5a48b] font-light">
                 Thursday
               </p>
             </div>
@@ -511,7 +528,7 @@
   <!-- Hidden Audio Element -->
   <audio id="globalAudioPlayer" preload="auto"></audio>
 
-  <!-- 1. Initial Bottom Experience Banner with Vibrant Border (Auto collapses in 2 seconds) -->
+  <!-- 1. Initial Bottom Experience Banner with Vibrant Border (Auto collapses in 2 seconds smoothly into bottom-left icon) -->
   <div
     id="musicIntroBanner"
     class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 max-w-md w-[92%] sm:w-auto px-5 py-3.5 rounded-2xl bg-[#171614]/95 vibrant-border backdrop-blur-xl shadow-[0_15px_45px_rgba(0,0,0,0.8)] flex items-center justify-between gap-4 transition-all duration-700"
@@ -538,7 +555,7 @@
     </button>
   </div>
 
-  <!-- 2. Minimized Floating Bottom-Left Vibrant Music Button (Collapses from banner) -->
+  <!-- 2. Minimized Floating Bottom-Left Vibrant Music Button -->
   <button
     id="floatingMusicToggleBtn"
     type="button"
@@ -554,24 +571,23 @@
     <div class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#c5a059] text-[#0e0e0d] text-[9px] font-bold flex items-center justify-center shadow">♪</div>
   </button>
 
-  <!-- 3. Full Screen / Drawer Music Player Overlay -->
+  <!-- 3. Full Screen / Drawer Music Player Overlay (Search Option placed at the top of the player) -->
   <div
     id="musicPlayerModal"
     class="fixed inset-0 z-50 hidden bg-[#080807]/92 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 transition-all duration-300"
     role="dialog"
     aria-modal="true"
   >
-    <div class="relative w-full max-w-xl rounded-[28px] bg-[#171614]/98 border border-[#c5a059]/50 p-6 sm:p-8 shadow-[0_25px_80px_rgba(0,0,0,0.95)] flex flex-col max-h-[92vh] overflow-hidden">
+    <div class="relative w-full max-w-md rounded-[28px] bg-[#171614]/98 border border-[#c5a059]/50 p-5 sm:p-7 shadow-[0_25px_80px_rgba(0,0,0,0.95)] flex flex-col max-h-[92vh] overflow-hidden">
       <!-- Modal Header -->
-      <div class="flex items-center justify-between pb-4 border-b border-[#c5a059]/20 shrink-0">
+      <div class="flex items-center justify-between pb-3 border-b border-[#c5a059]/20 shrink-0">
         <div class="flex items-center gap-2.5">
           <span class="text-xl">🎵</span>
           <div>
-            <h3 class="couple-title text-xl sm:text-2xl text-[#f7f3ee]">Renu &amp; Pankaj Music Player</h3>
-            <p class="text-[10px] sm:text-xs text-[#b5a48b] tracking-wider uppercase">Search or Play Directly</p>
+            <h3 class="couple-title text-lg sm:text-xl text-[#f7f3ee]">Pankaj &amp; Renu Music</h3>
+            <p class="text-[10px] text-[#b5a48b] tracking-wider uppercase">Search or Play Directly</p>
           </div>
         </div>
-        <!-- Single cross button that minimises player while audio keeps playing -->
         <button
           id="closePlayerBtn"
           type="button"
@@ -582,76 +598,8 @@
         </button>
       </div>
 
-      <!-- Currently Playing Track Card -->
-      <div class="my-4 p-4 rounded-2xl bg-[#0e0e0d]/90 border border-[#c5a059]/30 flex items-center gap-4 shrink-0 shadow-inner">
-        <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-[#c5a059]/40 bg-[#1c1b18] shrink-0">
-          <img
-            id="playerTrackImg"
-            src="https://placehold.co/150x150/171614/c5a059?text=♪"
-            alt="Track Cover"
-            class="w-full h-full object-cover vinyl-spinning vinyl-paused"
-          />
-        </div>
-        <div class="flex-1 min-w-0">
-          <p id="playerTrackName" class="text-sm sm:text-base font-medium text-[#f7f3ee] truncate">Select or Play a Song</p>
-          <p id="playerTrackArtist" class="text-xs text-[#b5a48b] truncate mt-0.5">Renu &amp; Pankaj Special Playlist</p>
-          
-          <!-- Audio Playback Controls & Random -->
-          <div class="flex items-center gap-3 mt-3">
-            <button
-              id="playerPlayPauseBtn"
-              type="button"
-              class="w-9 h-9 rounded-full bg-gradient-to-r from-[#c5a059] to-[#e5c378] text-[#0e0e0d] flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all shrink-0"
-            >
-              <svg id="playIconSvg" class="w-4 h-4 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              <svg id="pauseIconSvg" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-            </button>
-            <button
-              id="playerRandomBtn"
-              type="button"
-              class="px-3 py-1.5 rounded-lg bg-[#171614] border border-[#c5a059]/40 hover:border-[#e5c378] text-[#e5c378] text-[10px] tracking-wider uppercase font-medium transition-all"
-            >
-              🎲 Random Play
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Seekbar & Time Readouts -->
-      <div class="space-y-1.5 mb-4 shrink-0">
-        <div class="flex items-center justify-between text-[10px] text-[#b5a48b]">
-          <span id="currentTimeReadout">0:00</span>
-          <span id="durationReadout">0:00</span>
-        </div>
-        <input
-          id="audioSeekbar"
-          type="range"
-          min="0"
-          max="100"
-          value="0"
-          class="w-full h-1.5 bg-[#0e0e0d] rounded-lg appearance-none cursor-pointer accent-[#c5a059]"
-        />
-      </div>
-
-      <!-- Volume Control Bar -->
-      <div class="flex items-center gap-3 mb-4 px-1 shrink-0">
-        <svg class="w-4 h-4 text-[#c5a059] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-        </svg>
-        <input
-          id="volumeSlider"
-          type="range"
-          min="0"
-          max="1"
-          step="0.05"
-          value="1"
-          class="w-full h-1.5 bg-[#0e0e0d] rounded-lg appearance-none cursor-pointer accent-[#c5a059]"
-        />
-      </div>
-
-      <!-- Search Section -->
-      <div class="shrink-0 mb-3">
+      <!-- Search Section at Top of Player -->
+      <div class="shrink-0 my-3">
         <div class="relative flex items-center">
           <input
             id="songSearchInput"
@@ -671,6 +619,89 @@
             Search
           </button>
         </div>
+      </div>
+
+      <!-- Main Layout with Centered Album Art & Right-Side Vertical Volume Slider -->
+      <div class="flex items-stretch gap-4 mb-3 shrink-0">
+        <!-- Centered Album Art Card -->
+        <div class="flex-1 flex flex-col items-center justify-center p-4 rounded-2xl bg-[#0e0e0d]/90 border border-[#c5a059]/30 text-center shadow-inner">
+          <div class="relative w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden border-2 border-[#c5a059]/50 bg-[#1c1b18] shadow-2xl mb-3">
+            <img
+              id="playerTrackImg"
+              src="https://placehold.co/200x200/171614/c5a059?text=♪"
+              alt="Track Cover"
+              class="w-full h-full object-cover vinyl-spinning vinyl-paused"
+            />
+          </div>
+          <p id="playerTrackName" class="text-sm sm:text-base font-medium text-[#f7f3ee] truncate w-full px-2">Select or Play a Song</p>
+          <p id="playerTrackArtist" class="text-xs text-[#b5a48b] truncate w-full px-2 mt-0.5">Renu &amp; Pankaj Special Playlist</p>
+        </div>
+
+        <!-- Right Side Vertical Volume Control -->
+        <div class="w-12 rounded-2xl bg-[#0e0e0d]/90 border border-[#c5a059]/30 py-4 flex flex-col items-center justify-between shrink-0 shadow-inner">
+          <svg class="w-4 h-4 text-[#c5a059]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <div class="h-28 flex items-center justify-center py-2">
+            <input
+              id="volumeSlider"
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value="1"
+              class="w-28 h-1.5 bg-[#171614] rounded-lg appearance-none cursor-pointer accent-[#c5a059] -rotate-90 origin-center"
+            />
+          </div>
+          <span class="text-[9px] text-[#b5a48b] font-mono">VOL</span>
+        </div>
+      </div>
+
+      <!-- Playback Controls Bar (Previous, Play/Pause, Next) -->
+      <div class="flex items-center justify-center gap-5 my-2 shrink-0">
+        <button
+          id="playerPrevBtn"
+          type="button"
+          class="w-10 h-10 rounded-full bg-[#0e0e0d] border border-[#c5a059]/40 hover:border-[#e5c378] text-[#e5c378] flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow"
+          title="Previous Track"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
+        </button>
+
+        <button
+          id="playerPlayPauseBtn"
+          type="button"
+          class="w-14 h-14 rounded-full bg-gradient-to-r from-[#c5a059] via-[#e5c378] to-[#c5a059] text-[#0e0e0d] flex items-center justify-center shadow-[0_0_25px_rgba(197,160,89,0.5)] hover:scale-105 active:scale-95 transition-all shrink-0"
+        >
+          <svg id="playIconSvg" class="w-6 h-6 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <svg id="pauseIconSvg" class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        </button>
+
+        <button
+          id="playerNextBtn"
+          type="button"
+          class="w-10 h-10 rounded-full bg-[#0e0e0d] border border-[#c5a059]/40 hover:border-[#e5c378] text-[#e5c378] flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow"
+          title="Next Track"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+        </button>
+      </div>
+
+      <!-- Seekbar & Time Readouts -->
+      <div class="space-y-1 mb-3 shrink-0">
+        <div class="flex items-center justify-between text-[10px] text-[#b5a48b]">
+          <span id="currentTimeReadout">0:00</span>
+          <span id="durationReadout">0:00</span>
+        </div>
+        <input
+          id="audioSeekbar"
+          type="range"
+          min="0"
+          max="100"
+          value="0"
+          class="w-full h-1.5 bg-[#0e0e0d] rounded-lg appearance-none cursor-pointer accent-[#c5a059]"
+        />
       </div>
 
       <!-- Search Results / Playlist Scroll Area -->
@@ -1449,9 +1480,10 @@
       const musicPlayerModal = document.getElementById("musicPlayerModal");
       const closePlayerBtn = document.getElementById("closePlayerBtn");
       const playerPlayPauseBtn = document.getElementById("playerPlayPauseBtn");
+      const playerPrevBtn = document.getElementById("playerPrevBtn");
+      const playerNextBtn = document.getElementById("playerNextBtn");
       const playIconSvg = document.getElementById("playIconSvg");
       const pauseIconSvg = document.getElementById("pauseIconSvg");
-      const playerRandomBtn = document.getElementById("playerRandomBtn");
       const playerTrackName = document.getElementById("playerTrackName");
       const playerTrackArtist = document.getElementById("playerTrackArtist");
       const playerTrackImg = document.getElementById("playerTrackImg");
@@ -1475,15 +1507,14 @@
         renderPlaylistUI(currentPlaylist);
       }
 
-      // Automatically collapse intro banner after 2 seconds
+      // Automatically collapse intro banner after 2 seconds smoothly into bottom-left icon
       setTimeout(() => {
         if (musicIntroBanner && !musicIntroBanner.classList.contains("hidden") && musicIntroBanner.style.opacity !== "0") {
-          musicIntroBanner.style.transform = "translateY(150%) scale(0.8)";
-          musicIntroBanner.style.opacity = "0";
+          musicIntroBanner.classList.add("collapsing-fold");
           setTimeout(() => {
             musicIntroBanner.classList.add("hidden");
             floatingMusicBtn.classList.remove("hidden");
-          }, 500);
+          }, 700);
         }
       }, 2000);
 
@@ -1554,7 +1585,7 @@
 
       audioEl.addEventListener("ended", () => {
         if (currentPlaylist.length > 1) {
-          let nextIdx = Math.floor(Math.random() * currentPlaylist.length);
+          let nextIdx = (currentTrackIndex + 1) % currentPlaylist.length;
           playTrack(nextIdx, true);
         } else if (currentPlaylist.length === 1) {
           playTrack(0, true);
@@ -1562,12 +1593,11 @@
       });
 
       acceptMusicBannerBtn?.addEventListener("click", () => {
-        musicIntroBanner.style.transform = "translateY(150%) scale(0.8)";
-        musicIntroBanner.style.opacity = "0";
+        musicIntroBanner.classList.add("collapsing-fold");
         setTimeout(() => {
           musicIntroBanner.classList.add("hidden");
           floatingMusicBtn.classList.remove("hidden");
-        }, 500);
+        }, 700);
 
         if (currentPlaylist.length > 0) {
           const randomIndex = Math.floor(Math.random() * currentPlaylist.length);
@@ -1585,7 +1615,6 @@
         musicPlayerModal.classList.add("flex");
       });
 
-      // Single cross button that minimizes player while audio keeps playing
       const minimizeHandler = () => {
         musicPlayerModal.classList.add("hidden");
         musicPlayerModal.classList.remove("flex");
@@ -1618,10 +1647,15 @@
         }
       });
 
-      playerRandomBtn?.addEventListener("click", () => {
+      playerPrevBtn?.addEventListener("click", () => {
         if (currentPlaylist.length > 0) {
-          const rand = Math.floor(Math.random() * currentPlaylist.length);
-          playTrack(rand, true);
+          playTrack(currentTrackIndex - 1, true);
+        }
+      });
+
+      playerNextBtn?.addEventListener("click", () => {
+        if (currentPlaylist.length > 0) {
+          playTrack(currentTrackIndex + 1, true);
         }
       });
 
