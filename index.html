@@ -197,27 +197,36 @@
       animation: vibrantGlow 3s ease-in-out infinite;
     }
 
-    /* Vinyl Record Spin */
+    /* Vinyl Record & Music Button Spin when Playing */
     @keyframes spinVinyl {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
     .vinyl-spinning {
-      animation: spinVinyl 6s linear infinite;
+      animation: spinVinyl 4s linear infinite;
     }
     .vinyl-paused {
       animation-play-state: paused;
     }
 
-    /* Smooth Paper-Folding Collapse Animation towards Bottom-Left Icon */
-    @keyframes collapseFoldToCorner {
-      0% { transform: scale(1) translate(0, 0); opacity: 1; border-radius: 1rem; }
-      50% { transform: scale(0.45) translate(-28vw, 35vh) skewX(12deg); opacity: 0.8; }
-      100% { transform: scale(0.08) translate(-42vw, 42vh) rotate(-180deg); opacity: 0; border-radius: 9999px; }
+    /* Attached Flashcard Disappearing Directly Into the Left Music Icon */
+    #musicIntroBanner {
+      transform-origin: 28px center;
+      transition:
+        max-width 0.68s cubic-bezier(0.65, 0, 0.35, 1),
+        padding 0.68s cubic-bezier(0.65, 0, 0.35, 1),
+        opacity 0.55s ease,
+        transform 0.68s cubic-bezier(0.65, 0, 0.35, 1),
+        border-width 0.68s ease;
     }
-    .collapsing-fold {
-      animation: collapseFoldToCorner 0.7s cubic-bezier(0.77, 0, 0.175, 1) forwards;
-      transform-origin: center bottom;
+    #musicIntroBanner.collapsing-into-icon {
+      max-width: 56px !important;
+      padding-left: 0px !important;
+      padding-right: 0px !important;
+      opacity: 0 !important;
+      transform: translateX(-8px) scale(0.75) !important;
+      border-width: 0px !important;
+      pointer-events: none !important;
     }
   </style>
 </head>
@@ -517,53 +526,48 @@
   </button>
 
   <!-- ==========================================================================
-       IMMERSE MUSIC WIDGET & PLAYER OVERLAY (GOLD-BLACK RICH THEME)
+       IMMERSE MUSIC WIDGET & PLAYER OVERLAY (ATTACHED ICON + BAR DESIGN)
        ========================================================================== -->
   <!-- Hidden Audio Element -->
   <audio id="globalAudioPlayer" preload="auto"></audio>
 
-  <!-- 1. Initial Bottom Experience Banner with Vibrant Border (Auto collapses in 2 seconds smoothly into bottom-left icon) -->
-  <div
-    id="musicIntroBanner"
-    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 max-w-md w-[92%] sm:w-auto px-5 py-3.5 rounded-2xl bg-[#171614]/95 vibrant-border backdrop-blur-xl shadow-[0_15px_45px_rgba(0,0,0,0.8)] flex items-center justify-between gap-4 transition-all duration-700"
-  >
-    <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-full bg-[#c5a059]/20 border border-[#c5a059] flex items-center justify-center text-[#e5c378] shrink-0 animate-pulse">
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <path d="M9 18V5l12-2v13"></path>
-          <circle cx="6" cy="18" r="3"></circle>
-          <circle cx="18" cy="16" r="3"></circle>
+  <!-- Unified Bottom-Left Music Icon & Attached Flashcard Container -->
+  <div class="fixed bottom-6 left-4 sm:left-6 z-40 flex items-center pointer-events-none max-w-[calc(100vw-2rem)]">
+    <!-- 1. Floating Bottom-Left Vibrant Music Button (Always visible anchor, rotates when music plays) -->
+    <button
+      id="floatingMusicToggleBtn"
+      type="button"
+      class="pointer-events-auto relative z-20 w-14 h-14 rounded-full bg-[#171614] vibrant-border shadow-[0_10px_30px_rgba(197,160,89,0.45)] flex items-center justify-center text-[#e5c378] transition-transform duration-300 hover:scale-105 active:scale-95 shrink-0 vinyl-spinning vinyl-paused"
+      aria-label="Open Music Player"
+    >
+      <div class="relative w-8 h-8 flex items-center justify-center">
+        <svg id="musicButtonIconVinyl" class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="10"></circle>
+          <circle cx="12" cy="12" r="5.5" stroke-opacity="0.45"></circle>
+          <circle cx="12" cy="12" r="2.8" fill="#c5a059"></circle>
         </svg>
       </div>
-      <div class="text-left">
-        <p class="text-xs sm:text-sm font-medium text-[#f7f3ee] tracking-wide">Enhance Experience With Music</p>
-        <p class="text-[10px] text-[#b5a48b]">Immerse in wedding melodies &amp; celebration vibes</p>
-      </div>
-    </div>
-    <button
-      id="acceptMusicBannerBtn"
-      type="button"
-      class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#c5a059] via-[#e5c378] to-[#c5a059] text-[#0e0e0d] text-[11px] font-semibold uppercase tracking-wider shadow-lg hover:scale-105 active:scale-95 transition-all shrink-0"
-    >
-      Tune In ✨
+      <div class="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#c5a059] text-[#0e0e0d] text-[10px] font-bold flex items-center justify-center shadow">♪</div>
     </button>
-  </div>
 
-  <!-- 2. Minimized Floating Bottom-Left Vibrant Music Button -->
-  <button
-    id="floatingMusicToggleBtn"
-    type="button"
-    class="fixed bottom-6 left-6 z-40 hidden w-14 h-14 rounded-full bg-[#171614] vibrant-border shadow-[0_10px_30px_rgba(197,160,89,0.4)] flex items-center justify-center text-[#e5c378] transition-all duration-300 hover:scale-110 active:scale-95 group"
-    aria-label="Open Music Player"
-  >
-    <div class="relative w-8 h-8 flex items-center justify-center">
-      <svg id="musicButtonIconVinyl" class="w-7 h-7 vinyl-spinning vinyl-paused" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <circle cx="12" cy="12" r="10"></circle>
-        <circle cx="12" cy="12" r="3" fill="#c5a059"></circle>
-      </svg>
+    <!-- 2. Attached Experience Flashcard (Extends from the music icon and retracts directly inside it) -->
+    <div
+      id="musicIntroBanner"
+      class="pointer-events-auto relative z-10 -ml-7 pl-10 pr-3.5 py-2.5 h-14 max-w-[340px] sm:max-w-[420px] rounded-r-2xl rounded-l-full bg-[#171614]/95 vibrant-border backdrop-blur-xl shadow-[0_15px_45px_rgba(0,0,0,0.85)] flex items-center justify-between gap-3 overflow-hidden whitespace-nowrap"
+    >
+      <div class="text-left overflow-hidden">
+        <p class="text-[11px] sm:text-xs font-medium text-[#f7f3ee] tracking-wide truncate">Enhance Experience With Music</p>
+        <p class="text-[9px] sm:text-[10px] text-[#b5a48b] truncate">Immerse in wedding melodies &amp; vibes</p>
+      </div>
+      <button
+        id="acceptMusicBannerBtn"
+        type="button"
+        class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#c5a059] via-[#e5c378] to-[#c5a059] text-[#0e0e0d] text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider shadow-lg hover:scale-105 active:scale-95 transition-all shrink-0"
+      >
+        Tune In ✨
+      </button>
     </div>
-    <div class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#c5a059] text-[#0e0e0d] text-[9px] font-bold flex items-center justify-center shadow">♪</div>
-  </button>
+  </div>
 
   <!-- 3. Full Screen / Drawer Music Player Overlay (Search Option placed at the top of the player) -->
   <div
@@ -1484,7 +1488,6 @@
       const songSearchInput = document.getElementById("songSearchInput");
       const songSearchBtn = document.getElementById("songSearchBtn");
       const songPlaylistContainer = document.getElementById("songPlaylistContainer");
-      const musicButtonIconVinyl = document.getElementById("musicButtonIconVinyl");
       const audioSeekbar = document.getElementById("audioSeekbar");
       const currentTimeReadout = document.getElementById("currentTimeReadout");
       const durationReadout = document.getElementById("durationReadout");
@@ -1501,16 +1504,19 @@
         renderPlaylistUI(currentPlaylist);
       }
 
-      // Automatically collapse intro banner after 2 seconds smoothly into bottom-left icon
+      // Helper to smoothly retract the attached flashcard into the music icon
+      function collapseBannerIntoIcon() {
+        if (!musicIntroBanner || musicIntroBanner.classList.contains("hidden") || musicIntroBanner.classList.contains("collapsing-into-icon")) return;
+        musicIntroBanner.classList.add("collapsing-into-icon");
+        setTimeout(() => {
+          musicIntroBanner.classList.add("hidden");
+        }, 700);
+      }
+
+      // Automatically collapse attached flashcard into the music icon after 2.5 seconds
       setTimeout(() => {
-        if (musicIntroBanner && !musicIntroBanner.classList.contains("hidden") && musicIntroBanner.style.opacity !== "0") {
-          musicIntroBanner.classList.add("collapsing-fold");
-          setTimeout(() => {
-            musicIntroBanner.classList.add("hidden");
-            floatingMusicBtn.classList.remove("hidden");
-          }, 700);
-        }
-      }, 2000);
+        collapseBannerIntoIcon();
+      }, 2500);
 
       function formatTime(seconds) {
         if (isNaN(seconds)) return "0:00";
@@ -1548,15 +1554,25 @@
         if (playing) {
           playIconSvg.classList.add("hidden");
           pauseIconSvg.classList.remove("hidden");
-          musicButtonIconVinyl.classList.remove("vinyl-paused");
+          floatingMusicBtn.classList.remove("vinyl-paused");
           playerTrackImg.classList.remove("vinyl-paused");
         } else {
           playIconSvg.classList.remove("hidden");
           pauseIconSvg.classList.add("hidden");
-          musicButtonIconVinyl.classList.add("vinyl-paused");
+          floatingMusicBtn.classList.add("vinyl-paused");
           playerTrackImg.classList.add("vinyl-paused");
         }
       }
+
+      audioEl.addEventListener("play", () => {
+        isPlaying = true;
+        updatePlayStateUI(true);
+      });
+
+      audioEl.addEventListener("pause", () => {
+        isPlaying = false;
+        updatePlayStateUI(false);
+      });
 
       audioEl.addEventListener("timeupdate", () => {
         if (!isNaN(audioEl.duration)) {
@@ -1587,11 +1603,7 @@
       });
 
       acceptMusicBannerBtn?.addEventListener("click", () => {
-        musicIntroBanner.classList.add("collapsing-fold");
-        setTimeout(() => {
-          musicIntroBanner.classList.add("hidden");
-          floatingMusicBtn.classList.remove("hidden");
-        }, 700);
+        collapseBannerIntoIcon();
 
         if (currentPlaylist.length > 0) {
           const randomIndex = Math.floor(Math.random() * currentPlaylist.length);
@@ -1599,8 +1611,9 @@
         }
       });
 
-      // When clicked on the collapsed music icon, if audio hasn't started yet, play random track. Otherwise open player.
+      // When clicked on the music icon, retract banner if still open, start music if not yet loaded, and open player
       floatingMusicBtn?.addEventListener("click", () => {
+        collapseBannerIntoIcon();
         if (!audioEl.src && currentPlaylist.length > 0) {
           const randomIndex = Math.floor(Math.random() * currentPlaylist.length);
           playTrack(randomIndex, true);
@@ -1612,7 +1625,6 @@
       const minimizeHandler = () => {
         musicPlayerModal.classList.add("hidden");
         musicPlayerModal.classList.remove("flex");
-        floatingMusicBtn.classList.remove("hidden");
       };
 
       closePlayerBtn?.addEventListener("click", minimizeHandler);
@@ -1744,7 +1756,7 @@
           audioEl.play().then(() => {
             document.getElementById("playIconSvg").classList.add("hidden");
             document.getElementById("pauseIconSvg").classList.remove("hidden");
-            document.getElementById("musicButtonIconVinyl").classList.remove("vinyl-paused");
+            document.getElementById("floatingMusicToggleBtn").classList.remove("vinyl-paused");
             document.getElementById("playerTrackImg").classList.remove("vinyl-paused");
           });
           document.getElementById("playerTrackName").textContent = song.name;
